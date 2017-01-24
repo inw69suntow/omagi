@@ -1,0 +1,141 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>ระบบฐานข้อมูลมวลชน กองอำนวยการรักษาความมั่นคงภายในราชอาณาจักร</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-874">
+    <link rel="stylesheet" href="css.css" type="text/css">
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+<script language="javascript">
+    function logout() {
+        document.location = "logoff.aspx";
+    }
+
+    //window.onbeforeunload = function (evt) { logout(); }
+    //window.onunload = function (evt) { logout(); }
+</script>
+</head>
+
+<body id="masterBody" runat="server" style="background-color:#fec24a">
+    <form id="form1" runat="server">
+    <div>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" leftmargin="0" text="#000000" topmargin="0" marginwidth="0" marginheight="0" bgcolor="fec24a">
+        <tr>
+	        <td width="800px"><img src="photo/header.png" width="800px" height="90px"></td>
+	        <td>
+		        <table width="100%" border="0" cellspacing="0" cellpadding="0" align="right" valign="top" class="css">
+			        <tr><td height="20" align="center" class="css"><font color="51290f"><b><a href="user_manual.pdf"><font color="51290f">คู่มือ</font></a> | <a href="mailto:guntap@softnet.co.th"><font color="51290f">ช่วยเหลือ</font></a> | <a href="logoff.aspx"><font color="51290f">ออกจากระบบ</font></a></b></font></td></tr>
+                    <tr>
+                        <td height="20" align="center">
+                                <b><font color="#51290f">ชื่อผู้ใช้งาน : </font></b><asp:Label ID="lblUname" Text="" runat="server" ForeColor="#51290f"/><br />
+                        </td>
+                    </tr>
+		        </table>
+	        </td>
+        </tr>
+        <tr>
+            <td colspan="2" valign="top">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" align="right" valign="top" class="css" bgcolor="#fec24a">
+                    <tr>
+                        <td width="250px" valign="top">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" align="right" valign="top" class="css" bgcolor="#fec24a">
+                                <tr>
+                                    <td style="background-color:#fec24a" height="20px">
+                                        <font class="header_1">ประกาศ</font>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" width="100%">
+                                        <div id="outputBox" style="
+                                                text-align:left;
+                                                color:black;
+                                                border:1px solid black; 
+                                                border-collapse:collapse; 
+                                                background:#ffffff; 
+                                                width: 250px;
+                                                height:160px;  
+                                                position:relative;
+                                                overflow:auto;
+                                                margin-bottom:2px;
+                                                top: 0px;
+                                                left: 0px;"
+                                                >
+                                                <asp:Label ID="lblShoutM" runat="server"  
+                                                    style="margin-left: 0px; text-align:left; max-width:230px; Width:230px;" 
+                                                    Font-Size="12px" Font-Bold="True"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td height="20px" valign="middle">
+                                        <font style="font-weight:bold">เรื่อง : </font><asp:TextBox ID="txtNewSubj" Width="210px" MaxLength="250" runat="server" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <asp:FileUpload ID="txtFile" Width="100%" CssClass="css" runat="server"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <font style="font-weight:bold">ข้อความ : </font>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <asp:TextBox ID="txtText" width="250px" Height="60px" runat="server" 
+                                            TextMode="MultiLine"></asp:TextBox>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                    <asp:Button ID="btnSubmit" runat="server" Width="70px" CssClass="css" 
+                                            Text="ประกาศ" onclick="btnSubmit_Click"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color:#fec24a">
+                                        <font class="header_1">สนทนา</font>
+                                    </td>
+                                </tr>
+                                <tr style="background-color:#fec24a;height: 250px">
+                                    <td style="background-color:#fec24a" width="100%">
+                                        <iframe src="shout.aspx" scrolling="auto" width="100%" height="250" marginheight="0" marginwidth="0" frameborder="0" style="background-color:#fec24a"></iframe>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td valign="top" style="background-color:#fec24a">
+                            <asp:Menu ID="TreeView1" runat="server" 
+                              Width="80%" BorderWidth="0" BorderColor="#fec24a"
+                              NodeIndent="10" DisappearAfter="20"  
+                              Orientation="Horizontal" MaximumDynamicDisplayLevels="5" 
+                                BackColor="#fec24a" DynamicHorizontalOffset="2" Font-Names="Tahoma" 
+                                Font-Size="16px" Font-Bold="true" ForeColor="#51290f" StaticSubMenuIndent="10px"
+                              >
+                                <DynamicHoverStyle BackColor="#fec24a" ForeColor="#51290f" />
+                                <DynamicMenuItemStyle HorizontalPadding="5px" VerticalPadding="2px" BackColor="#fec24a" ForeColor="#51290f"/>
+                                <DynamicMenuStyle BackColor="#fec24a" ForeColor="#51290f"/>
+                                <DynamicSelectedStyle BackColor="#fec24a" ForeColor="#51290f"/>
+
+                                <StaticHoverStyle BackColor="#fec24a" ForeColor="#51290f" />
+                                <StaticMenuItemStyle HorizontalPadding="5px" VerticalPadding="2px" BackColor="#fec24a" ForeColor="#51290f"/>
+                                <StaticSelectedStyle BackColor="#fec24a" ForeColor="#51290f"/>
+                                <StaticMenuStyle BackColor="#fec24a" ForeColor="#51290f"/>
+                            </asp:Menu>
+                            <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+                            </asp:ContentPlaceHolder>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        </table>        
+    </div>
+    </form>
+</body>
+</html>

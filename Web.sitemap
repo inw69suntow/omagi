@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+  <siteMapNode url="blank.aspx" title="ระบบฐานข้อมูลมวลชน" description="">
+  	<siteMapNode title="บันทึกข้อมูล"  description="">
+		<siteMapNode url="mass_entry.aspx" title="บันทึกข้อมูลกลุ่มมวลชน"  description="" />
+   		<siteMapNode url="train_member_entry.aspx" title="บันทึกข้อมูลการฝึกอบรม"  description="" />
+    		<siteMapNode url="train_course_entry.aspx" title="บันทึกข้อมูลหลักสูตรการฝึกอบรม"  description="" />
+   	</siteMapNode>
+  	<siteMapNode title="รายงาน"  description="">
+		<siteMapNode url="report_REP.aspx" title="รายงานข้อมูลมวลชนและกราฟ"  description="" />
+    		<siteMapNode title="รายงานข้อมูลมวลชนสำหรับผู้บริหาร"  description="">
+      			<siteMapNode title="รายงานสรุปยอดมวลชน"  description="" />
+      			<siteMapNode title="รายงานรายละเอียดข้อมูลมวลชน"  description="" />
+    		</siteMapNode>   
+		<siteMapNode url="man_REP1.aspx" title="รายงานข้อมูลบุคคล"  description="" />
+   	</siteMapNode>
+    	<siteMapNode url="pass_change_entry.aspx" title="เปลี่ยนรหัสผ่าน"  description=""/>
+    	<siteMapNode title="บริหารระบบ"  description="">
+    		<siteMapNode url="user_entry.aspx" title="บันทึกข้อมูลผู้ใช้งาน"  description=""/>
+    		<siteMapNode url="unlock_entry.aspx" title="ปลดล๊อคผู้ใช้งาน"  description=""/>
+    		<siteMapNode url="audit_trail_rep.aspx" title="ปูมการใช้ระบบงาน"  description=""/>
+   	</siteMapNode>
+  </siteMapNode>
+</siteMap>
