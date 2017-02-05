@@ -1,18 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "web", ".", "{1666D11F-E812-483F-85FD-5B4CD4D08CD2}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "omagi", ".", "{1666D11F-E812-483F-85FD-5B4CD4D08CD2}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv2.0"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		Debug.AspNetCompiler.VirtualPath = "/web"
-		Debug.AspNetCompiler.PhysicalPath = "..\..\..\..\Desktop\Work\1374\web\"
+		Debug.AspNetCompiler.PhysicalPath = "..\omagi\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\web\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/web"
-		Release.AspNetCompiler.PhysicalPath = "..\..\..\..\Desktop\Work\1374\web\"
+		Release.AspNetCompiler.PhysicalPath = "..\omagi\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\web\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
