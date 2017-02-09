@@ -5,56 +5,96 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
     <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
        <script src='<%=Page.ResolveClientUrl("~/resources/js/common/jquery.js")%>' type="text/javascript"></script>
-       <link rel="stylesheet" type="text/css" href="<%=Page.ResolveClientUrl("~/resources/js/common/jquery-ui.css")%>">
+       <link rel="stylesheet" type="text/css" href="<%=Page.ResolveClientUrl("~/resources/js/common/jquery-ui.css")%>"/>
        <script src='<%=Page.ResolveClientUrl("~/resources/js/common/jquery-ui.js")%>' type="text/javascript"></script>
-      
+   
+    <link rel="stylesheet" type="text/css" href="<%=Page.ResolveClientUrl("~/resources/megamenu-js-master/css/style.css")%>"/>
+    <link rel="stylesheet" type="text/css" href="<%=Page.ResolveClientUrl("~/resources/megamenu-js-master/css/ionicons.min.css")%>"/>
 
-
-    <style>
-        .ui-menu { width: 150px; }
-    </style>
 
 </head>
 <body>
 
-<ul id='menu' class='ui-menu'>
-  <li class="ui-state-disabled"><div>Toys (n/a)</div></li>
-  <li><div>Books</div></li>
-  <li><div>Clothing</div></li>
-  <li><div>Electronics</div>
-    <ul>
-      <li class="ui-state-disabled"><div>Home Entertainment</div></li>
-      <li><div>Car Hifi</div></li>
-      <li><div>Utilities</div></li>
-    </ul>
-  </li>
-  <li><div>Movies</div></li>
-  <li><div>Music</div>
-    <ul>
-      <li><div>Rock</div>
-        <ul>
-          <li><div>Alternative</div></li>
-          <li><div>Classic</div></li>
-        </ul>
-      </li>
-      <li><div>Jazz</div>
-        <ul>
-          <li><div>Freejazz</div></li>
-          <li><div>Big Band</div></li>
-          <li><div>Modern</div></li>
-        </ul>
-      </li>
-      <li><div>Pop</div></li>
-    </ul>
-  </li>
-  <li class="ui-state-disabled"><div>Specials (n/a)</div></li>
-</ul>
-   
-     <script>
-         $(function () {
-             $("#menu").menu();
-         });
-  </script>
+<div class="menu-container">
+        <div class="menu">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="http://marioloncarek.com">About</a>
+                    <ul>
+                        <li><a href="http://marioloncarek.com">School</a>
+                            <ul>
+                                <li><a href="http://marioloncarek.com">Lidership</a></li>
+                                <li><a href="#">History</a></li>
+                                <li><a href="#">Locations</a></li>
+                                <li><a href="#">Careers</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Study</a>
+                            <ul>
+                                <li><a href="#">Undergraduate</a></li>
+                                <li><a href="#">Masters</a></li>
+                                <li><a href="#">International</a></li>
+                                <li><a href="#">Online</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Research</a>
+                            <ul>
+                                <li><a href="#">Undergraduate research</a></li>
+                                <li><a href="#">Masters research</a></li>
+                                <li><a href="#">Funding</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Something</a>
+                            <ul>
+                                <li><a href="#">Sub something</a></li>
+                                <li><a href="#">Sub something</a></li>
+                                <li><a href="#">Sub something</a></li>
+                                <li><a href="#">Sub something</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="http://marioloncarek.com">News</a>
+                    <ul>
+                        <li><a href="http://marioloncarek.com">Today</a></li>
+                        <li><a href="#">Calendar</a></li>
+                        <li><a href="#">Sport</a></li>
+                    </ul>
+                </li>
+                <li><a href="http://marioloncarek.com">Contact</a>
+                    <ul>
+                        <li><a href="#">School</a>
+                            <ul>
+                                <li><a href="#">Lidership</a></li>
+                                <li><a href="#">History</a></li>
+                                <li><a href="#">Locations</a></li>
+                                <li><a href="#">Careers</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Study</a>
+                            <ul>
+                                <li><a href="#">Undergraduate</a></li>
+                                <li><a href="#">Masters</a></li>
+                                <li><a href="#">International</a></li>
+                                <li><a href="#">Online</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Study</a>
+                            <ul>
+                                <li><a href="#">Undergraduate</a></li>
+                                <li><a href="#">Masters</a></li>
+                                <li><a href="#">International</a></li>
+                                <li><a href="#">Online</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Empty sub</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script type="text/javascript" src="<%=Page.ResolveClientUrl("~/resources/megamenu-js-master/js/megamenu.js")%>"></script>
 </body>
 </html>
