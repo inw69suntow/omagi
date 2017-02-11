@@ -3,12 +3,12 @@
 <head runat="server">
     <title>ระบบฐานข้อมูลมวลชน กองอำนวยการรักษาความมั่นคงภายในราชอาณาจักร</title>
     <meta http-equiv="Content-Type" content="text/html; charset=windows-874">
-    <link rel="stylesheet" href="css.css" type="text/css">
+    <link rel="stylesheet" href="v" type="text/css">
     <asp:ContentPlaceHolder id="head" runat="server">
     </asp:ContentPlaceHolder>
 <script language="javascript">
     function logout() {
-        document.location = "logoff.aspx";
+        document.location = "<%=Page.ResolveClientUrl("~/logoff.aspx")%>";
     }
 
     //window.onbeforeunload = function (evt) { logout(); }
@@ -21,10 +21,14 @@
     <div>
         <table width="100%" border="0" cellspacing="0" cellpadding="0" leftmargin="0" text="#000000" topmargin="0" marginwidth="0" marginheight="0" bgcolor="fec24a">
         <tr>
-	        <td width="800px"><img src="photo/header.png" width="800px" height="90px"></td>
+	        <td width="800px"><img src="<%=Page.ResolveClientUrl("~/photo/header.png")%>" width="800px" height="90px"></td>
 	        <td>
 		        <table width="100%" border="0" cellspacing="0" cellpadding="0" align="right" valign="top" class="css">
-			        <tr><td height="20" align="center" class="css"><font color="51290f"><b><a href="user_manual.pdf"><font color="51290f">คู่มือ</font></a> | <a href="mailto:guntap@softnet.co.th"><font color="51290f">ช่วยเหลือ</font></a> | <a href="logoff.aspx"><font color="51290f">ออกจากระบบ</font></a></b></font></td></tr>
+			        <tr><td height="20" align="center" class="css"><font color="51290f"><b>
+                        <a href="<%=Page.ResolveClientUrl("~/user_manual.pdf")%>">
+                            <font color="51290f">คู่มือ</font></a> | <a href="mailto:guntap@softnet.co.th">
+                            <font color="51290f">ช่วยเหลือ</font></a> | <a href="logoff.aspx">
+                            <font color="51290f">ออกจากระบบ</font></a></b></font></td></tr>
                     <tr>
                         <td height="20" align="center">
                                 <b><font color="#51290f">ชื่อผู้ใช้งาน : </font></b><asp:Label ID="lblUname" Text="" runat="server" ForeColor="#51290f"/><br />
@@ -104,7 +108,7 @@
                                 </tr>
                                 <tr style="background-color:#fec24a;height: 250px">
                                     <td style="background-color:#fec24a" width="100%">
-                                        <iframe src="shout.aspx" scrolling="auto" width="100%" height="250" marginheight="0" marginwidth="0" frameborder="0" style="background-color:#fec24a"></iframe>
+                                        <iframe src="<%=Page.ResolveClientUrl("~/shout.aspx")%>" scrolling="auto" width="100%" height="250" marginheight="0" marginwidth="0" frameborder="0" style="background-color:#fec24a"></iframe>
                                     </td>
                                 </tr>
                             </table>

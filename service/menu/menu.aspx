@@ -20,7 +20,33 @@
 <div class="menu-container">
         <div class="menu">
             <ul>
-                <li><a href="#">Home</a></li>
+                <li><a href="#">บันทึกข้อมูล</a>
+                    <ul>
+                        <li><a href="#"></a>
+                            <ul>
+                                <li><a href="#">สมาชิก</a></li>
+                                <li><a href="#">กลุ่มมวลชน</a></li>
+                            </ul>
+                        </li>
+                         <li><a href="#"></a>
+                            <ul>
+                                <li><a href="#">โครงการ</a></li>
+                                <li><a href="#">หลักสูตร</a></li>
+                                <li><a href="#">การฝึกอบรม</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                 <li><a href="#">ค้นหา</a>
+                    <ul>
+                        <li><a href="#">สมาชิก</a></li>
+                        <li><a href="#">กลุ่มมวลชน</a></li>
+                        <li><a href="#">หลักสูตร</a></li>
+                        <li><a href="#">โครงการ</a></li>
+                        <li><a href="#">การฝึกอบรม</a></li>
+                    </ul>
+                </li>
+
                 <li><a href="http://marioloncarek.com">About</a>
                     <ul>
                         <li><a href="http://marioloncarek.com">School</a>
@@ -31,6 +57,8 @@
                                 <li><a href="#">Careers</a></li>
                             </ul>
                         </li>
+
+
                         <li><a href="#">Study</a>
                             <ul>
                                 <li><a href="#">Undergraduate</a></li>
