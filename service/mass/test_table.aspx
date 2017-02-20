@@ -11,18 +11,17 @@
        <script src='<%=Page.ResolveClientUrl("~/resources/js/common/jquery-ui.js")%>' type="text/javascript"></script>
         <script src='<%=Page.ResolveClientUrl("~/resources/datatables/js/jquery.dataTables.js")%>' type="text/javascript"></script>
         <script src='<%=Page.ResolveClientUrl("~/resources/datatables/js/dataTables.bootstrap.js")%>' type="text/javascript"></script>
-
-       <script type="text/javascript">
-               var $j = jQuery.noConflict(true);
-       </script>
        <script src='<%=Page.ResolveClientUrl("~/resources/js/common/utils.js")%>' type="text/javascript"></script>
        <script src='<%=Page.ResolveClientUrl("~/resources/js/common/utilsDataTables.js")%>' type="text/javascript"></script>
 
 
         <link rel="stylesheet" type="text/css" href="<%=Page.ResolveClientUrl("~/resources/megamenu-js-master/css/style.css")%>"/>
         <link rel="stylesheet" type="text/css" href="<%=Page.ResolveClientUrl("~/resources/megamenu-js-master/css/ionicons.min.css")%>"/>
-        <link rel="stylesheet" type="text/css" href="<%=Page.ResolveClientUrl("~/resources/datatables/css/jquery.dataTables.css")%>"/>
+       
+        <link rel="stylesheet" type="text/css" href="<%=Page.ResolveClientUrl("~/resources/js/common/jquery-ui.theme.css")%>"/>
         <link rel="stylesheet" type="text/css" href="<%=Page.ResolveClientUrl("~/resources/datatables/css/jquery.dataTables_themeroller.css")%>"/>
+        <link rel="stylesheet" type="text/css" href="<%=Page.ResolveClientUrl("~/resources/datatables/css/jquery.dataTables.css")%>"/>
+        <link rel="stylesheet" type="text/css" href="<%=Page.ResolveClientUrl("~/resources/css/global_web.css")%>"/>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -52,9 +51,9 @@
 
 
               var createTable= function (dataList) {
-                    $j('#result').html('');
-                    $j('#result').html('<table id="table" class="hover cell-border display" cellspacing="0" width="100%"></table>');
-                    var table = $j('#table').dataTable({
+                    $('#result').html('');
+                    $('#result').html('<table id="table" class="hover cell-border display" cellspacing="0" width="100%"></table>');
+                    var table = $('#table').dataTable({
                         aaData: dataList || '',
                         bFilter: true,
                         bPaginate: false,
@@ -125,7 +124,7 @@
 	                            ]
                         //              ,
                         //            "rowCallback": function (row, data) {
-                        //                $j('td', row).unbind('click').bind('click', function (evt) {
+                        //                $('td', row).unbind('click').bind('click', function (evt) {
                         //                    evt.preventDefault();
                         //                    cmsContentAction.initDetailPage(data);
                         //                });

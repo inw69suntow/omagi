@@ -39,7 +39,7 @@
             cache: _opt.cache,
             success: function(data){
                 if(selection!=null && selection!=''){
-//                    $j(data).find('.news_subtitle').each(function() {
+//                    $(data).find('.news_subtitle').each(function() {
 //                        utils.setRow( this,3);
 //                    });
                     $(selection).html(data);
@@ -216,27 +216,27 @@
             }
         };
         utils.getRow=function(selector) {
-            var $j= jQuery.noConflict();
-            var height = $j(selector).height();
-            var line_height = $j(selector).css('line-height');
+            var $= jQuery.noConflict();
+            var height = $(selector).height();
+            var line_height = $(selector).css('line-height');
             line_height = parseFloat(line_height)
             var rows = height / line_height;
             return Math.round(rows);
         };
         utils.setRow=function(selector,row,lang){
-            var $j= jQuery.noConflict();
-            $j(selector).css('display','none');
-            var line_height = $j(selector).css('line-height');
+            var $= jQuery.noConflict();
+            $(selector).css('display','none');
+            var line_height = $(selector).css('line-height');
             line_height = parseFloat(line_height);
             var height=line_height*row;
-            $j(selector).css('height',height+(line_height/2));
-            $j(selector).css({'overflow' : 'hidden'});
-            $j(selector).css('display','');
+            $(selector).css('height',height+(line_height/2));
+            $(selector).css({'overflow' : 'hidden'});
+            $(selector).css('display','');
             utils.ellipsizeTextBox(selector,lang);
         };
         utils.ellipsizeTextBox=function(selector,lang){
-            var $j= jQuery.noConflict();
-            var el = $j(selector);
+            var $= jQuery.noConflict();
+            var el = $(selector);
             var keep = el.text();
             var suffix="...more";
             if(lang==='th'||lang==='TH'){
@@ -303,7 +303,7 @@
 $(function () {
     console.log("utils.js start...");
     console.log("require jqueryUI, blockUI.js");
-    $j=jQuery.noConflict();
+    $=jQuery.noConflict();
 });
 
 function onReady(data){
