@@ -3,7 +3,7 @@
 <head runat="server">
     <title>ระบบฐานข้อมูลมวลชน กองอำนวยการรักษาความมั่นคงภายในราชอาณาจักร</title>
     <meta http-equiv="Content-Type" content="text/html; charset=windows-874">
-    <link rel="stylesheet" href="v" type="text/css">
+    <link rel="stylesheet" href="<%=Page.ResolveClientUrl("~/css.css")%>" type="text/css">
     <asp:ContentPlaceHolder id="head" runat="server">
     </asp:ContentPlaceHolder>
 <script language="javascript">
