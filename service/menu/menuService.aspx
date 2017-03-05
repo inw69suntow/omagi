@@ -31,6 +31,7 @@
                                 <li><a href='<%=Page.ResolveClientUrl("~/mass_entry.aspx")%>'>บันทึกข้อมูลโครงการ</a></li>
                                 <li><a href='<%=Page.ResolveClientUrl("~/train_member_entry.aspx")%>'>บันทึกข้อมูลการฝึกอบรม</a></li>
                                 <li><a href='<%=Page.ResolveClientUrl("~/train_course_entry.aspx")%>'>บันทึกข้อมูลหลักสูตรการฝึกอบรม</a></li>
+                                <li><a href='<%=Page.ResolveClientUrl("~/train_course_entry.aspx")%>'>บันทึกข้อมูลสมาชิก</a></li>
                             </ul>
                         </li>
                     </ul>
