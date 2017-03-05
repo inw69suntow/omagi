@@ -21,9 +21,14 @@
     command.Connection = Conn;
     System.Data.OleDb.OleDbDataReader rs;
  %>
+
  <div class="menu-container">
     <div class="menu">
+     <% if (Session["uGroup"]!=null && ( Session["uGroup"].ToString() == "A" || Session["uGroup"].ToString() == "U" || Session["uGroup"].ToString() == "C" || Session["uGroup"].ToString() == "M"))
+        {%>
          <ul>
+            <% if (Session["uGroup"].ToString() == "A" || Session["uGroup"].ToString() == "U")
+               { %>
                 <li><a href="#">บันทึกข้อมูล</a>
                     <ul>
                         <li><a href="#"></a>
@@ -36,6 +41,8 @@
                         </li>
                     </ul>
                 </li>
+            <%} %>
+
                  <li><a href="#">รายงาน</a>
                     <ul>
                         <li><a href="#"></a>
@@ -55,20 +62,20 @@
                                                           
                                                                         <ul>
                                                                          <%
-                                                                             sql = "SELECT distinct fl_group_id,fl_group_name";
-                                                                             sql += " from tb_maingroup where fl_group_status='1' ";
-                                                                             sql += " and fl_group_type='1' ";
-                                                                             sql += " order by fl_group_id ";
+               sql = "SELECT distinct fl_group_id,fl_group_name";
+               sql += " from tb_maingroup where fl_group_status='1' ";
+               sql += " and fl_group_type='1' ";
+               sql += " order by fl_group_id ";
 
-                                                                             command.CommandText = sql;
-                                                                             rs = command.ExecuteReader();
-                                                                             while (rs.Read())
-                                                                             {
+               command.CommandText = sql;
+               rs = command.ExecuteReader();
+               while (rs.Read())
+               {
                                                                                  %>
                                                                                    <li><a href='<%=Page.ResolveClientUrl("~/detail_REP.aspx?t=1&id="+rs.GetString(0))%>'><%=rs.GetString(1)%></a></li>
                                                                                  <%
-                                                                             }
-                                                                             rs.Close();
+               }
+               rs.Close();
                                                                           %>
                                                                         
                                                                         </ul>
@@ -85,19 +92,19 @@
                                                                     <ul>
                                                                         <%
                                                                            
-                                                                            sql = "SELECT distinct fl_dept_id,fl_dept_name from tb_dept where fl_dept_status='1' ";
-                                                                            sql += " and fl_dept_id like '%00' ";
-                                                                            sql += " order by fl_dept_id ";
+               sql = "SELECT distinct fl_dept_id,fl_dept_name from tb_dept where fl_dept_status='1' ";
+               sql += " and fl_dept_id like '%00' ";
+               sql += " order by fl_dept_id ";
 
-                                                                            command.CommandText = sql;
-                                                                            rs = command.ExecuteReader();
-                                                                            while (rs.Read())
-                                                                            {
+               command.CommandText = sql;
+               rs = command.ExecuteReader();
+               while (rs.Read())
+               {
                                                                                 %>
                                                                                  <li><a href='<%=Page.ResolveClientUrl("~/detail_REP2.aspx?id="+rs.GetString(0))%>'><%= rs.GetString(1)%></a></li>
                                                                                 <%
-                                                                            }
-                                                                            rs.Close();
+               }
+               rs.Close();
                                                                             %>
                                                                     </ul>
                                                                 </li>
@@ -118,18 +125,18 @@
                                                 <li><a href='<%=Page.ResolveClientUrl("~/summary_REP.aspx?t=0")%>'>สรุปภาพรวม</a></li>
                                                 <li><a href='<%=Page.ResolveClientUrl("~/summary_REP.aspx?t=1")%>'>รายจังหวัดทั้งหมด</a></li>
                                                 <%
-                                                    sql = "SELECT distinct fl_dept_id,fl_dept_name from tb_dept where fl_dept_status='1' ";
-                                                    sql += " and fl_dept_id like '%00' ";
-                                                    sql += " order by fl_dept_id ";
+               sql = "SELECT distinct fl_dept_id,fl_dept_name from tb_dept where fl_dept_status='1' ";
+               sql += " and fl_dept_id like '%00' ";
+               sql += " order by fl_dept_id ";
 
-                                                    command.CommandText = sql;
-                                                    rs = command.ExecuteReader();
-                                                    while (rs.Read())
-                                                    {  %>
+               command.CommandText = sql;
+               rs = command.ExecuteReader();
+               while (rs.Read())
+               {  %>
                                                          <li><a href='<%=Page.ResolveClientUrl("~/summary_REP.aspx?t=1&id="+ rs.GetString(0))%>'><%=rs.GetString(1)%></a></li>
                                                         <%
-                                                    }
-                                                    rs.Close();
+               }
+               rs.Close();
                                                 %>
                                             </ul>
                                   </li>
@@ -144,8 +151,16 @@
                         </li> 
                      </ul>
                  </li>
+
+                  <% if (Session["uGroup"].ToString() == "A" || Session["uGroup"].ToString() == "U")
+                     { %>
                  <li><a href='<%=Page.ResolveClientUrl("~/mail_entry.aspx")%>'>ส่งเมล์</a> </li>
+                 <%} %>
+
                  <li><a href='<%=Page.ResolveClientUrl("~/pass_change_entry.aspx")%>'>เปลี่ยนรหัสผ่าน</a> </li>
+
+                 <% if (Session["uGroup"].ToString() == "A")
+                    { %>
                  <li><a href='#'>บริหารระบบ</a> 
                     <ul>
                         <li><a href='#'></a> 
@@ -157,7 +172,10 @@
                         </li>
                     </ul>
                  </li>
+                 <%} %>
+
             </ul>
+       <%} %>
     </div>
 </div>
             <%   Conn.Close(); %>
