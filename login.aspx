@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="css.css" type="text/css"/>
 </head>
 
-<body text="#000000" >
+<body text="#000000"  style="background:#fec24a">
 <form id="frm" runat="server">
 <div align="center">
   <table width="100%" border="0" bgcolor="fec24a">
