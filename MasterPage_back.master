@@ -1,4 +1,4 @@
-<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage_back.master.cs" Inherits="MasterPage" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>ระบบฐานข้อมูลมวลชน กองอำนวยการรักษาความมั่นคงภายในราชอาณาจักร</title>
@@ -6,17 +6,14 @@
     <link rel="stylesheet" href="<%=Page.ResolveClientUrl("~/css.css")%>" type="text/css">
     <asp:ContentPlaceHolder id="head" runat="server">
     </asp:ContentPlaceHolder>
-    <script language="javascript">
-        function logout() {
-            document.location = "<%=Page.ResolveClientUrl("~/logoff.aspx")%>";
-        }
+<script language="javascript">
+    function logout() {
+        document.location = "<%=Page.ResolveClientUrl("~/logoff.aspx")%>";
+    }
 
-        //window.onbeforeunload = function (evt) { logout(); }
-        //window.onunload = function (evt) { logout(); }
-    </script>
-
-    <!--#include file="resources/inc_resources.inc"-->
-    
+    //window.onbeforeunload = function (evt) { logout(); }
+    //window.onunload = function (evt) { logout(); }
+</script>
 </head>
 
 <body id="masterBody" runat="server" style="background-color:#fec24a">
@@ -117,7 +114,23 @@
                             </table>
                         </td>
                         <td valign="top" style="background-color:#fec24a">
-                             <!--#include file="resources/inc_menu.inc"-->
+                            <asp:Menu ID="TreeView1" runat="server" 
+                              Width="80%" BorderWidth="0" BorderColor="#fec24a"
+                              NodeIndent="10" DisappearAfter="20"  
+                              Orientation="Horizontal" MaximumDynamicDisplayLevels="5" 
+                                BackColor="#fec24a" DynamicHorizontalOffset="2" Font-Names="Tahoma" 
+                                Font-Size="16px" Font-Bold="true" ForeColor="#51290f" StaticSubMenuIndent="10px"
+                              >
+                                <DynamicHoverStyle BackColor="#fec24a" ForeColor="#51290f" />
+                                <DynamicMenuItemStyle HorizontalPadding="5px" VerticalPadding="2px" BackColor="#fec24a" ForeColor="#51290f"/>
+                                <DynamicMenuStyle BackColor="#fec24a" ForeColor="#51290f"/>
+                                <DynamicSelectedStyle BackColor="#fec24a" ForeColor="#51290f"/>
+
+                                <StaticHoverStyle BackColor="#fec24a" ForeColor="#51290f" />
+                                <StaticMenuItemStyle HorizontalPadding="5px" VerticalPadding="2px" BackColor="#fec24a" ForeColor="#51290f"/>
+                                <StaticSelectedStyle BackColor="#fec24a" ForeColor="#51290f"/>
+                                <StaticMenuStyle BackColor="#fec24a" ForeColor="#51290f"/>
+                            </asp:Menu>
                             <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
                             </asp:ContentPlaceHolder>
                         </td>
