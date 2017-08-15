@@ -4,6 +4,10 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <style type="text/css">
       #map_canvas { height: 100% }
+        .css
+        {
+            height: 22px;
+        }
     </style>
     <script type="text/javascript"
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBhV-8I34Asyh9676tt9tkHKN0oL4YCce4&sensor=true">
@@ -30,6 +34,8 @@
                 title: 'ที่นี่'
             });
         }
+
+      
     </script>
 </asp:Content>
 <asp:Content ID="content" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -59,6 +65,22 @@ sub prepareText()
         Set Excl = Nothing
     end if
 end sub
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        var txtKeyWord = '<%= txtKeyword.ClientID %>';
+        var btnSearch = '<%= btnSearch.ClientID %>';
+        document.getElementById(txtKeyWord).addEventListener("keydown", function (e) {
+            if (!e) { var e = window.event; }
+            //e.preventDefault(); // sometimes useful
+
+            // Enter is pressed
+            if (e.keyCode == 13) {
+                document.getElementById(btnSearch).click();
+            }
+        }, false);
+    });
 </script>
 <table width="750px" border="0" align="center" cellspacing="0" cellpadding="0" class="css">
   <tr>
@@ -102,6 +124,8 @@ end sub
        </table>
     </td>
   </tr>
+  
+  
   <tr>
     <td>
         <table width="750px" border="0" cellspacing="0" cellpadding="0" class="css">
@@ -135,9 +159,9 @@ end sub
                             </td>
                         </tr>
                         <tr height="20px">
-                            <td class="choice" >คำค้นหา:</td>
+                            <td class="choice" >ชื่อโครงการ:</td>
                             <td class="choice" >
-                                <asp:TextBox ID="txtKeyword" runat="server" CssClass="css"/>
+                                <asp:TextBox  ID="txtKeyword" runat="server" CssClass="css"/>
                                 <asp:ImageButton ID="btnSearch" runat="server" CssClass="css" ImageUrl="photo/search.gif" 
                             Width="18px" Height="18px" OnClick="btnSearch_Click" />
 	                            <asp:ImageButton ID="btnExport" class="css" runat="server" OnClick="btnExport_Click" ImageUrl="photo/x.gif"  Width="18px" Height="18px"/>
@@ -172,6 +196,8 @@ end sub
         </table>
     </td>
   </tr>
+
+
   <tr>
     <td align="center" valign="top">
                 <table width="750px" border="1" style="border:1px solid;" cellspacing="0" cellpadding="0" bgcolor="#ffffff">

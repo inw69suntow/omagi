@@ -20,7 +20,7 @@
 <div class="menu-container">
         <div class="menu">
             <ul>
-                <li><a href="#">บันทึกข้อมูล</a>
+                <li><a href="#">บันทึกข้อมูลxxx</a>
                     <ul>
                         <li><a href="#"></a>
                             <ul>
