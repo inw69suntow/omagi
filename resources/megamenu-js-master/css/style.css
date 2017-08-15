@@ -48,7 +48,7 @@ Screen style's
 .menu-container {
     width: 80%;
     margin: 0 auto;
-    background: #e9e9e9;
+  /*  background: #e9e9e9; */
 }
 
 .menu-mobile {
@@ -102,7 +102,8 @@ Screen style's
 
 .menu > ul > li {
     float: left;
-    background: #e9e9e9;
+    /** background: #e9e9e9;**/
+    background :#fec24a;
     padding: 0;
     margin: 0;
 }
@@ -111,6 +112,7 @@ Screen style's
     text-decoration: none;
     padding: 1.5em 3em;
     display: block;
+    font-size:1.2em;
 }
 
 .menu > ul > li:hover {
