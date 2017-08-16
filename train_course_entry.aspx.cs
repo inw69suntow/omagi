@@ -96,8 +96,11 @@ public partial class _train_course_entry : System.Web.UI.Page
             Response.Redirect("login.aspx");
             return;
         }
-
-        Load_Table(null); 
+        if (!IsPostBack)
+        {
+            Load_Table(null); 
+        }
+       
     }
 
 
@@ -126,13 +129,15 @@ public partial class _train_course_entry : System.Web.UI.Page
             string sql = "SELECT fl_course from tb_train_Course ";
             if (course != null && !"".Equals(course))
             {
-                sql += " where fl_course like '%"+course+"%'";
+                sql += " where fl_course like '%"+course.Replace("'","")+"%'";
+               // sql += " where fl_course LIKE '%@course%' ";
             }
             sql +=" order by fl_course ";
             OleDbDataReader dtReader;
             OleDbCommand objCmd = new OleDbCommand();
             objCmd.CommandText = sql;
             objCmd.Connection = con;
+  
             dtReader = objCmd.ExecuteReader();
 
             int count = 1;
@@ -248,8 +253,5 @@ public partial class _train_course_entry : System.Web.UI.Page
     {
         Load_Table(txtKeyword.Text.Trim());
     }
-    protected void txtKeyword_TextChanged(object sender, EventArgs e)
-    {
-
-    }
+  
 }
