@@ -353,7 +353,7 @@ public partial class _train_member_entry: System.Web.UI.Page
         {
             cmbDept.Items.Add(new ListItem(rs.GetString(1), rs.GetString(0)));
             cmbDeptSearch.Items.Add(new ListItem(rs.GetString(1), rs.GetString(0)));
-        }
+        } 
         rs.Close();
         Conn.Close();
     }
@@ -885,12 +885,14 @@ public partial class _train_member_entry: System.Web.UI.Page
             return;
         }
 
-        //Inject Client Script
-        HtmlGenericControl body = (HtmlGenericControl)Master.FindControl("masterBody");
-        body.Attributes.Add("onload", "initialize()");
+       
 
-        if (!Page.IsPostBack)
+        if (!IsPostBack)
         {
+            //Inject Client Script
+            HtmlGenericControl body = (HtmlGenericControl)Master.FindControl("masterBody");
+            body.Attributes.Add("onload", "initialize()");
+
             dateDataSet();
             titleDataSet();
             provinceDataSet();
@@ -910,27 +912,30 @@ public partial class _train_member_entry: System.Web.UI.Page
                 }
             }
             userDataSet();
-        }
-        OleDbConnection Conn = null;
-        try
-        {
-            DateTime tmpNow = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
-            tmpNow = tmpNow.AddMinutes(20);
-            Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
-            OleDbCommand command = new OleDbCommand();
-            Conn.Open();
-            command.Connection = Conn;
 
-            string sql = "DELETE FROM tb_logontime where fl_user_id='" + Session["uID"].ToString().Replace("'", "''") + "' ";
-            command.CommandText = sql;
-            command.ExecuteNonQuery();
 
-            sql = "INSERT INTO tb_logontime(fl_user_id,fl_user_time) values ('" + Session["uID"].ToString().Replace("'", "''") + "','" + tmpNow.Year + tmpNow.Month.ToString().PadLeft(2, '0') + tmpNow.Day.ToString().PadLeft(2, '0') + tmpNow.Hour.ToString().PadLeft(2, '0') + tmpNow.Minute.ToString().PadLeft(2, '0') + tmpNow.Second.ToString().PadLeft(2, '0') + "') ";
-            command.CommandText = sql;
-            command.ExecuteNonQuery();
-            Conn.Close();
+            OleDbConnection Conn = null;
+            try
+            {
+                DateTime tmpNow = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+                tmpNow = tmpNow.AddMinutes(20);
+                Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
+                OleDbCommand command = new OleDbCommand();
+                Conn.Open();
+                command.Connection = Conn;
+
+                string sql = "DELETE FROM tb_logontime where fl_user_id='" + Session["uID"].ToString().Replace("'", "''") + "' ";
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+
+                sql = "INSERT INTO tb_logontime(fl_user_id,fl_user_time) values ('" + Session["uID"].ToString().Replace("'", "''") + "','" + tmpNow.Year + tmpNow.Month.ToString().PadLeft(2, '0') + tmpNow.Day.ToString().PadLeft(2, '0') + tmpNow.Hour.ToString().PadLeft(2, '0') + tmpNow.Minute.ToString().PadLeft(2, '0') + tmpNow.Second.ToString().PadLeft(2, '0') + "') ";
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                Conn.Close();
+            }
+            catch (Exception ex) { if (Conn != null) { if (Conn.State == ConnectionState.Open)Conn.Close(); } }
         }
-        catch (Exception ex) { if (Conn != null) { if (Conn.State == ConnectionState.Open)Conn.Close(); } }
+       
     }
 
     protected void userDataSet()
@@ -1046,7 +1051,7 @@ public partial class _train_member_entry: System.Web.UI.Page
             dtGrid.Rows[i].Attributes.Add("class", "off");
             dtGrid.Rows[i].Attributes.Add("onmouseover", "this.className='on'");
             dtGrid.Rows[i].Attributes.Add("onmouseout", "this.className='off'");
-            dtGrid.Rows[i].Attributes.Add("onclick", action);
+            dtGrid.Rows[i].Attributes.Add("ondblclick", action);
 
             dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
             dtGrid.Rows[i].Cells[0].ColSpan = 1;

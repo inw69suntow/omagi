@@ -1,5 +1,5 @@
 <%@ OutputCache Location="None" VaryByParam="none" %>
-<%@ Page Language="C#" AutoEventWireup="true" CodeFile="mass_entry_detail.aspx.cs" Inherits="_mass_entry" ViewStateEncryptionMode="Always"%>
+<%@ Page Language="C#" AutoEventWireup="true" CodeFile="sub_mass_entry_detail.aspx.cs" Inherits="_mass_entry" ViewStateEncryptionMode="Always"%>
 <html>
     <head>
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />

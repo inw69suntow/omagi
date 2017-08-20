@@ -51,8 +51,21 @@
         function openMember(action,checkbox) {
               if (checkbox.checked) {
                    document.location="train_member_entry.aspx?hid=" + action;
-                } 
-        }
+                }
+           }
+
+
+//             function openMember(action, checkbox) {
+//               $.ajax({
+//                   type: "GET",
+//                   url: "train_member_entry.aspx?hid=" + action,
+//                   dataType: "text/heml",
+//                   success: function (txt) {
+//                     $('#member_detail').html('');
+//                     $('#member_detail').html(txt);       
+//                  
+//               });
+//           }
     </script>
 </asp:Content>
 <asp:Content ID="content" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -438,4 +451,5 @@ end sub
      </td>
   </tr>
 </table>
+
 </asp:Content>

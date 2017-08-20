@@ -1051,13 +1051,16 @@ public partial class _train_member_entry: System.Web.UI.Page
             dtGrid.Rows[i].Attributes.Add("class", "off");
             dtGrid.Rows[i].Attributes.Add("onmouseover", "this.className='on'");
             dtGrid.Rows[i].Attributes.Add("onmouseout", "this.className='off'");
-            dtGrid.Rows[i].Attributes.Add("ondblclick", action);
+            //dtGrid.Rows[i].Attributes.Add("ondblclick", action);
 
             dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
             dtGrid.Rows[i].Cells[0].ColSpan = 1;
             dtGrid.Rows[i].Cells[0].Align = "CENTER";
 
-            if (hidID.Value != rs.GetString(0)) dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\"" + action + "\">"; else dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' checked onClick=\"" + action + "\">";
+            if (hidID.Value != rs.GetString(0))
+                dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\"" + action + "\">"; 
+            else 
+                dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' checked onClick=\"" + action + "\">";
 
             for (int j = 0; j < 6; j++)
             {
