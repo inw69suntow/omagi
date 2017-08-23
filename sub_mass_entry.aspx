@@ -60,6 +60,18 @@ sub prepareText()
     end if
 end sub
 </script>
+
+<script type="text/javascript">
+
+
+    function checkboxClick(chckbox, id, parent) {
+        if ($(chckbox).is(':checked')) {
+            document.location="sub_mass_entry.aspx?hid=" +id+ "&parent_id=" + parent ;
+        } 
+    }
+
+</script>
+
 <table width="750px" border="0" align="center" cellspacing="0" cellpadding="0" class="css">
   <tr>
     <td style="height:25px; width: 750px;" class="header_1">ข้อมูลโครงการย่อย</td>
@@ -190,11 +202,25 @@ end sub
                                 <asp:DropDownList ID="cmbMassGroup" runat="server" CssClass="css"></asp:DropDownList>
                             <font color="red">*</font>
                             </td>
+                        </tr
+                         <tr height="20px">
+                            <td class="choice" >ชื่อโครงการแม่:</td>
+                            <td class="choice" >
+                                <asp:HiddenField ID="HiddenField1" runat="server" />
+                                <asp:Label ID="lbParentName" runat="server" ></asp:Label>
+                            </td>
                         </tr>
                         <tr height="20px">
                             <td class="choice" >ชื่อโครงการย่อย:</td>
                             <td class="choice" >
                                 <asp:TextBox ID="txtMassName" runat="server" width="200px" MaxLength="500" CssClass="css"/>
+                            </td>
+                        </tr>
+                         <tr height="20px">
+                            <td class="choice" >ระดับโครงการ:</td>
+                            <td class="choice" >
+                                  <asp:DropDownList ID="ddProjectLevel" cssClass="css" runat="server">
+                                 </asp:DropDownList>
                             </td>
                         </tr>
                         <tr height="20px">
