@@ -318,7 +318,10 @@ public partial class _mass_entry: System.Web.UI.Page
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[5].Width = "10%";
         dtGrid.Rows[0].Cells[5].InnerHtml = "<center>จำนวนรายงาน (คน)</center>";
-      
+
+        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
+        dtGrid.Rows[0].Cells[5].Width = "10%";
+        dtGrid.Rows[0].Cells[5].InnerHtml = "";
 
         string sql = "SELECT distinct fl_id,";
         sql = sql + " case isnull(a.fl_groupname,'') when '' then isnull(b.fl_group_name,'') else isnull(a.fl_groupname,'') end groupName, ";
@@ -433,7 +436,7 @@ public partial class _mass_entry: System.Web.UI.Page
                 dtGrid.Rows[i].Attributes.Add("class", "off");
                 dtGrid.Rows[i].Attributes.Add("onmouseover", "this.className='on'");
                 dtGrid.Rows[i].Attributes.Add("onmouseout", "this.className='off'");
-                dtGrid.Rows[i].Attributes.Add("onclick", action);
+               // dtGrid.Rows[i].Attributes.Add("onclick", action);
             }
             else
             {
@@ -446,7 +449,10 @@ public partial class _mass_entry: System.Web.UI.Page
             dtGrid.Rows[i].Cells[0].ColSpan = 1;
             dtGrid.Rows[i].Cells[0].Align = "CENTER";
 
-            if (hidID.Value != rs.GetString(0)) dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\"" + action + "\">"; else dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' checked onClick=\"" + action + "\">";
+            if (hidID.Value != rs.GetString(0)) 
+                dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\"" + action + "\">"; 
+            else 
+                dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' checked onClick=\"" + action + "\">";
 
             for (int j = 1; j <= 4; j++)
             {
@@ -458,7 +464,10 @@ public partial class _mass_entry: System.Web.UI.Page
             dtGrid.Rows[i].Cells[5].Align = "RIGHT";
             dtGrid.Rows[i].Cells[5].InnerHtml = rs.GetInt32(5).ToString("#,##0");
 
-         
+            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
+            dtGrid.Rows[i].Cells[6].ColSpan = 1;
+            dtGrid.Rows[i].Cells[6].Align = "CENTER";
+            dtGrid.Rows[i].Cells[6].InnerHtml = "<a href=\"sub_mass_entry.aspx?parent_id=" + rs.GetString(0) + "&path=mass_entry\">โครงการย่อย</a>";
 
 
             i = i + 1;
