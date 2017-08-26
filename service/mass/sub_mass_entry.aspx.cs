@@ -303,45 +303,65 @@ public partial class _mass_entry: System.Web.UI.Page
         dtGrid.Rows[0].Cells[0].Width = "1%";
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[1].Width = "25%";
-        dtGrid.Rows[0].Cells[1].InnerHtml = "<center>โครงการ</center>";
+        dtGrid.Rows[0].Cells[1].InnerHtml = "<center>โครงการหลักย่อย</center>";
+        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
+        dtGrid.Rows[0].Cells[2].Width = "25%";
+        dtGrid.Rows[0].Cells[2].InnerHtml = "<center>โครงการหลักหลัก</center>";
 
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[2].Width = "20%";
-        dtGrid.Rows[0].Cells[2].InnerHtml = "<center>ประเภทโครงการ</center>"; 
+        dtGrid.Rows[0].Cells[3].Width = "20%";
+        dtGrid.Rows[0].Cells[3].InnerHtml = "<center>ประเภทโครงการ</center>"; 
 
-        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[3].Width = "15%";
-        dtGrid.Rows[0].Cells[3].InnerHtml = "<center>จังหวัด</center>";
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[4].Width = "15%";
-        dtGrid.Rows[0].Cells[4].InnerHtml = "<center>หน่วยงาน</center>";
+        dtGrid.Rows[0].Cells[4].InnerHtml = "<center>จังหวัด</center>";
+
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[5].Width = "10%";
-        dtGrid.Rows[0].Cells[5].InnerHtml = "<center>จำนวนรายงาน (คน)</center>";
-      
+        dtGrid.Rows[0].Cells[5].InnerHtml = "<center>หน่วยงาน</center>";
 
-        string sql = "SELECT distinct fl_id,";
-        sql = sql + " case isnull(a.fl_groupname,'') when '' then isnull(b.fl_group_name,'') else isnull(a.fl_groupname,'') end groupName, ";
+        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
+        dtGrid.Rows[0].Cells[6].Width = "4%";
+        dtGrid.Rows[0].Cells[6].InnerHtml = "<center>จำนวนรายงาน (คน)</center>";
+
+        string sql = "SELECT distinct a.fl_id id, ";
+        sql = sql + " isnull(a.fl_groupname,'') groupName ";
+        //โครงการหลัก
+        sql = sql + " ,case isnull(parent.fl_groupname,'') when '' then isnull(b.fl_group_name,'') else isnull(parent.fl_groupname,'') end parentName ";
         //เพิ่ม group name 
-        sql = sql + " isnull(b.fl_group_name,'') mainGroupName, ";
-        sql = sql + " case isnull(fl_province_name,'') when '' then isnull(fl_province,'') else isnull(fl_province_name,'') end provinceName, ";
-        sql = sql + " case isnull(fl_dept_name,'') when '' then isnull(fl_dept,'') else isnull(fl_dept_name,'') end deptName, ";
-        sql = sql + " cast('0' + isnull(fl_reportMember,0) as int) reportMember, ";
+        sql = sql + " ,isnull(b.fl_group_id,'') mainGroupId, isnull(b.fl_group_name,'') mainGroupName, ";
+
+        sql = sql + " case isnull(c.fl_province_name,'') when '' then isnull(a.fl_province,'') else isnull(c.fl_province_name,'') end provinceName,";
+        sql = sql + " case isnull(d.fl_dept_name,'') when '' then isnull(a.fl_dept,'') else isnull(d.fl_dept_name,'') end deptName,";
+        sql = sql + " cast('0' + isnull(a.fl_reportMember,0) as int) reportMember,  a.fl_dept ";
         
         //For sorting
-        sql = sql + " fl_dept ";
-        sql = sql + " ,isnull(b.fl_group_id,'') mainGroupId ";
+        //sql = sql + " fl_dept ";
+        
+        
+        sql = sql + " ,ISNULL(parent.fl_id,'') parentId ";
       
-
         sql = sql + " FROM tb_detailgroup a ";
+        sql = sql + " left join tb_detailgroup parent on parent.fl_id = a.fl_parent_id ";
         sql = sql + " left join tb_maingroup b  on a.fl_group_id = b.fl_group_id ";
         sql = sql + " left join tb_moicode c on a.fl_province = c.fl_province_code ";
         sql = sql + " left join tb_dept d on a.fl_dept=d.fl_dept_id ";
 
         sql = sql + " where 1=1 ";
-
-        // update โครงการหลักเท่านั้น
-        sql += " and a.fl_parent_id is null ";
+        // update โครงการลูกเท่านั้น
+        String parent= Request.Params.Get("parent_id");
+        if (txtParentName.Text != null && txtParentName.Text.Trim() != "")
+        {
+            sql += " and a.fl_parent_id =\'" + txtParentName.Text.Replace("'","").Trim()+"\' " ;
+        }
+        else if (parent != null && !"".Equals(parent.Trim()))
+        {
+            sql += " and a.fl_parent_id=\'"+parent.Replace("'","").Trim()+"\' ";
+        }
+        else
+        {
+            sql += " and a.fl_parent_id is not null ";
+        }
         //Check filter command
         if (cmbDeptSearch.SelectedValue.Trim() != "") sql = sql + " and isnull(a.fl_dept,'') ='" + cmbDeptSearch.SelectedValue.Trim() + "' ";
         if (cmbProvinceSearch.SelectedValue.Trim() != "") sql = sql + " and a.fl_province='" + cmbProvinceSearch.SelectedValue.Trim() + "' ";
@@ -426,9 +446,10 @@ public partial class _mass_entry: System.Web.UI.Page
         i = 1;
         while ((rs.Read()) && (i <= pageSize))
         {
-            string action = "document.location='mass_entry.aspx?hid=" + rs.GetString(0) + "';";
+
+            string action = "document.location='sub_mass_entry.aspx?hid=" + rs.GetString(0) + "'&parent_id=" + rs["parentId"] + ";";
             dtGrid.Rows.Add(new HtmlTableRow());
-            if (rs.GetInt32(5) > 0)
+            if (rs.GetInt32(6) > 0)
             {
                 dtGrid.Rows[i].Attributes.Add("class", "off");
                 dtGrid.Rows[i].Attributes.Add("onmouseover", "this.className='on'");
@@ -440,7 +461,7 @@ public partial class _mass_entry: System.Web.UI.Page
                 dtGrid.Rows[i].Attributes.Add("class", "close");
                 dtGrid.Rows[i].Attributes.Add("onmouseover", "this.className='on'");
                 dtGrid.Rows[i].Attributes.Add("onmouseout", "this.className='close'");
-               // dtGrid.Rows[i].Attributes.Add("onclick", action);
+                dtGrid.Rows[i].Attributes.Add("onclick", action);
             }
             dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
             dtGrid.Rows[i].Cells[0].ColSpan = 1;
@@ -448,18 +469,32 @@ public partial class _mass_entry: System.Web.UI.Page
 
             if (hidID.Value != rs.GetString(0)) dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\"" + action + "\">"; else dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' checked onClick=\"" + action + "\">";
 
-            for (int j = 1; j <= 4; j++)
-            {
-                dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
-                dtGrid.Rows[i].Cells[j].Align = "LEFT";
-                dtGrid.Rows[i].Cells[j].InnerHtml = "&nbsp;" + rs.GetString(j);
-            }
+           
+
             dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
-            dtGrid.Rows[i].Cells[5].Align = "RIGHT";
-            dtGrid.Rows[i].Cells[5].InnerHtml = rs.GetInt32(5).ToString("#,##0");
+            dtGrid.Rows[i].Cells[1].Align = "LEFT";
+            dtGrid.Rows[i].Cells[1].InnerHtml = "&nbsp;" + rs.GetString(1);
 
-         
+            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
+            dtGrid.Rows[i].Cells[2].Align = "LEFT";
+            dtGrid.Rows[i].Cells[2].InnerHtml = "&nbsp;" + rs.GetString(2);
 
+            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
+            dtGrid.Rows[i].Cells[3].Align = "LEFT";
+            dtGrid.Rows[i].Cells[4].InnerHtml = "&nbsp;" + rs.GetString(3);
+
+
+            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
+            dtGrid.Rows[i].Cells[4].Align = "LEFT";
+            dtGrid.Rows[i].Cells[4].InnerHtml = "&nbsp;" + rs.GetString(4);
+
+            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
+            dtGrid.Rows[i].Cells[5].Align = "LEFT";
+            dtGrid.Rows[i].Cells[5].InnerHtml = "&nbsp;" + rs.GetString(5);
+
+            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
+            dtGrid.Rows[i].Cells[6].Align = "RIGHT";
+            dtGrid.Rows[i].Cells[6].InnerHtml = rs.GetInt32(4).ToString("#,##0");
 
             i = i + 1;
         }

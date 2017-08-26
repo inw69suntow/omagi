@@ -19,6 +19,7 @@
                         <li><a href="#"></a>
                             <ul>
                                 <li><a href='<%=Page.ResolveClientUrl("~/mass_entry.aspx")%>'>บันทึกข้อมูลโครงการ</a></li>
+								<!--<li><a href='<%=Page.ResolveClientUrl("~/sub_mass_entry.aspx")%>'>บันทึกข้อมูลโครงการย่อย</a></li>--!>
                                 <li><a href='<%=Page.ResolveClientUrl("~/train_member_entry.aspx")%>'>บันทึกข้อมูลการฝึกอบรม</a></li>
                                 <li><a href='<%=Page.ResolveClientUrl("~/train_course_entry.aspx")%>'>บันทึกข้อมูลหลักสูตรการฝึกอบรม</a></li>
                                 <li><a href='<%=Page.ResolveClientUrl("~/train_course_entry.aspx")%>'>บันทึกข้อมูลสมาชิก</a></li>

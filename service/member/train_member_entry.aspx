@@ -30,6 +30,29 @@
                 title: 'ที่นี่'
             });
         }
+
+
+        $(function () {
+            var txtKeyWord = '<%= txtKeyword.ClientID %>';
+            var btnSearch = '<%= btnSearch.ClientID %>';
+            document.getElementById(txtKeyWord).addEventListener("keydown", function (e) {
+                if (!e) { var e = window.event; }
+                //e.preventDefault(); // sometimes useful
+
+                // Enter is pressed
+                if (e.keyCode == 13) {
+                    document.getElementById(btnSearch).click();
+                }
+            }, false);
+        });
+
+
+
+        function openMember(action,checkbox) {
+              if (checkbox.checked) {
+                   document.location="train_member_entry.aspx?hid=" + action;
+                } 
+        }
     </script>
 </asp:Content>
 <asp:Content ID="content" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -143,7 +166,7 @@ end sub
                             </td>
                         </tr>
                         <tr height="20px">
-                            <td class="choice" >คำค้นหา:</td>
+                            <td class="choice" >ชื่อผู้เข้าอบรม:</td>
                             <td class="choice" >
                                 <asp:TextBox ID="txtKeyword" runat="server" CssClass="css" Width="90px"/>                        
                                 <asp:ImageButton ID="btnSearch" runat="server" CssClass="css" ImageUrl="photo/search.gif" 

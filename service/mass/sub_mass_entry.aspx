@@ -1,5 +1,5 @@
 <%@ OutputCache Location="None" VaryByParam="none" %>
-<%@ Page Language="C#" AutoEventWireup="true" CodeFile="mass_entry.aspx.cs" Inherits="_mass_entry" MasterPageFile="~/MasterPage.master" ViewStateEncryptionMode="Always"%>
+<%@ Page Language="C#" AutoEventWireup="true" CodeFile="sub_mass_entry.aspx.cs" Inherits="_mass_entry" MasterPageFile="~/MasterPage.master" ViewStateEncryptionMode="Always"%>
 <asp:Content ID="content2" ContentPlaceHolderID="head" runat="server">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <style type="text/css">
@@ -62,7 +62,7 @@ end sub
 </script>
 <table width="750px" border="0" align="center" cellspacing="0" cellpadding="0" class="css">
   <tr>
-    <td style="height:25px; width: 750px;" class="header_1">ข้อมูลกลุ่มมวลชน</td>
+    <td style="height:25px; width: 750px;" class="header_1">ข้อมูลโครงการย่อย</td>
   </tr>
 </table>
 
@@ -74,7 +74,7 @@ end sub
             <tr>
                 <td width="6px" style="height:23px;" background="photo/box_topleft.gif"></td>   
                 <th style="height:20px; width:598px;"  background="photo/box_topbg.gif">
-                    <div align="left" valign="middle"><b>รายนามกลุ่มมวลชน</b>
+                    <div align="left" valign="middle"><b>รายนามโครงการย่อย</b>
                     </div>
                 </th>
                 <th style="height:20px; width:140px;"  background="photo/box_topbg.gif">
@@ -134,13 +134,18 @@ end sub
                                 </asp:DropDownList>
                             </td>
                         </tr>
+                         <tr height="20px">
+                            <td class="choice" >โครงการหลัก:</td>
+                            <td class="choice" >
+                               <asp:TextBox ID="txtParentName" runat="server" CssClass="css"/>
+                            </td>
+                        </tr>
                         <tr height="20px">
-                            <td class="choice" >คำค้นหา:</td>
+                            <td class="choice" >โครงการย่อย:</td>
                             <td class="choice" >
                                 <asp:TextBox ID="txtKeyword" runat="server" CssClass="css"/>
-                                <asp:ImageButton ID="btnSearch" runat="server" CssClass="css" ImageUrl="photo/search.gif" 
-                            Width="18px" Height="18px" OnClick="btnSearch_Click" />
-	                            <asp:ImageButton ID="btnExport" class="css" runat="server" OnClick="btnExport_Click" ImageUrl="photo/x.gif"  Width="18px" Height="18px"/>
+                                <asp:ImageButton ID="btnSearch" runat="server" CssClass="css" ImageUrl="~/photo/search.gif" Width="18px" Height="18px" OnClick="btnSearch_Click" />
+	                            <asp:ImageButton ID="btnExport" class="css" runat="server" OnClick="btnExport_Click" ImageUrl="~/photo/x.gif"  Width="18px" Height="18px"/>
                             </td>
                         </tr>
                       </table>
@@ -186,7 +191,7 @@ end sub
                             </td>
                         </tr>
                         <tr height="20px">
-                            <td class="choice" >ชื่อกลุ่มมวลชน:</td>
+                            <td class="choice" >ชื่อโครงการย่อย:</td>
                             <td class="choice" >
                                 <asp:TextBox ID="txtMassName" runat="server" width="200px" MaxLength="500" CssClass="css"/>
                             </td>

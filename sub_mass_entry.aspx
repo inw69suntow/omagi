@@ -1,13 +1,9 @@
 <%@ OutputCache Location="None" VaryByParam="none" %>
-<%@ Page Language="C#" AutoEventWireup="true" CodeFile="mass_entry.aspx.cs" Inherits="_mass_entry" MasterPageFile="~/MasterPage.master" ViewStateEncryptionMode="Always"%>
+<%@ Page Language="C#" AutoEventWireup="true" CodeFile="sub_mass_entry.aspx.cs" Inherits="_mass_entry" MasterPageFile="~/MasterPage.master" ViewStateEncryptionMode="Always"%>
 <asp:Content ID="content2" ContentPlaceHolderID="head" runat="server">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <style type="text/css">
       #map_canvas { height: 100% }
-        .css
-        {
-            height: 22px;
-        }
     </style>
     <script type="text/javascript"
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBhV-8I34Asyh9676tt9tkHKN0oL4YCce4&sensor=true">
@@ -34,8 +30,6 @@
                 title: 'ที่นี่'
             });
         }
-
-      
     </script>
 </asp:Content>
 <asp:Content ID="content" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -68,28 +62,19 @@ end sub
 </script>
 
 <script type="text/javascript">
-    $(function () {
-        var txtKeyWord = '<%= txtKeyword.ClientID %>';
-        var btnSearch = '<%= btnSearch.ClientID %>';
-        document.getElementById(txtKeyWord).addEventListener("keydown", function (e) {
-            if (!e) { var e = window.event; }
-            //e.preventDefault(); // sometimes useful
-
-            // Enter is pressed
-            if (e.keyCode == 13) {
-                document.getElementById(btnSearch).click();
-            }
-        }, false);
-    });
 
 
-    function childClick(id, parent) {
-         document.location = "sub_mass_entry.aspx?hid=" + id + "&parent_id=" + parent+"&page=master";
+    function checkboxClick(chckbox, id, parent) {
+        if ($(chckbox).is(':checked')) {
+            document.location="sub_mass_entry.aspx?hid=" +id+ "&parent_id=" + parent ;
+        } 
     }
+
 </script>
+
 <table width="750px" border="0" align="center" cellspacing="0" cellpadding="0" class="css">
   <tr>
-    <td style="height:25px; width: 750px;" class="header_1">ข้อมูลโครงการ</td>
+    <td style="height:25px; width: 750px;" class="header_1">ข้อมูลโครงการย่อย</td>
   </tr>
 </table>
 
@@ -101,7 +86,7 @@ end sub
             <tr>
                 <td width="6px" style="height:23px;" background="photo/box_topleft.gif"></td>   
                 <th style="height:20px; width:598px;"  background="photo/box_topbg.gif">
-                    <div align="left" valign="middle"><b>รายนามโครงการ</b>
+                    <div align="left" valign="middle"><b>รายนามโครงการย่อย</b>
                     </div>
                 </th>
                 <th style="height:20px; width:140px;"  background="photo/box_topbg.gif">
@@ -129,8 +114,6 @@ end sub
        </table>
     </td>
   </tr>
-  
-  
   <tr>
     <td>
         <table width="750px" border="0" cellspacing="0" cellpadding="0" class="css">
@@ -163,13 +146,18 @@ end sub
                                 </asp:DropDownList>
                             </td>
                         </tr>
-                        <tr height="20px">
-                            <td class="choice" >ชื่อโครงการ:</td>
+                         <tr height="20px">
+                            <td class="choice" >โครงการหลัก:</td>
                             <td class="choice" >
-                                <asp:TextBox  ID="txtKeyword" runat="server" CssClass="css"/>
-                                <asp:ImageButton ID="btnSearch" runat="server" CssClass="css" ImageUrl="photo/search.gif" 
-                            Width="18px" Height="18px" OnClick="btnSearch_Click" />
-	                            <asp:ImageButton ID="btnExport" class="css" runat="server" OnClick="btnExport_Click" ImageUrl="photo/x.gif"  Width="18px" Height="18px"/>
+                               <asp:TextBox ID="txtParentName" runat="server" CssClass="css"/>
+                            </td>
+                        </tr>
+                        <tr height="20px">
+                            <td class="choice" >โครงการย่อย:</td>
+                            <td class="choice" >
+                                <asp:TextBox ID="txtKeyword" runat="server" CssClass="css"/>
+                                <asp:ImageButton ID="btnSearch" runat="server" CssClass="css" ImageUrl="~/photo/search.gif" Width="18px" Height="18px" OnClick="btnSearch_Click" />
+	                            <asp:ImageButton ID="btnExport" class="css" runat="server" OnClick="btnExport_Click" ImageUrl="~/photo/x.gif"  Width="18px" Height="18px"/>
                             </td>
                         </tr>
                       </table>
@@ -201,8 +189,6 @@ end sub
         </table>
     </td>
   </tr>
-
-
   <tr>
     <td align="center" valign="top">
                 <table width="750px" border="1" style="border:1px solid;" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
@@ -210,16 +196,31 @@ end sub
                 <td>
                     <table border="0" align="center" width="100%" cellspacing="0" cellpadding="0">            
                         <tr height="20px">
-                            <td class="choice" style="width: 200px">ประเภทโครงการ:</td>
+                            <td class="choice" style="width: 200px">ประเภทกลุ่มมวลชน:</td>
                             <td class="choice" >
+                                <asp:HiddenField ID="hdParentId" runat="server" />
                                 <asp:DropDownList ID="cmbMassGroup" runat="server" CssClass="css"></asp:DropDownList>
                             <font color="red">*</font>
                             </td>
+                        </tr
+                         <tr height="20px">
+                            <td class="choice" >ชื่อโครงการแม่:</td>
+                            <td class="choice" >
+                                <asp:HiddenField ID="HiddenField1" runat="server" />
+                                <asp:Label ID="lbParentName" runat="server" ></asp:Label>
+                            </td>
                         </tr>
                         <tr height="20px">
-                            <td class="choice" >ชื่อโครงการ:</td>
+                            <td class="choice" >ชื่อโครงการย่อย:</td>
                             <td class="choice" >
                                 <asp:TextBox ID="txtMassName" runat="server" width="200px" MaxLength="500" CssClass="css"/>
+                            </td>
+                        </tr>
+                         <tr height="20px">
+                            <td class="choice" >ระดับโครงการ:</td>
+                            <td class="choice" >
+                                  <asp:DropDownList ID="ddProjectLevel" cssClass="css" runat="server">
+                                 </asp:DropDownList>
                             </td>
                         </tr>
                         <tr height="20px">
