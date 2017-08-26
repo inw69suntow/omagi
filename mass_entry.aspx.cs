@@ -440,7 +440,7 @@ public partial class _mass_entry: System.Web.UI.Page
                 dtGrid.Rows[i].Attributes.Add("class", "close");
                 dtGrid.Rows[i].Attributes.Add("onmouseover", "this.className='on'");
                 dtGrid.Rows[i].Attributes.Add("onmouseout", "this.className='close'");
-                dtGrid.Rows[i].Attributes.Add("onclick", action);
+               // dtGrid.Rows[i].Attributes.Add("onclick", action);
             }
             dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
             dtGrid.Rows[i].Cells[0].ColSpan = 1;

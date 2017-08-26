@@ -172,6 +172,8 @@ public partial class _mass_entry: System.Web.UI.Page
         //cmbTambon.Items.Add(new ListItem("ไม่กำหนด", ""));
         //cmbMassGroup.SelectedValue = "";
         txtMassName.Text = "";
+        lbParentName.Text = "";
+        hdParentId.Value = "";
         txtReportAmount.Text = "";
         //cmbDept.SelectedValue="";
         txtGoogle.Text="";
@@ -185,48 +187,88 @@ public partial class _mass_entry: System.Web.UI.Page
         clearBox();
         hidID.Value = hid.Trim();
         string sql = "SELECT distinct ";
-        sql += " isnull(fl_province,''), ";
-        sql += " isnull(fl_district,''), ";
-        sql += " isnull(fl_tambon,''), ";
-        sql += " isnull(fl_moo,''), ";
-        sql += " isnull(fl_group_id,''), ";
-        sql += " isnull(fl_groupname,''), ";
-        sql += " isnull(fl_reportMember,''), ";
-        sql += " isnull(fl_dept,''), ";
-        sql += " isnull(fl_google,''), ";
-        sql += " isnull(fl_create_time,''), ";
-        sql += " isnull(fl_update_time,'') ";
-        sql += " from tb_detailgroup ";
-        sql += " where fl_id='" + hidID.Value + "' ";
+        sql += " isnull(a.fl_province,''), ";
+        sql += " isnull(a.fl_district,''), ";
+        sql += " isnull(a.fl_tambon,''), ";
+        sql += " isnull(a.fl_moo,''), ";
+        sql += " isnull(a.fl_group_id,''), ";
+        sql += " isnull(a.fl_groupname,''), ";
+        sql += " isnull(a.fl_reportMember,''), ";
+        sql += " isnull(a.fl_dept,''), ";
+        sql += " isnull(a.fl_google,''), ";
+        sql += " isnull(a.fl_create_time,''), ";
+        sql += " isnull(a.fl_update_time,'') ";
+
+        sql += " ,isnull(parent.fl_groupname,'') parentName ";
+        sql += " ,isnull(parent.fl_id,'') parentId ";
+        sql += " ,isnull(a.fl_id,'') parentId ";
+        sql += " ,a.fl_level level ";
+
+        sql += " from tb_detailgroup a ";
+        sql += " left join tb_detailgroup parent on parent.fl_id = a.fl_parent_id ";
+        sql += " where a.fl_id='" + hidID.Value + "' ";
 
         OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
         OleDbCommand command = new OleDbCommand();
-        Conn.Open();
-        command.Connection = Conn;
-        command.CommandText = sql.Replace(";","");
-        OleDbDataReader rs = command.ExecuteReader();
-        if (rs.Read())
+        OleDbDataReader rs = null;
+        try
         {
-            if (rs.GetString(0).Trim() != "") cmbProvince.SelectedValue = rs.GetString(0).Trim();
-            districtDataSet();
-            if (rs.GetString(1).Trim() != "") cmbDistrict.SelectedValue = rs.GetString(1).Trim();
-            tambonDataSet();
-            if (rs.GetString(2).Trim() != "") cmbTambon.SelectedValue = rs.GetString(2).Trim();
-            txtMoo.Text = rs.GetString(3);
+            Conn.Open();
+            command.Connection = Conn;
+            command.CommandText = sql.Replace(";", "");
+            rs = command.ExecuteReader();
+            if (rs.Read())
+            {
+                if (rs.GetString(0).Trim() != "") cmbProvince.SelectedValue = rs.GetString(0).Trim();
+                districtDataSet();
+                if (rs.GetString(1).Trim() != "") cmbDistrict.SelectedValue = rs.GetString(1).Trim();
+                tambonDataSet();
+                if (rs.GetString(2).Trim() != "") cmbTambon.SelectedValue = rs.GetString(2).Trim();
+                txtMoo.Text = rs.GetString(3);
 
-            if (rs.GetString(4).Trim() != "") cmbMassGroup.SelectedValue = rs.GetString(4).Trim();
-            txtMassName.Text = rs.GetString(5).Trim();
+                if (rs.GetString(4).Trim() != "") cmbMassGroup.SelectedValue = rs.GetString(4).Trim();
+                txtMassName.Text = rs.GetString(5).Trim();
 
-            txtReportAmount.Text = rs.GetString(6).Trim();
-            if (rs.GetString(7).Trim() != "") cmbDept.SelectedValue = rs.GetString(7).Trim();
-            txtGoogle.Text = rs.GetString(8).Trim();
+                txtReportAmount.Text = rs.GetString(6).Trim();
+                if (rs.GetString(7).Trim() != "") cmbDept.SelectedValue = rs.GetString(7).Trim();
+                txtGoogle.Text = rs.GetString(8).Trim();
 
-            if (rs.GetString(9) != "") lblCreate.Text = rs.GetString(9).Substring(6, 2) + "-" + rs.GetString(9).Substring(4, 2) + "-" + rs.GetString(9).Substring(0, 4) + " " + rs.GetString(9).Substring(8, 2) + ":" + rs.GetString(9).Substring(10, 2) + ":" + rs.GetString(9).Substring(12, 2);
-            if (rs.GetString(10) != "") lblUpdate.Text = rs.GetString(10).Substring(6, 2) + "-" + rs.GetString(10).Substring(4, 2) + "-" + rs.GetString(10).Substring(0, 4) + " " + rs.GetString(10).Substring(8, 2) + ":" + rs.GetString(10).Substring(10, 2) + ":" + rs.GetString(10).Substring(12, 2);
+                if (rs.GetString(9) != "") lblCreate.Text = rs.GetString(9).Substring(6, 2) + "-" + rs.GetString(9).Substring(4, 2) + "-" + rs.GetString(9).Substring(0, 4) + " " + rs.GetString(9).Substring(8, 2) + ":" + rs.GetString(9).Substring(10, 2) + ":" + rs.GetString(9).Substring(12, 2);
+                if (rs.GetString(10) != "") lblUpdate.Text = rs.GetString(10).Substring(6, 2) + "-" + rs.GetString(10).Substring(4, 2) + "-" + rs.GetString(10).Substring(0, 4) + " " + rs.GetString(10).Substring(8, 2) + ":" + rs.GetString(10).Substring(10, 2) + ":" + rs.GetString(10).Substring(12, 2);
+
+                if (rs["parentName"] != null)
+                {
+                    lbParentName.Text = rs["parentName"].ToString();
+                }
+                if (rs["parentId"] != null)
+                {
+                    hdParentId.Value = rs["parentId"].ToString();
+                }
+                if (rs["parentId"] != null)
+                {
+                    hdParentId.Value = rs["parentId"].ToString();
+                }
+                if (rs["level"] != null)
+                {
+                    ddProjectLevel.SelectedValue = rs["level"].ToString();
+                }
+            }
         }
-        rs.Close();
-        Conn.Close();
+        catch (Exception e)
+        {
+            throw e;
+        }
+        finally
+        {
+            if (rs != null)
+            {
+                rs.Close();
+            }
+           
+            Conn.Close();
 
+        }
+       
         cmbDeptSearch.SelectedValue = cmbDept.SelectedValue;
         cmbProvinceSearch.SelectedValue = cmbProvince.SelectedValue;
     }

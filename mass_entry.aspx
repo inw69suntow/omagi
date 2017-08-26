@@ -81,6 +81,11 @@ end sub
             }
         }, false);
     });
+
+
+    function childClick(id, parent) {
+         document.location = "sub_mass_entry.aspx?hid=" + id + "&parent_id=" + parent+"&page=master";
+    }
 </script>
 <table width="750px" border="0" align="center" cellspacing="0" cellpadding="0" class="css">
   <tr>
