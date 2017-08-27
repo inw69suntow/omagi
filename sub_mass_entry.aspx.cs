@@ -420,7 +420,12 @@ public partial class _mass_entry: System.Web.UI.Page
         }
         else if (hdParentId.Value != null && !"".Equals(hdParentId.Value.Trim()))
         {
-            sql += " and a.fl_parent_id=\'"+hdParentId.Value.Replace("'","").Trim()+"\' ";
+           
+            if(hidID.Value!=null && !"".Equals(hidID.Value)){
+                 sql += " and a.fl_parent_id in (\'"+hdParentId.Value.Replace("'","").Trim()+"\',\'"+hidID.Value+"\') ";
+            }else{
+                sql += " and a.fl_parent_id=\'"+hdParentId.Value.Replace("'","").Trim()+"\' ";
+            }
          
         }
         else
