@@ -467,7 +467,7 @@ public partial class _mass_entry: System.Web.UI.Page
             dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
             dtGrid.Rows[i].Cells[6].ColSpan = 1;
             dtGrid.Rows[i].Cells[6].Align = "CENTER";
-            dtGrid.Rows[i].Cells[6].InnerHtml = "<a href=\"sub_mass_entry.aspx?parent_id=" + rs.GetString(0) + "&path=mass_entry\">โครงการย่อย</a>";
+            dtGrid.Rows[i].Cells[6].InnerHtml = "<a href=\"sub_mass_entry.aspx?parent_id=" + rs.GetString(0) + "&page=master&parentSearch=" + rs.GetString(0) + "\">โครงการย่อย</a>";
 
 
             i = i + 1;

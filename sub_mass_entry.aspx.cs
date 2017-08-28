@@ -13,6 +13,8 @@ using System.Data;
 using System.Data.Common;
 using System.Text;
 using System.Data.OleDb;
+using omagi_model;
+using System.Collections.Generic;
 
 public partial class _mass_entry: System.Web.UI.Page
 {
@@ -310,8 +312,13 @@ public partial class _mass_entry: System.Web.UI.Page
             ddProjectLevel.DataSource = new String[] { "1", "2" };
             ddProjectLevel.DataBind();
             String parent = Request.Params["parent_id"];
+            String parentSearch = Request.Params["parentSearch"];
+            String page = Request.Params["page"];
             this.hdParentId.Value = parent == null ? "" : parent.Trim();
-
+            if ("master".Equals(page))
+            {
+                this.hdParentIdSearch.Value = parentSearch == null ? "" : parentSearch.Trim();
+            }
             userDataSet();
         }
         else
@@ -418,15 +425,18 @@ public partial class _mass_entry: System.Web.UI.Page
             sql += " and parent.fl_groupname like \'%" + txtParentName.Text.Replace("'", "").Trim() + "%\' ";
           
         }
-        else if (hdParentId.Value != null && !"".Equals(hdParentId.Value.Trim()))
+        else if (hdParentIdSearch.Value != null && !"".Equals(hdParentIdSearch.Value.Trim()))
         {
            
-            if(hidID.Value!=null && !"".Equals(hidID.Value)){
-                 sql += " and a.fl_parent_id in (\'"+hdParentId.Value.Replace("'","").Trim()+"\',\'"+hidID.Value+"\') ";
-            }else{
-                sql += " and a.fl_parent_id=\'"+hdParentId.Value.Replace("'","").Trim()+"\' ";
-            }
-         
+            //if(hidID.Value!=null && !"".Equals(hidID.Value)){
+            //    sql += " and a.fl_parent_id in (\'" + hdParentIdSearch.Value.Replace("'", "").Trim() + "\',\'" + hdParentIdSearch.Value + "\') ";
+            
+            //}else{
+            //    sql += " and a.fl_parent_id=\'" + hdParentIdSearch.Value.Replace("'", "").Trim() + "\' ";
+            //}
+
+            sql += " and a.fl_parent_id in (select distinct fl_id from tb_detailgroup where fl_parent_id=\'" + hdParentIdSearch.Value.Replace("'", "").Trim() + "\') ";
+            sql += " or a.fl_parent_id=\'" + hdParentIdSearch.Value.Replace("'", "").Trim() + "\' ";
         }
         else
         {
@@ -538,9 +548,9 @@ public partial class _mass_entry: System.Web.UI.Page
             dtGrid.Rows[i].Cells[0].Align = "CENTER";
 
             if (hidID.Value != rs.GetString(0))
-                dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\'checkboxClick(this,\"" + rs["fl_id"] +"\",\""+ rs["parentId"] + "\")\' />"; 
+                dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\'checkboxClick(this,\"" + rs["fl_id"] + "\",\"" + rs["parentId"] + "\",\"" + this.hdParentIdSearch.Value + "\")\' />"; 
             else
-                dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\'checkboxClick(this,\"" + rs["fl_id"] + "\",\"" + rs["parentId"] + "\")\' />";
+                dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\'checkboxClick(this,\"" + rs["fl_id"] + "\",\"" + rs["parentId"] + "\",\"" + this.hdParentIdSearch.Value + "\")\' />";
 
     
 
@@ -594,6 +604,27 @@ public partial class _mass_entry: System.Web.UI.Page
             dtGrid.Rows[i].Cells[0].InnerHtml = "<font color='red' size='4'><b>" + ConfigurationManager.AppSettings["nodataMsg"] + "</b></font>";
         }
     }
+
+
+
+    public IList<Project> getProject2()
+    {
+         String sql="select * from tb_detailgroup " ;
+         sql+=" where fl_parent_id in (SELECT DISTINCT fl_id FROM tb_detailgroup where fl_parent_id='288') ";
+         sql += " and fl_level=2";
+         OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
+         OleDbCommand command = new OleDbCommand();
+         Conn.Open();
+         command.Connection = Conn;
+         //Count Page        
+         command.CommandText = sql ;
+         command.Connection = Conn;
+        IList<Project> listProject = new List<Project>();
+        return listProject;
+    }
+
+
+
 
     public void btnSearch_Click(object sender, EventArgs e)
     {
