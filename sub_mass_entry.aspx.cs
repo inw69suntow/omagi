@@ -615,12 +615,18 @@ public partial class _mass_entry: System.Web.UI.Page
          OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
          OleDbCommand command = new OleDbCommand();
          Conn.Open();
-         command.Connection = Conn;
          //Count Page        
          command.CommandText = sql ;
          command.Connection = Conn;
-        IList<Project> listProject = new List<Project>();
-        return listProject;
+         OleDbDataReader rs = command.ExecuteReader();
+       //  int i = 0;
+         while (rs.Read())
+         {
+             Project project = new Project();
+             project.Fl_id=rs[""];
+         }
+         IList<Project> listProject = new List<Project>();
+         return listProject;
     }
 
 
