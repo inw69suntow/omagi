@@ -244,10 +244,6 @@ public partial class _mass_entry: System.Web.UI.Page
                 {
                     hdParentId.Value = rs["parentId"].ToString();
                 }
-                if (rs["parentId"] != null)
-                {
-                    hdParentId.Value = rs["parentId"].ToString();
-                }
                 if (rs["level"] != null)
                 {
                     ddProjectLevel.SelectedValue = rs["level"].ToString();
@@ -310,7 +306,10 @@ public partial class _mass_entry: System.Web.UI.Page
             ddProjectLevel.DataSource = new String[] { "1", "2" };
             ddProjectLevel.DataBind();
             String parent = Request.Params["parent_id"];
-            this.hdParentId.Value = parent == null ? "" : parent.Trim();
+            String path = Request.Params["path"];
+            if("mass_entry".Equals(path)){
+                this.hdParentId.Value = parent == null ? "" : parent.Trim();
+            }
 
             userDataSet();
         }
@@ -421,11 +420,13 @@ public partial class _mass_entry: System.Web.UI.Page
         else if (hdParentId.Value != null && !"".Equals(hdParentId.Value.Trim()))
         {
            
-            if(hidID.Value!=null && !"".Equals(hidID.Value)){
-                 sql += " and a.fl_parent_id in (\'"+hdParentId.Value.Replace("'","").Trim()+"\',\'"+hidID.Value+"\') ";
-            }else{
-                sql += " and a.fl_parent_id=\'"+hdParentId.Value.Replace("'","").Trim()+"\' ";
-            }
+            //if(hidID.Value!=null && !"".Equals(hidID.Value)){
+            //     sql += " and a.fl_parent_id in (\'"+hdParentId.Value.Replace("'","").Trim()+"\',\'"+hidID.Value+"\') ";
+            //}else{
+            //    sql += " and a.fl_parent_id=\'"+hdParentId.Value.Replace("'","").Trim()+"\' ";
+            //}
+           sql += " and a.fl_parent_id in (select fl_id from tb_detailgroup where fl_parent_id=\'" + hdParentId.Value + "\') ";
+           sql += " or a.fl_parent_id=\'" + hdParentId.Value + "\' ";
          
         }
         else

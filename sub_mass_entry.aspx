@@ -66,7 +66,8 @@ end sub
 
     function checkboxClick(chckbox, id, parent) {
         if ($(chckbox).is(':checked')) {
-            document.location="sub_mass_entry.aspx?hid=" +id+ "&parent_id=" + parent ;
+           // document.location = "sub_mass_entry.aspx?hid=" + id + "&parent_id=" + parent;
+            document.location = "sub_mass_entry.aspx?hid=" + id ;
         } 
     }
 
