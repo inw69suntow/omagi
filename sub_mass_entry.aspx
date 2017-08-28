@@ -64,10 +64,9 @@ end sub
 <script type="text/javascript">
 
 
-    function checkboxClick(chckbox, id, parent) {
+    function checkboxClick(chckbox, id, parent,master) {
         if ($(chckbox).is(':checked')) {
-           // document.location = "sub_mass_entry.aspx?hid=" + id + "&parent_id=" + parent;
-            document.location = "sub_mass_entry.aspx?hid=" + id ;
+            document.location = "sub_mass_entry.aspx?hid=" + id + "&parent_id=" + parent + "&page=master&parentSearch=" + master
         } 
     }
 
@@ -200,6 +199,7 @@ end sub
                             <td class="choice" style="width: 200px">ประเภทกลุ่มมวลชน:</td>
                             <td class="choice" >
                                 <asp:HiddenField ID="hdParentId" runat="server" />
+                                <asp:HiddenField ID="hdParentIdSearch" runat="server" />
                                 <asp:DropDownList ID="cmbMassGroup" runat="server" CssClass="css"></asp:DropDownList>
                             <font color="red">*</font>
                             </td>
