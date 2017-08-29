@@ -16,7 +16,7 @@ using System.Data.OleDb;
 using omagi_model;
 using System.Collections.Generic;
 
-public partial class _mass_entry: System.Web.UI.Page
+public partial class _mass_entry : System.Web.UI.Page
 {
 
     override protected void OnInit(EventArgs e)
@@ -97,7 +97,7 @@ public partial class _mass_entry: System.Web.UI.Page
         OleDbCommand command = new OleDbCommand();
 
         string sql = "SELECT distinct fl_district_code,fl_district_name from tb_moicode where fl_status='1' ";
-        sql += " and fl_province_code ='" + cmbProvince.SelectedValue.Trim() +"' ";
+        sql += " and fl_province_code ='" + cmbProvince.SelectedValue.Trim() + "' ";
         sql += " order by fl_district_name ";
 
         Conn.Open();
@@ -178,7 +178,7 @@ public partial class _mass_entry: System.Web.UI.Page
         hdParentId.Value = "";
         txtReportAmount.Text = "";
         //cmbDept.SelectedValue="";
-        txtGoogle.Text="";
+        txtGoogle.Text = "";
         lblCreate.Text = "";
         lblUpdate.Text = "";
 
@@ -266,11 +266,11 @@ public partial class _mass_entry: System.Web.UI.Page
             {
                 rs.Close();
             }
-           
+
             Conn.Close();
 
         }
-       
+
         cmbDeptSearch.SelectedValue = cmbDept.SelectedValue;
         cmbProvinceSearch.SelectedValue = cmbProvince.SelectedValue;
     }
@@ -350,11 +350,23 @@ public partial class _mass_entry: System.Web.UI.Page
 
     protected void userDataSet()
     {
-        if (pageID.SelectedValue != "") userDataSet(Convert.ToInt32(pageID.SelectedValue)); else userDataSet(1);
+
+        if (pageID.SelectedValue != "")
+        {
+            userDataSet(Convert.ToInt32(pageID.SelectedValue));
+        }
+        else
+        {
+            userDataSet(1);
+        }
     }
 
     protected void userDataSet(int curPage)
     {
+        String parentId = this.hdParentIdSearch.Value;
+        Dictionary<String, IList<Project>> mapProject2 = getProject2(parentId);
+        IList<Project> listProject1 = getProject1(curPage);
+
         dtGrid.Rows.Clear();
         dtGrid.BorderColor = ConfigurationManager.AppSettings["gridBorderColor"];
         dtGrid.Border = 1;
@@ -379,7 +391,7 @@ public partial class _mass_entry: System.Web.UI.Page
 
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[4].Width = "20%";
-        dtGrid.Rows[0].Cells[4].InnerHtml = "<center>ประเภทโครงการ</center>"; 
+        dtGrid.Rows[0].Cells[4].InnerHtml = "<center>ประเภทโครงการ</center>";
 
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[5].Width = "15%";
@@ -393,205 +405,34 @@ public partial class _mass_entry: System.Web.UI.Page
         dtGrid.Rows[0].Cells[7].Width = "4%";
         dtGrid.Rows[0].Cells[7].InnerHtml = "<center>จำนวนรายงาน (คน)</center>";
 
-        string sql = "SELECT distinct a.fl_id, ";
-        sql = sql + " isnull(a.fl_groupname,'') groupName ";
-        //โครงการหลัก
-        sql = sql + " ,case isnull(parent.fl_groupname,'') when '' then isnull(b.fl_group_name,'') else isnull(parent.fl_groupname,'') end parentName ";
-        //เพิ่ม group name 
-        sql = sql + " ,isnull(b.fl_group_id,'') mainGroupId, isnull(b.fl_group_name,'') mainGroupName, ";
-
-        sql = sql + " case isnull(c.fl_province_name,'') when '' then isnull(a.fl_province,'') else isnull(c.fl_province_name,'') end provinceName,";
-        sql = sql + " case isnull(d.fl_dept_name,'') when '' then isnull(a.fl_dept,'') else isnull(d.fl_dept_name,'') end deptName,";
-        sql = sql + " cast('0' + isnull(a.fl_reportMember,0) as int) reportMember,  a.fl_dept ";
-        
-        //For sorting
-        //sql = sql + " fl_dept ";
-        
-        
-        sql = sql + " ,ISNULL(parent.fl_id,'') parentId ";
-        sql = sql + " ,a.fl_level level ";
-        sql = sql + " FROM tb_detailgroup a ";
-        sql = sql + " left join tb_detailgroup parent on parent.fl_id = a.fl_parent_id ";
-        sql = sql + " left join tb_maingroup b  on a.fl_group_id = b.fl_group_id ";
-        sql = sql + " left join tb_moicode c on a.fl_province = c.fl_province_code ";
-        sql = sql + " left join tb_dept d on a.fl_dept=d.fl_dept_id ";
-
-        sql = sql + " where 1=1 ";
-        // update โครงการลูกเท่านั้น
-       // String parent= Request.Params.Get("parent_id");
-       
-        if (txtParentName.Text != null && txtParentName.Text.Trim() != "")
-        {
-            sql += " and parent.fl_groupname like \'%" + txtParentName.Text.Replace("'", "").Trim() + "%\' ";
-          
-        }
-        else if (hdParentIdSearch.Value != null && !"".Equals(hdParentIdSearch.Value.Trim()))
-        {
-           
-            //if(hidID.Value!=null && !"".Equals(hidID.Value)){
-            //    sql += " and a.fl_parent_id in (\'" + hdParentIdSearch.Value.Replace("'", "").Trim() + "\',\'" + hdParentIdSearch.Value + "\') ";
-            
-            //}else{
-            //    sql += " and a.fl_parent_id=\'" + hdParentIdSearch.Value.Replace("'", "").Trim() + "\' ";
-            //}
-
-            sql += " and a.fl_parent_id in (select distinct fl_id from tb_detailgroup where fl_parent_id=\'" + hdParentIdSearch.Value.Replace("'", "").Trim() + "\') ";
-            sql += " or a.fl_parent_id=\'" + hdParentIdSearch.Value.Replace("'", "").Trim() + "\' ";
-        }
-        else
-        {
-            sql += " and a.fl_parent_id is not null ";
-        }
-        //Check filter command
-        if (cmbDeptSearch.SelectedValue.Trim() != "") sql = sql + " and isnull(a.fl_dept,'') ='" + cmbDeptSearch.SelectedValue.Trim() + "' ";
-        if (cmbProvinceSearch.SelectedValue.Trim() != "") sql = sql + " and a.fl_province='" + cmbProvinceSearch.SelectedValue.Trim() + "' ";
-        string[] tmpStringToken;
-        if (txtKeyword.Text.Trim()!="")
-        {
-            tmpStringToken = txtKeyword.Text.Split(' ');
-            foreach (string tmp in tmpStringToken)
-            {
-                sql = sql + " and (";
-                sql = sql + " isnull(a.fl_groupname,'') like '%" + tmp.Replace("'", "''") + "%' ";
-                sql = sql + " or isnull(b.fl_group_name,'') like '%" + tmp.Replace("'", "''") + "%' ";
-                sql = sql + ") ";
-            }
-        }
-
-        //Check Access Right
-        //if (Session["uGroup"].ToString() == "U") sql = sql + " and isnull(a.fl_dept,'') like '" + Session["uDept"].ToString().Replace("0","") + "%' ";
-        if (Session["uGroup"].ToString() == "U")
-        {
-            if (Session["uDept"].ToString().Substring(0) != "0") sql = sql + " and isnull(a.fl_dept,'') like '" + Session["uDept"].ToString().Replace("00", "") + "%' ";
-        }
-        //if (hidID.Value!= "") sql += " and fl_id='" + hidID.Value + "' ";
-        OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
-        OleDbCommand command = new OleDbCommand();
-
-        Conn.Open();
-        command.Connection = Conn;
-
-        //Count Page        
-        command.CommandText = "SELECT IsNULL(COUNT(fl_id),0) as c from (" + sql + ") olderS "; ;
-        command.Connection = Conn;
-
-        OleDbDataReader rs = command.ExecuteReader();
-        int rCount = 0;
-        
-        if (rs.Read()) rCount = rs.GetInt32(0);
-        rs.Close();
-
-        int pageSize = Convert.ToInt32(ConfigurationManager.AppSettings["pageSize"].ToString());
-        if ((rCount % pageSize) > 0) rCount = ((rCount - (rCount % pageSize)) / pageSize) + 1; else rCount = rCount / pageSize;
-
-        pageID.Items.Clear();
-        for (int x = 1; x <= rCount; x++) pageID.Items.Add(new ListItem(x.ToString(), x.ToString()));
-        if (rCount != 0)
-        {
-            if (curPage <= rCount)
-            {
-                pageID.SelectedIndex = curPage - 1;
-            }
-            else
-            {
-                pageID.SelectedIndex = 0;
-                curPage = 1;
-            }
-        }
-
-        btnPrev.Visible = true;
-        btnNext.Visible = true;
-
-        if (rCount == 0)
-        {
-            btnPrev.Visible = false;
-            btnNext.Visible = false;
-        }
-
-        if (pageID.SelectedValue == "1") btnPrev.Visible = false;
-        if (pageID.SelectedValue == rCount.ToString()) btnNext.Visible = false;
-
-        sql = sql + " order by ";
-        sql = sql + " fl_dept ASC, ";
-        sql = sql + " reportMember DESC,";
-        sql = sql + " groupname ASC, ";
-        sql = sql + " provinceName ";
-
         int i = 0;
-        command.CommandText = sql.Replace(";", "");
-        Session["userSQL"]= sql.Replace(";", "");
-
-        rs = command.ExecuteReader();
-        while (i < (curPage-1) * pageSize) { rs.Read(); i++; }
-        i = 1;
-        while ((rs.Read()) && (i <= pageSize))
+        while (i < listProject1.Count)
         {
+            Project project = listProject1[i];
             //string action = "document.location='mass_entry.aspx?hid=" + rs.GetString(0) + "';";
-            string action = "document.location='sub_mass_entry.aspx?hid=" + rs["fl_id"] + "&parent_id=" + rs["parentId"] + "';";
-            dtGrid.Rows.Add(new HtmlTableRow());
-            if (rs.GetInt32(7) > 0)
+            //string action = "document.location='sub_mass_entry.aspx?hid=" + project.Fl_id + "&parent_id=" + rs["parentId"] + "';";
+            if (mapProject2.ContainsKey(project.Fl_id))
             {
-                dtGrid.Rows[i].Attributes.Add("class", "off");
-                dtGrid.Rows[i].Attributes.Add("onmouseover", "this.className='on'");
-                dtGrid.Rows[i].Attributes.Add("onmouseout", "this.className='off'");
-              //  dtGrid.Rows[i].Attributes.Add("onclick", action);
+                printBody(project, dtGrid, i.ToString());
+                IList<Project> listChild= mapProject2[project.Fl_id];
+                for (int j = 0; j < listChild.Count;j++ )
+                {
+                    Project child = listChild[j];
+                    printBody(child, dtGrid,"child_"+j);
+                }
+
             }
             else
             {
-                dtGrid.Rows[i].Attributes.Add("class", "close");
-                dtGrid.Rows[i].Attributes.Add("onmouseover", "this.className='on'");
-                dtGrid.Rows[i].Attributes.Add("onmouseout", "this.className='close'");
-               // dtGrid.Rows[i].Attributes.Add("onclick", action);
-            }
-            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
-            dtGrid.Rows[i].Cells[0].ColSpan = 1;
-            dtGrid.Rows[i].Cells[0].Align = "CENTER";
-
-            if (hidID.Value != rs.GetString(0))
-                dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\'checkboxClick(this,\"" + rs["fl_id"] + "\",\"" + rs["parentId"] + "\",\"" + this.hdParentIdSearch.Value + "\")\' />"; 
-            else
-                dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\'checkboxClick(this,\"" + rs["fl_id"] + "\",\"" + rs["parentId"] + "\",\"" + this.hdParentIdSearch.Value + "\")\' />";
-
-    
-
-            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
-            dtGrid.Rows[i].Cells[1].Align = "LEFT";
-            dtGrid.Rows[i].Cells[1].InnerHtml = "&nbsp;" + rs["groupName"];
-
-            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
-            dtGrid.Rows[i].Cells[2].Align = "CENTER";
-            dtGrid.Rows[i].Cells[2].InnerHtml = "&nbsp;" + rs["level"];
-
-
-            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
-            dtGrid.Rows[i].Cells[3].Align = "LEFT";
-            dtGrid.Rows[i].Cells[3].InnerHtml = "&nbsp;" + rs["parentName"];
-
-            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
-            dtGrid.Rows[i].Cells[4].Align = "LEFT";
-            dtGrid.Rows[i].Cells[4].InnerHtml = "&nbsp;" + rs["mainGroupName"];
-
-
-            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
-            dtGrid.Rows[i].Cells[5].Align = "LEFT";
-            dtGrid.Rows[i].Cells[5].InnerHtml = "&nbsp;" + rs["provinceName"];
-
-            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
-            dtGrid.Rows[i].Cells[6].Align = "LEFT";
-            dtGrid.Rows[i].Cells[6].InnerHtml = "&nbsp;" + rs["deptName"];
-
-    
-
-            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
-            dtGrid.Rows[i].Cells[7].Align = "RIGHT";
-            dtGrid.Rows[i].Cells[7].InnerHtml =  ((Int32)rs["reportMember"]).ToString("#,##0");
-
+      
+                printBody(project, dtGrid,i.ToString());
+                
+            }   
             i = i + 1;
         }
-        rs.Close();
-        Conn.Close();
 
-        if (i == 1)
+
+        if ((i + 1) == 1)
         {
             //noDataFound
             dtGrid.Rows.Add(new HtmlTableRow());
@@ -606,29 +447,312 @@ public partial class _mass_entry: System.Web.UI.Page
     }
 
 
-
-    public IList<Project> getProject2()
+    public void printBody(Project project, HtmlTable dtGrid,String  chk_index)
     {
-         String sql="select * from tb_detailgroup " ;
-         sql+=" where fl_parent_id in (SELECT DISTINCT fl_id FROM tb_detailgroup where fl_parent_id='288') ";
-         sql += " and fl_level=2";
-         OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
-         OleDbCommand command = new OleDbCommand();
-         Conn.Open();
-         //Count Page        
-         command.CommandText = sql ;
-         command.Connection = Conn;
-         OleDbDataReader rs = command.ExecuteReader();
-       //  int i = 0;
-         while (rs.Read())
-         {
-             Project project = new Project();
-             project.Fl_id=rs[""];
-         }
-         IList<Project> listProject = new List<Project>();
-         return listProject;
+        HtmlTableRow htmlRow = new HtmlTableRow();
+        dtGrid.Rows.Add(htmlRow);
+        if (Convert.ToInt32(project.ReportMember) > 0)
+        {
+            htmlRow.Attributes.Add("class", "off");
+            htmlRow.Attributes.Add("onmouseover", "this.className='on'");
+            htmlRow.Attributes.Add("onmouseout", "this.className='off'");
+            // htmlRow.Attributes.Add("onclick", action);
+        }
+        else
+        {
+            htmlRow.Attributes.Add("class", "close");
+            htmlRow.Attributes.Add("onmouseover", "this.className='on'");
+            htmlRow.Attributes.Add("onmouseout", "this.className='close'");
+            //htmlRow.Attributes.Add("onclick", action);
+        }
+        if (project.Level == 2)
+        {
+            htmlRow.Attributes.Add("style", "background-color:#d5cccc");
+        }
+        htmlRow.Cells.Add(new HtmlTableCell());
+        htmlRow.Cells[0].ColSpan = 1;
+        htmlRow.Cells[0].Align = "CENTER";
+
+        if (hidID.Value != project.Fl_id)
+            htmlRow.Cells[0].InnerHtml = "<input type='checkbox' id='check_" + chk_index+ "' onClick=\'checkboxClick(this,\"" + project.Fl_id + "\",\"" + project.ParentId + "\",\"" + this.hdParentIdSearch.Value + "\")\' />";
+        else
+        {
+            htmlRow.Cells[0].InnerHtml = "<input type='checkbox' id='check_" + chk_index+ "' onClick=\'checkboxClick(this,\"" + project.Fl_id + "\",\"" + project.ParentId + "\",\"" + this.hdParentIdSearch.Value + "\")\' />";
+        }
+
+
+        htmlRow.Cells.Add(new HtmlTableCell());
+        htmlRow.Cells[1].Align = "LEFT";
+        htmlRow.Cells[1].InnerHtml = "&nbsp;" + project.GroupName;
+
+        htmlRow.Cells.Add(new HtmlTableCell());
+        htmlRow.Cells[2].Align = "CENTER";
+        htmlRow.Cells[2].InnerHtml = "&nbsp;" + project.Level;
+
+
+        htmlRow.Cells.Add(new HtmlTableCell());
+        htmlRow.Cells[3].Align = "LEFT";
+        htmlRow.Cells[3].InnerHtml = "&nbsp;" + project.ParentName;
+
+        htmlRow.Cells.Add(new HtmlTableCell());
+        htmlRow.Cells[4].Align = "LEFT";
+        htmlRow.Cells[4].InnerHtml = "&nbsp;" + project.MainGroupName;
+
+
+        htmlRow.Cells.Add(new HtmlTableCell());
+        htmlRow.Cells[5].Align = "LEFT";
+        htmlRow.Cells[5].InnerHtml = "&nbsp;" + project.ProvinceName;
+
+        htmlRow.Cells.Add(new HtmlTableCell());
+        htmlRow.Cells[6].Align = "LEFT";
+        htmlRow.Cells[6].InnerHtml = "&nbsp;" + project.DeptName;
+
+
+
+        htmlRow.Cells.Add(new HtmlTableCell());
+        htmlRow.Cells[7].Align = "RIGHT";
+        htmlRow.Cells[7].InnerHtml = Convert.ToInt32(project.ReportMember).ToString("#,##0");
     }
 
+
+
+    public Dictionary<String, IList<Project>> getProject2(String parentId1)
+    {
+        //IList<Project> listProject = new List<Project>();
+        Dictionary<String, IList<Project>> mapProject = new Dictionary<String, IList<Project>>();
+        String sql = "select * from tb_detailgroup ";
+        sql += " where fl_parent_id in (SELECT DISTINCT fl_id FROM tb_detailgroup where fl_parent_id=\'" + parentId1 + "\') ";
+        sql += " and fl_level=2";
+        OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
+        OleDbCommand command = new OleDbCommand();
+        OleDbDataReader rs = null;
+        try
+        {
+            Conn.Open();
+            //Count Page        
+            command.CommandText = sql;
+            command.Connection = Conn;
+            rs = command.ExecuteReader();
+            //  int i = 0;
+            while (rs.Read())
+            {
+                Project project = new Project();
+                project.Fl_id = Convert.ToString(rs["fl_id"]);
+                project.GroupName = Convert.ToString(rs["fl_groupname"]);
+                project.ParentName = "";//Convert.ToString(rs["ParentName"]);
+                project.MainGroupId = "";// Convert.ToString(rs["MainGroupId"]);
+                project.MainGroupName = "";//Convert.ToString(rs["MainGroupName"]);
+                project.ProvinceName = "";// Convert.ToString(rs["ProvinceName"]);
+                project.DeptName = "";// Convert.ToString(rs["DeptName"]);
+                project.ReportMember = Convert.ToString(rs["fl_reportMember"]);
+                project.Fl_dept = Convert.ToString(rs["fl_dept"]);
+                project.ParentId = Convert.ToString(rs["fl_parent_id"]);
+                project.Level = Convert.ToInt32(rs["fl_level"]);
+               // mapProject.Add(project.Fl_id, project);
+
+                if (mapProject.ContainsKey(project.ParentId))
+                {
+                   IList<Project> childList= mapProject[project.ParentId];
+                   childList.Add(project);
+
+                }
+                else
+                {
+                    IList<Project> childList = new List<Project>();
+                    childList.Add(project);
+                    mapProject.Add(project.ParentId, childList);
+                }
+
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            if (rs != null)
+            {
+                rs.Close();
+            }
+            if (Conn != null)
+            {
+                Conn.Close();
+            }
+        }
+        return mapProject;
+    }
+
+
+    public IList<Project> getProject1(int curPage)
+    {
+
+        IList<Project> listProject1 = new List<Project>();
+
+        OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
+        OleDbCommand command = new OleDbCommand();
+        OleDbDataReader rs = null;
+        try
+        {
+            string sql = "SELECT distinct a.fl_id, ";
+            sql = sql + " isnull(a.fl_groupname,'') groupName ";
+            //โครงการหลัก
+            sql = sql + " ,case isnull(parent.fl_groupname,'') when '' then isnull(b.fl_group_name,'') else isnull(parent.fl_groupname,'') end parentName ";
+            //เพิ่ม group name 
+            sql = sql + " ,isnull(b.fl_group_id,'') mainGroupId, isnull(b.fl_group_name,'') mainGroupName, ";
+
+            sql = sql + " case isnull(c.fl_province_name,'') when '' then isnull(a.fl_province,'') else isnull(c.fl_province_name,'') end provinceName,";
+            sql = sql + " case isnull(d.fl_dept_name,'') when '' then isnull(a.fl_dept,'') else isnull(d.fl_dept_name,'') end deptName,";
+            sql = sql + " cast('0' + isnull(a.fl_reportMember,0) as int) reportMember,  a.fl_dept ";
+
+            //For sorting
+            //sql = sql + " fl_dept ";
+
+
+            sql = sql + " ,ISNULL(parent.fl_id,'') parentId ";
+            sql = sql + " ,a.fl_level level ";
+            sql = sql + " FROM tb_detailgroup a ";
+            sql = sql + " left join tb_detailgroup parent on parent.fl_id = a.fl_parent_id ";
+            sql = sql + " left join tb_maingroup b  on a.fl_group_id = b.fl_group_id ";
+            sql = sql + " left join tb_moicode c on a.fl_province = c.fl_province_code ";
+            sql = sql + " left join tb_dept d on a.fl_dept=d.fl_dept_id ";
+
+            sql = sql + " where 1=1 ";
+            // update โครงการลูกเท่านั้น
+            // String parent= Request.Params.Get("parent_id");
+
+            if (txtParentName.Text != null && txtParentName.Text.Trim() != "")
+            {
+                sql += " and parent.fl_groupname like \'%" + txtParentName.Text.Replace("'", "").Trim() + "%\' ";
+
+            }
+            else if (hdParentIdSearch.Value != null && !"".Equals(hdParentIdSearch.Value.Trim()))
+            {
+                sql += " and a.fl_parent_id=\'" + hdParentIdSearch.Value.Replace("'", "").Trim() + "\' ";
+            }
+            else
+            {
+                sql += " and a.fl_parent_id is not null ";
+            }
+            //Check filter command
+            if (cmbDeptSearch.SelectedValue.Trim() != "")
+                sql = sql + " and isnull(a.fl_dept,'') ='" + cmbDeptSearch.SelectedValue.Trim() + "' ";
+            if (cmbProvinceSearch.SelectedValue.Trim() != "")
+                sql = sql + " and a.fl_province='" + cmbProvinceSearch.SelectedValue.Trim() + "' ";
+
+            string[] tmpStringToken;
+            if (txtKeyword.Text.Trim() != "")
+            {
+                tmpStringToken = txtKeyword.Text.Split(' ');
+                foreach (string tmp in tmpStringToken)
+                {
+                    sql = sql + " and (";
+                    sql = sql + " isnull(a.fl_groupname,'') like '%" + tmp.Replace("'", "''") + "%' ";
+                    sql = sql + " or isnull(b.fl_group_name,'') like '%" + tmp.Replace("'", "''") + "%' ";
+                    sql = sql + ") ";
+                }
+            }
+
+            //Check Access Right
+            //if (Session["uGroup"].ToString() == "U") sql = sql + " and isnull(a.fl_dept,'') like '" + Session["uDept"].ToString().Replace("0","") + "%' ";
+            if (Session["uGroup"].ToString() == "U")
+            {
+                if (Session["uDept"].ToString().Substring(0) != "0") sql = sql + " and isnull(a.fl_dept,'') like '" + Session["uDept"].ToString().Replace("00", "") + "%' ";
+            }
+
+
+            Conn.Open();
+            command.Connection = Conn;
+
+            //Count Page        
+            command.CommandText = "SELECT IsNULL(COUNT(fl_id),0) as c from (" + sql + ") olderS "; ;
+            command.Connection = Conn;
+
+            rs = command.ExecuteReader();
+            int rCount = 0;
+
+            if (rs.Read()) rCount = rs.GetInt32(0);
+            rs.Close();
+
+            int pageSize = Convert.ToInt32(ConfigurationManager.AppSettings["pageSize"].ToString());
+            if ((rCount % pageSize) > 0) rCount = ((rCount - (rCount % pageSize)) / pageSize) + 1; else rCount = rCount / pageSize;
+
+            pageID.Items.Clear();
+            for (int x = 1; x <= rCount; x++) pageID.Items.Add(new ListItem(x.ToString(), x.ToString()));
+            if (rCount != 0)
+            {
+                if (curPage <= rCount)
+                {
+                    pageID.SelectedIndex = curPage - 1;
+                }
+                else
+                {
+                    pageID.SelectedIndex = 0;
+                    curPage = 1;
+                }
+            }
+
+            btnPrev.Visible = true;
+            btnNext.Visible = true;
+
+            if (rCount == 0)
+            {
+                btnPrev.Visible = false;
+                btnNext.Visible = false;
+            }
+
+            if (pageID.SelectedValue == "1") btnPrev.Visible = false;
+            if (pageID.SelectedValue == rCount.ToString()) btnNext.Visible = false;
+
+            sql = sql + " order by ";
+            sql = sql + " fl_dept ASC, ";
+            sql = sql + " reportMember DESC,";
+            sql = sql + " groupname ASC, ";
+            sql = sql + " provinceName ";
+
+            int i = 0;
+            command.CommandText = sql.Replace(";", "");
+            Session["userSQL"] = sql.Replace(";", "");
+
+            rs = command.ExecuteReader();
+            while (i < (curPage - 1) * pageSize) { rs.Read(); i++; }
+
+
+            i = 1;
+            while ((rs.Read()) && (i <= pageSize))
+            {
+                Project project = new Project();
+                project.Fl_id = Convert.ToString(rs["fl_id"]);
+                project.GroupName = Convert.ToString(rs["groupName"]);
+                project.ParentName = Convert.ToString(rs["parentName"]);
+                project.MainGroupId = Convert.ToString(rs["mainGroupId"]);
+                project.MainGroupName = Convert.ToString(rs["mainGroupName"]);
+                project.ProvinceName = Convert.ToString(rs["provinceName"]);
+                project.DeptName = Convert.ToString(rs["deptName"]);
+                project.ReportMember = Convert.ToString(rs["reportMember"]);
+                project.Fl_dept = Convert.ToString(rs["fl_dept"]);
+                project.ParentId = Convert.ToString(rs["parentId"]);
+                project.Level = Convert.ToInt32(rs["level"]);
+                listProject1.Add(project);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            if (rs != null)
+            {
+                rs.Close();
+            }
+            if (Conn != null)
+            {
+                Conn.Close();
+            }
+        }
+        return listProject1;
+    }
 
 
 
@@ -798,11 +922,11 @@ public partial class _mass_entry: System.Web.UI.Page
             return;
         }
 
-        txtReportAmount.Text="0" + txtReportAmount.Text.Trim();
+        txtReportAmount.Text = "0" + txtReportAmount.Text.Trim();
         try
         {
             int x = Convert.ToInt32(txtReportAmount.Text);
-		txtReportAmount.Text=x.ToString();
+            txtReportAmount.Text = x.ToString();
         }
         catch (Exception ee)
         {
@@ -820,18 +944,18 @@ public partial class _mass_entry: System.Web.UI.Page
             sql += " fl_province = '" + cmbProvince.SelectedValue.Trim() + "', ";
             sql += " fl_district = '" + cmbDistrict.SelectedValue.Trim() + "', ";
             sql += " fl_tambon = '" + cmbTambon.SelectedValue.Trim() + "', ";
-            sql += " fl_moo = '" + txtMoo.Text.Trim().Replace("'","''").Replace(";","") + "', ";
+            sql += " fl_moo = '" + txtMoo.Text.Trim().Replace("'", "''").Replace(";", "") + "', ";
             sql += " fl_group_id = '" + cmbMassGroup.SelectedValue.Trim() + "', ";
-            sql += " fl_groupname = '" + txtMassName.Text.Trim().Replace("'","''").Replace(";","") + "', ";
-            sql += " fl_reportMember ='" + txtReportAmount.Text.Trim().Replace("'","''").Replace(";","") + "', ";
-            sql += " fl_update_by ='" + Session["uID"].ToString().Trim().Replace("'","''") + "', ";
+            sql += " fl_groupname = '" + txtMassName.Text.Trim().Replace("'", "''").Replace(";", "") + "', ";
+            sql += " fl_reportMember ='" + txtReportAmount.Text.Trim().Replace("'", "''").Replace(";", "") + "', ";
+            sql += " fl_update_by ='" + Session["uID"].ToString().Trim().Replace("'", "''") + "', ";
             sql += " fl_update_ip ='" + Request.UserHostAddress + "', ";
-            sql += " fl_update_time ='" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2,'0') + DateTime.Now.Day.ToString().PadLeft(2,'0') + DateTime.Now.Hour.ToString().PadLeft(2,'0') + DateTime.Now.Minute.ToString().PadLeft(2,'0') + DateTime.Now.Second.ToString().PadLeft(2,'0') + "', ";
+            sql += " fl_update_time ='" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
             sql += " fl_dept ='" + cmbDept.SelectedValue.Trim() + "', ";
-            sql += " fl_google ='" + txtGoogle.Text.Trim().Replace("'","''").Replace(";","") + "' ";
+            sql += " fl_google ='" + txtGoogle.Text.Trim().Replace("'", "''").Replace(";", "") + "' ";
 
 
-            sql += " where fl_id = '" + hidID.Value.Trim() +"'; ";
+            sql += " where fl_id = '" + hidID.Value.Trim() + "'; ";
 
             //Write Log
             sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
@@ -893,10 +1017,10 @@ public partial class _mass_entry: System.Web.UI.Page
             sql += " '" + Request.UserHostAddress + "', ";
             sql += " '" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
             sql += " '" + cmbDept.SelectedValue.Trim() + "', ";
-            sql += " '" + txtGoogle.Text.Trim().Replace("'", "''").Replace(";", "") + "', "; 
-            sql += " '" + hdParentId.Value.Trim().Replace("'", "") + "', " ;
-            sql += " '"+ddProjectLevel.SelectedValue+"' ";
-            sql+= ") ";
+            sql += " '" + txtGoogle.Text.Trim().Replace("'", "''").Replace(";", "") + "', ";
+            sql += " '" + hdParentId.Value.Trim().Replace("'", "") + "', ";
+            sql += " '" + ddProjectLevel.SelectedValue + "' ";
+            sql += ") ";
 
             //Write Log
             sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
@@ -1093,7 +1217,7 @@ public partial class _mass_entry: System.Web.UI.Page
         OleDbCommand command = new OleDbCommand();
         Conn.Open();
         command.Connection = Conn;
-        string sql = "DELETE from tb_detailgroup "; 
+        string sql = "DELETE from tb_detailgroup ";
         sql += " where fl_id = '" + hidID.Value.Trim() + "'; ";
 
         //Write Log
