@@ -754,10 +754,61 @@ public partial class _mass_entry : System.Web.UI.Page
         return listProject1;
     }
 
+    public int countProject(String projectName,int level ,String parentId)
+    {
+        OleDbConnection Conn = null;
+        OleDbCommand command = null;
+        OleDbDataReader rs = null;
+        int rCount = 0;
+        try
+        {
+
+            Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
+            command = new OleDbCommand();
+            Conn.Open();
+
+            String sql = "select count(*) from tb_detailgroup where fl_groupname ='" + projectName + "' ";
+
+            sql+=" and fl_level ="+level+" ";
+            sql += " and fl_parent_id='" + parentId + "' ";
+            command.CommandText = sql;
+            command.Connection = Conn;
+            rs = command.ExecuteReader();
+            if (rs.Read())
+            {
+                rCount = rs.GetInt32(0);
+            }
+            rs.Close();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            if (rs != null)
+            {
+                rs.Close();
+            }
+            if (Conn != null)
+            {
+                Conn.Close();
+            }
+        }
+        return rCount;
+    }
+    public Boolean isContainProjectId(String projectName, int level, String parentId)
+    {
+        int row = countProject(projectName, level, parentId);
+        return row > 0;
+    }
 
 
     public void btnSearch_Click(object sender, EventArgs e)
     {
+          OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
+        OleDbCommand command = new OleDbCommand();
+
         clearBox();
         userDataSet();
     }
