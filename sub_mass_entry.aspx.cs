@@ -797,7 +797,7 @@ public partial class _mass_entry : System.Web.UI.Page
         }
         return rCount;
     }
-    public Boolean isContainProjectId(String projectName, int level, String parentId)
+    public Boolean isContainProject(String projectName, int level, String parentId)
     {
         int row = countProject(projectName, level, parentId);
         return row > 0;
@@ -1019,6 +1019,16 @@ public partial class _mass_entry : System.Web.UI.Page
         }
         else
         {
+           String projectName= txtMassName.Text.Trim();
+           String parentId = hdParentId.Value;
+           int level = Convert.ToInt32(ddProjectLevel.SelectedValue);
+            if(isContainProject(projectName,level,parentId)){
+                lblResponse.Text = "มีโครงการย่อยนี้แล้ว";
+                lblResponse.ForeColor = System.Drawing.Color.Red;
+                lblResponse.Visible = true;
+                userDataSet();
+                return;
+            }
             //Find new ID
             sql = "select distinct isnull(max(cast(fl_id as int)),0)+1 from tb_detailgroup ";
             Conn.Open();
@@ -1070,7 +1080,7 @@ public partial class _mass_entry : System.Web.UI.Page
             sql += " '" + cmbDept.SelectedValue.Trim() + "', ";
             sql += " '" + txtGoogle.Text.Trim().Replace("'", "''").Replace(";", "") + "', ";
             sql += " '" + hdParentId.Value.Trim().Replace("'", "") + "', ";
-            sql += " '" + ddProjectLevel.SelectedValue + "' ";
+            sql += " " + ddProjectLevel.SelectedValue + " ";
             sql += ") ";
 
             //Write Log
