@@ -1205,6 +1205,9 @@ public partial class _train_member_entry: System.Web.UI.Page
         tambonDataSet();
         userDataSet();
     }
+
+
+
     protected void btnSave_Click(object sender, EventArgs e)
     {
         lblResponse.Text = "";
@@ -1426,6 +1429,13 @@ public partial class _train_member_entry: System.Web.UI.Page
             sql = sql + " fl_update_time,";
             sql = sql + " fl_google ";
 
+            sql = sql + ",fl_educational";
+            sql = sql + ",fl_talent";
+            sql = sql + ",fl_job";
+            sql = sql + " ,fl_position";
+            sql = sql + ",fl_current_addr";
+            sql = sql + ",fl_academy";
+
             sql = sql + " ) values ( ";
             sql = sql + " '" + changeDigit(txtCardID.Text.Trim().Replace(";", "").Replace("'", "").Replace("-", "").Replace(".", "").Replace(" ", "")) + "',";
             sql = sql + " '" + cmbTitle.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "',";
@@ -1455,8 +1465,15 @@ public partial class _train_member_entry: System.Web.UI.Page
             sql += " '" + Session["uID"].ToString().Trim().Replace("'", "''") + "', ";
             sql += " '" + Request.UserHostAddress + "', ";
             sql += " '" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
-            sql = sql + " '" + txtGoogle.Text.Trim().Replace(";", "").Replace("'", "") + "'); ";
+            sql = sql + " '" + txtGoogle.Text.Trim().Replace(";", "").Replace("'", "") + "'";
 
+            sql = sql + " ,'" + txtEducational.Text.Trim() + "'";
+            sql = sql + " ,'" + txtTalent.Text.Trim() + "'";
+            sql = sql + " ,'" + txtJob.Text.Trim() + "'";
+            sql = sql + " ,'" + txtPosition.Text.Trim() + "'";
+            sql = sql + " ,'" + txtCurAddr.Text.Trim() + "'";
+            sql = sql + " ,'" + txtAcademy.Text.Trim() + "'";
+            sql = sql + ");";
             sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
             sql += " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
             sql += " 'CITIZEN', ";
@@ -1491,6 +1508,13 @@ public partial class _train_member_entry: System.Web.UI.Page
             sql += " fl_update_ip ='" + Request.UserHostAddress + "', ";
             sql += " fl_update_time ='" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
             sql = sql + " fl_google='" + txtGoogle.Text.Trim().Replace(";", "").Replace("'", "") + "' ";
+            sql = sql + " ,fl_educational='" + txtEducational.Text.Trim() + "'";
+            sql = sql + " ,fl_talent='" + txtTalent.Text.Trim() + "'";
+            sql = sql + " ,fl_job='" + txtJob.Text.Trim() + "'";
+            sql = sql + " ,fl_position='" + txtPosition.Text.Trim() + "'";
+            sql = sql + " ,fl_current_addr='" + txtCurAddr.Text.Trim() + "'";
+            sql = sql + " ,fl_academy='" + txtAcademy.Text.Trim() + "'";
+
             sql = sql + " where fl_citizen_id='" + changeDigit(txtCardID.Text.Trim().Replace(";", "").Replace("'", "").Replace("-", "").Replace(".", "").Replace(" ", "")) + "'; ";
 
             sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
@@ -1503,104 +1527,7 @@ public partial class _train_member_entry: System.Web.UI.Page
         }
         #endregion
 
-        //Process traingroup
-        #region trainProc
-        procFlag = "UP";
-        if (txtCardID.Text.Trim().Replace(";", "").Replace("'", "") == "")
-        {
-            procFlag = "NA";
-        }
-        else
-        {
-            sql2 = "SELECT distinct fl_citizen_id from tb_train_detail ";
-            sql2 += "where fl_citizen_id ='" + changeDigit(txtCardID.Text.Trim().Replace(";", "").Replace("'", "").Replace("-", "").Replace(".", "").Replace(" ", "")) + "' ";
-            sql2 += " and isnull(fl_dept,'') ='" + cmbDept.SelectedValue.Trim() + "' ";
-            sql2 += " and fl_province_code='" + cmbTrainProvince.SelectedValue.Trim() + "' ";
-
-            sql2 += " and fl_course='" + cmbCourse.SelectedValue.Trim() + "' ";
-            sql2 += " and fl_gen='" + cmbGen.SelectedValue.Trim() + "' ";
-            sql2 += " and fl_year='" + cmbYear.SelectedValue.Trim() + "' ";
-            command.CommandText = sql2;
-            rs = command.ExecuteReader();
-            if (!rs.Read()) procFlag = "IN";
-            rs.Close();
-        }
-
-        if (procFlag == "IN")
-        {
-            sql = sql + "INSERT INTO tb_train_detail (";
-            sql = sql + " fl_citizen_id,";
-            sql = sql + " fl_dept,";
-            sql = sql + " fl_province_code,";
-            sql = sql + " fl_course,";
-            sql = sql + " fl_gen,";
-            sql = sql + " fl_year,";
-
-            sql = sql + " fl_pos,";
-            sql = sql + " fl_start,";
-            sql = sql + " fl_stop, ";
-            sql = sql + " fl_create_by,";
-            sql = sql + " fl_create_ip,";
-            sql = sql + " fl_create_time,";
-            sql = sql + " fl_update_by,";
-            sql = sql + " fl_update_IP,";
-            sql = sql + " fl_update_time";
-
-            sql = sql + " ) values ( ";
-
-            sql = sql + "'" + changeDigit(txtCardID.Text.Trim().Replace(";", "").Replace("'", "").Replace("-", "").Replace(".", "").Replace(" ", "")) + "', ";
-            sql += " '" + cmbDept.SelectedValue.Trim() + "', ";
-            sql += " '" + cmbTrainProvince.SelectedValue.Trim() + "', ";
-
-            sql += " '" + cmbCourse.SelectedValue.Trim() + "', ";
-            sql += " '" + cmbGen.SelectedValue.Trim() + "', ";
-            sql += " '" + cmbYear.SelectedValue.Trim() + "', ";
-
-            sql = sql + "'" + cmbPos.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "', ";
-            sql = sql + " '" + tmpDateStart + "',";
-            sql = sql + " '" + tmpDateStop + "',";
-
-            sql += " '" + Session["uID"].ToString().Trim().Replace("'", "''") + "', ";
-            sql += " '" + Request.UserHostAddress + "', ";
-            sql += " '" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
-            sql += " '" + Session["uID"].ToString().Trim().Replace("'", "''") + "', ";
-            sql += " '" + Request.UserHostAddress + "', ";
-            sql += " '" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "'); ";
-
-            sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
-            sql += " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
-            sql += " 'TRAIN MEMBER', ";
-            sql += " 'INSERT', ";
-            sql += " '" + changeDigit(txtCardID.Text.Trim().Replace(";", "").Replace("'", "").Replace("-", "").Replace(".", "").Replace(" ", "")) + "," + cmbCourse.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbGen.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbYear.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbTrainProvince.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbDept.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "', ";
-            sql += " '" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
-            sql += " '" + Request.UserHostAddress + "'); ";
-        }
-        else
-        {
-            sql = sql + "UPDATE tb_train_detail SET ";
-            sql = sql + " fl_pos='" + cmbPos.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "',";
-            sql = sql + " fl_start='" + tmpDateStart + "',";
-            sql = sql + " fl_stop='" + tmpDateStop + "', ";
-            sql += " fl_update_by ='" + Session["uID"].ToString().Trim().Replace("'", "''") + "', ";
-            sql += " fl_update_ip ='" + Request.UserHostAddress + "', ";
-            sql += " fl_update_time ='" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "' ";
-            sql = sql + " where fl_citizen_id='" + changeDigit(txtCardID.Text.Trim().Replace(";", "").Replace("'", "").Replace("-", "").Replace(".", "").Replace(" ", "")) + "' ";
-            sql += " and isnull(fl_dept,'') ='" + cmbDept.SelectedValue.Trim() + "' ";
-            sql += " and fl_province_code='" + cmbTrainProvince.SelectedValue.Trim() + "' ";
-
-            sql += " and fl_course='" + cmbCourse.SelectedValue.Trim() + "' ";
-            sql += " and fl_gen='" + cmbGen.SelectedValue.Trim() + "' ";
-            sql += " and fl_year='" + cmbYear.SelectedValue.Trim() + "'; ";
-
-            sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
-            sql += " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
-            sql += " 'TRAIN MEMBER', ";
-            sql += " 'UPDATE', ";
-            sql += " '" + changeDigit(txtCardID.Text.Trim().Replace(";", "").Replace("'", "").Replace("-", "").Replace(".", "").Replace(" ", "")) + "," + cmbCourse.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbGen.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbYear.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbTrainProvince.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbDept.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "', ";
-            sql += " '" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
-            sql += " '" + Request.UserHostAddress + "'); ";
-        }
-        #endregion
+      
         command.CommandText = sql;
         command.ExecuteNonQuery();
         Conn.Close();
