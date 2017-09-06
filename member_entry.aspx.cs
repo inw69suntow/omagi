@@ -989,9 +989,12 @@ public partial class _train_member_entry: System.Web.UI.Page
             dtGrid.Rows[i].Cells[1].Align = "LEFT";
             dtGrid.Rows[i].Cells[1].InnerHtml = Convert.ToString(rs["fl_citizen_id"]);
 
+            String title=Convert.ToString(rs["fl_title"]);
             dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
             dtGrid.Rows[i].Cells[2].Align = "LEFT";
-            dtGrid.Rows[i].Cells[2].InnerHtml = Convert.ToString(rs["fl_title"]);
+            dtGrid.Rows[i].Cells[2].InnerHtml = getTitle(title); 
+
+        
 
             dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
             dtGrid.Rows[i].Cells[3].Align = "LEFT";
@@ -1051,6 +1054,19 @@ public partial class _train_member_entry: System.Web.UI.Page
         }
         rs.Close();
         Conn.Close();
+    }
+
+    private String getTitle(String key)
+    {
+        for (int i = 0; i < cmbTitle.Items.Count; i++)
+        {
+
+            if (cmbTitle.Items[i].Value.Equals(key))
+            {
+                return cmbTitle.Items[i].Text;
+            }
+        }
+        return "";
     }
 
     protected void btnSearch_Click(object sender, EventArgs e)
