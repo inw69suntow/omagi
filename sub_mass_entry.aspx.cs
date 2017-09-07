@@ -187,6 +187,8 @@ public partial class _mass_entry : System.Web.UI.Page
     protected void boxSet(string hid)
     {
         clearBox();
+        writeParentName();
+
         hidID.Value = hid.Trim();
         string sql = "SELECT distinct ";
         sql += " isnull(a.fl_province,''), ";
@@ -203,7 +205,7 @@ public partial class _mass_entry : System.Web.UI.Page
 
         sql += " ,isnull(parent.fl_groupname,'') parentName ";
         sql += " ,isnull(parent.fl_id,'') parentId ";
-        sql += " ,isnull(a.fl_id,'') parentId ";
+        //sql += " ,isnull(a.fl_id,'') parentId ";
         sql += " ,a.fl_level level ";
 
         sql += " from tb_detailgroup a ";
@@ -246,10 +248,10 @@ public partial class _mass_entry : System.Web.UI.Page
                 {
                     hdParentId.Value = rs["parentId"].ToString();
                 }
-                if (rs["parentId"] != null)
-                {
-                    hdParentId.Value = rs["parentId"].ToString();
-                }
+                //if (rs["parentId"] != null)
+                //{
+                //    hdParentId.Value = rs["parentId"].ToString();
+                //}
                 if (rs["level"] != null)
                 {
                     ddProjectLevel.SelectedValue = rs["level"].ToString();
@@ -275,6 +277,45 @@ public partial class _mass_entry : System.Web.UI.Page
         cmbProvinceSearch.SelectedValue = cmbProvince.SelectedValue;
     }
 
+
+
+    protected void writeParentName()
+    {
+  
+        string sql = "SELECT distinct ";
+        sql += " isnull(a.fl_groupname,'') fl_groupname";
+        sql += " from tb_detailgroup a ";
+        sql += " where a.fl_id='" + hdParentId.Value + "' ";
+
+        OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
+        OleDbCommand command = new OleDbCommand();
+        OleDbDataReader rs = null;
+        try
+        {
+            Conn.Open();
+            command.Connection = Conn;
+            command.CommandText = sql.Replace(";", "");
+            rs = command.ExecuteReader();
+            if (rs.Read())
+            {
+                this.lbParentName.Text = Convert.ToString( rs["fl_groupname"]);
+            }
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+        finally
+        {
+            if (rs != null)
+            {
+                rs.Close();
+            }
+
+            Conn.Close();
+
+        }
+    }
     protected void Page_Load(object sender, EventArgs e)
     {
         try
@@ -320,6 +361,7 @@ public partial class _mass_entry : System.Web.UI.Page
                 this.hdParentIdSearch.Value = parentSearch == null ? "" : parentSearch.Trim();
             }
             userDataSet();
+            writeParentName();
         }
         else
         {
