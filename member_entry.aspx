@@ -206,66 +206,7 @@ end sub
             <tr>
                 <td>
                     <table border="0" align="center" width="100%" cellspacing="0" cellpadding="0">                                    
-                        <tr height="20px">
-                            <td class="choice" style="width: 100px">หลักสูตร:</td>
-                            <td class="choice">
-                                <asp:DropDownList ID="cmbCourse" runat="server" CssClass="css"></asp:DropDownList>
-                                <font color="red">*</font>
-                            </td>
-                        </tr>
-                        <tr height="20px">
-                            <td class="choice" >รุ่น:</td>
-                            <td class="choice" >
-                                <asp:DropDownList ID="cmbGen" runat="server" CssClass="css"></asp:DropDownList>
-                                /
-                                <asp:DropDownList ID="cmbYear" runat="server" CssClass="css"></asp:DropDownList>
-                                <font color="red">*</font>
-                            </td>
-                        </tr>
-                        <tr height="20px">
-                            <td class="choice">จังหวัด:</td>
-                            <td class="choice">
-                                <asp:DropDownList ID="cmbTrainProvince" runat="server" CssClass="css"></asp:DropDownList>
-                                <font color="red">*</font>
-                            </td>
-                        </tr>
-                        <tr height="20px">
-                            <td class="choice">หน่วยงาน:</td>
-                            <td class="choice">
-                                <asp:DropDownList ID="cmbDept" runat="server" CssClass="css"></asp:DropDownList>
-                                <font color="red">*</font>
-                            </td>
-                        </tr>
-                        <tr height="20px">
-                            <td class="choice" >วันเริ่มฝึกอบรม:</td>
-                            <td class="choice" >
-                                <asp:DropDownList ID="cmbStartDD" runat="server" CssClass="css"></asp:DropDownList> -
-                                <asp:DropDownList ID="cmbStartMM" runat="server" CssClass="css"></asp:DropDownList> -
-                                <asp:DropDownList ID="cmbStartYY" runat="server" CssClass="css"></asp:DropDownList>
-                            </td>
-                        </tr>
-                        <tr height="20px">
-                            <td class="choice">วันสิ้นสุดการฝึกอบรม:</td>
-                            <td class="choice">
-                                <asp:DropDownList ID="cmbStopDD" runat="server" CssClass="css"></asp:DropDownList> -
-                                <asp:DropDownList ID="cmbStopMM" runat="server" CssClass="css"></asp:DropDownList> -
-                                <asp:DropDownList ID="cmbStopYY" runat="server" CssClass="css"></asp:DropDownList>
-                            </td>
-                        </tr>
-                       <tr height="20px">
-                            <td class="choice">ตำแหน่ง:</td>
-                            <td class="choice">
-                                <asp:DropDownList ID="cmbPos" runat="server" CssClass="css">
-                                    <asp:ListItem Text="ประธาน" Value="P"></asp:ListItem>
-                                    <asp:ListItem Text="รองประธาน" Value="V"></asp:ListItem>
-                                    <asp:ListItem Text="เลขานุการ" Value="Y"></asp:ListItem>
-                                    <asp:ListItem Text="สมาชิก" Value="Z"></asp:ListItem>
-                                </asp:DropDownList>
-                            </td>
-                        </tr>
-                        <tr height="20px">
-                            <td class="header_2" colspan="2">&nbsp;</td>
-                        </tr>
+                     
                         <tr height="20px">
                             <td class="choice" >บัตรประชาชน:</td>
                             <td class="choice" >
