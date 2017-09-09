@@ -174,8 +174,8 @@ public partial class _mass_entry : System.Web.UI.Page
         //cmbTambon.Items.Add(new ListItem("ไม่กำหนด", ""));
         //cmbMassGroup.SelectedValue = "";
         txtMassName.Text = "";
-        lbParentName.Text = "";
-        hdParentId.Value = "";
+       // lbParentName.Text = "";
+     //   hdParentId.Value = "";
         txtReportAmount.Text = "";
         //cmbDept.SelectedValue="";
         txtGoogle.Text = "";
@@ -187,6 +187,8 @@ public partial class _mass_entry : System.Web.UI.Page
     protected void boxSet(string hid)
     {
         clearBox();
+        writeParentName();
+
         hidID.Value = hid.Trim();
         string sql = "SELECT distinct ";
         sql += " isnull(a.fl_province,''), ";
@@ -203,7 +205,7 @@ public partial class _mass_entry : System.Web.UI.Page
 
         sql += " ,isnull(parent.fl_groupname,'') parentName ";
         sql += " ,isnull(parent.fl_id,'') parentId ";
-        sql += " ,isnull(a.fl_id,'') parentId ";
+        //sql += " ,isnull(a.fl_id,'') parentId ";
         sql += " ,a.fl_level level ";
 
         sql += " from tb_detailgroup a ";
@@ -246,13 +248,18 @@ public partial class _mass_entry : System.Web.UI.Page
                 {
                     hdParentId.Value = rs["parentId"].ToString();
                 }
-                if (rs["parentId"] != null)
-                {
-                    hdParentId.Value = rs["parentId"].ToString();
-                }
+                //if (rs["parentId"] != null)
+                //{
+                //    hdParentId.Value = rs["parentId"].ToString();
+                //}
                 if (rs["level"] != null)
                 {
                     ddProjectLevel.SelectedValue = rs["level"].ToString();
+                    if (ddProjectLevel.SelectedValue == "2")
+                    {
+                        bindDDparent1();
+                        ddParent1.SelectedValue = hdParentId.Value;
+                    }
                 }
             }
         }
@@ -275,6 +282,45 @@ public partial class _mass_entry : System.Web.UI.Page
         cmbProvinceSearch.SelectedValue = cmbProvince.SelectedValue;
     }
 
+
+
+    protected void writeParentName()
+    {
+  
+        string sql = "SELECT distinct ";
+        sql += " isnull(a.fl_groupname,'') fl_groupname";
+        sql += " from tb_detailgroup a ";
+        sql += " where a.fl_id='" + hdParentId.Value + "' ";
+
+        OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
+        OleDbCommand command = new OleDbCommand();
+        OleDbDataReader rs = null;
+        try
+        {
+            Conn.Open();
+            command.Connection = Conn;
+            command.CommandText = sql.Replace(";", "");
+            rs = command.ExecuteReader();
+            if (rs.Read())
+            {
+                this.lbParentName.Text = Convert.ToString( rs["fl_groupname"]);
+            }
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+        finally
+        {
+            if (rs != null)
+            {
+                rs.Close();
+            }
+
+            Conn.Close();
+
+        }
+    }
     protected void Page_Load(object sender, EventArgs e)
     {
         try
@@ -299,18 +345,8 @@ public partial class _mass_entry : System.Web.UI.Page
             deptDataSet();
             provinceDataSet();
             massDataSet();
-            if (Request.QueryString["hid"] != null)
-            {
-                if (Request.QueryString["hid"].Trim() != "")
-                {
-                    boxSet(Request.QueryString["hid"].ToString());
-                }
-            }
-
-
+          
             //project level
-            ddProjectLevel.DataSource = new String[] { "1", "2" };
-            ddProjectLevel.DataBind();
             String parent = Request.Params["parent_id"];
             String parentSearch = Request.Params["parentSearch"];
             String page = Request.Params["page"];
@@ -318,13 +354,23 @@ public partial class _mass_entry : System.Web.UI.Page
             if ("master".Equals(page))
             {
                 this.hdParentIdSearch.Value = parentSearch == null ? "" : parentSearch.Trim();
+                dropdownLovel(page);
+            }
+            else
+            {
+                dropdownLovel(null);
+            }
+            if (Request.QueryString["hid"] != null)
+            {
+                if (Request.QueryString["hid"].Trim() != "")
+                {
+                    boxSet(Request.QueryString["hid"].ToString());
+                }
             }
             userDataSet();
+            writeParentName();
         }
-        else
-        {
-            this.hdParentId.Value = "";
-        }
+       
         if (Session["uGroup"].ToString() == "C") btnSave.Enabled = false;
         OleDbConnection Conn = null;
         try
@@ -347,7 +393,21 @@ public partial class _mass_entry : System.Web.UI.Page
         }
         catch (Exception ex) { if (Conn != null) { if (Conn.State == ConnectionState.Open)Conn.Close(); } }
     }
+    private  void dropdownLovel(String page){
+        if ("master".Equals(page))
+        {
+            ddProjectLevel.DataSource = new String[] { "1" };
+            ddProjectLevel.DataBind();
+            ddProjectLevel.SelectedValue = "1";
+        }
+        else
+        {
 
+            ddProjectLevel.DataSource = new String[] { "1" ,"2"};
+            ddProjectLevel.DataBind();
+        }
+       
+    }
     protected void userDataSet()
     {
 
@@ -754,6 +814,52 @@ public partial class _mass_entry : System.Web.UI.Page
         return listProject1;
     }
 
+
+    public void bindDDparent1()
+    {
+        String parentId = hdParentId.Value;
+        String hid =hidID.Value;
+        ddParent1.Items.Clear();
+        //cmbDept.Items.Add(new ListItem("ไม่กำหนด", ""));
+        ddParent1.Items.Add(new ListItem("ยังไม่กำหนด", ""));
+        if (parentId == "")
+        {
+            return;
+        }
+        OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
+        OleDbCommand command = new OleDbCommand();
+        OleDbDataReader rs = null;
+        try
+        {
+            Conn.Open();
+            command.Connection = Conn;
+            String sql = "select fl_id,fl_groupname from tb_detailgroup where fl_parent_id=" + parentId + " and fl_level=1 and fl_id <> "+hid;
+            command.CommandText = sql;
+            rs = command.ExecuteReader();
+            if (rs.Read())
+            {
+                ddParent1.Items.Add(new ListItem(Convert.ToString(rs["fl_groupname"]),Convert.ToString( rs["fl_id"])));
+            }
+            rs.Close();
+        
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            if (rs != null)
+            {
+                rs.Close();
+            }
+            if (Conn != null)
+            {
+                Conn.Close();
+            }
+        }
+
+    }
     public int countProject(String projectName,int level ,String parentId)
     {
         OleDbConnection Conn = null;
@@ -988,6 +1094,32 @@ public partial class _mass_entry : System.Web.UI.Page
         OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
         OleDbCommand command = new OleDbCommand();
 
+        String projectLevel="";
+        String parentId = "";
+        if(ddProjectLevel.SelectedIndex>=0){
+            projectLevel=projectLevel = ddProjectLevel.Items[ddProjectLevel.SelectedIndex].Value;
+        }
+        if (projectLevel == "1")
+        {
+            parentId = hdParentId.Value;
+        }
+        else if (projectLevel == "2")
+        {
+            if (ddParent1.SelectedIndex >= 0)
+            {
+                parentId = ddParent1.Items[ ddParent1.SelectedIndex].Value;
+            }
+            else
+            {
+                lblResponse.Text = "ต้องระบุโครงการย่อยระดับ 1";
+                lblResponse.ForeColor = System.Drawing.Color.Red;
+                lblResponse.Visible = true;
+                userDataSet();
+                return;
+            }
+           
+        }
+        
         //Save Process
         if (hidID.Value != "")
         {
@@ -1004,6 +1136,8 @@ public partial class _mass_entry : System.Web.UI.Page
             sql += " fl_update_time ='" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
             sql += " fl_dept ='" + cmbDept.SelectedValue.Trim() + "', ";
             sql += " fl_google ='" + txtGoogle.Text.Trim().Replace("'", "''").Replace(";", "") + "' ";
+            sql += " ,fl_parent_id ='" + parentId + "' ";
+            sql += " ,fl_level ='" + projectLevel + "' ";
 
 
             sql += " where fl_id = '" + hidID.Value.Trim() + "'; ";
@@ -1020,7 +1154,6 @@ public partial class _mass_entry : System.Web.UI.Page
         else
         {
            String projectName= txtMassName.Text.Trim();
-           String parentId = hdParentId.Value;
            int level = Convert.ToInt32(ddProjectLevel.SelectedValue);
             if(isContainProject(projectName,level,parentId)){
                 lblResponse.Text = "มีโครงการย่อยนี้แล้ว";
@@ -1293,5 +1426,15 @@ public partial class _mass_entry : System.Web.UI.Page
         command.CommandText = sql;
         command.ExecuteNonQuery();
         Conn.Close();
+    }
+
+
+    protected void ddParent1_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddProjectLevel.SelectedIndex > 0)
+        {
+            bindDDparent1();
+        }
+        userDataSet();
     }
 }

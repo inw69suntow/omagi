@@ -326,36 +326,7 @@ public partial class _train_member_entry: System.Web.UI.Page
         return result;
     }
 
-    protected void deptDataSet()
-    {
-        cmbDept.Items.Clear();
-   
-        //cmbDept.Items.Add(new ListItem("ไม่กำหนด", ""));
-        //cmbDeptSearch.Items.Add(new ListItem("ไม่กำหนด", ""));
 
-        OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
-        OleDbCommand command = new OleDbCommand();
-
-        string sql = "SELECT distinct fl_dept_id,fl_dept_name from tb_dept where fl_dept_status='1' ";
-        //if (Session["uGroup"].ToString() == "U") sql = sql + " and fl_dept_id like '" + Session["uDept"].ToString().Replace("0", "") + "%' ";
-        if (Session["uGroup"].ToString() == "U")
-        {
-            if (Session["uDept"].ToString().Substring(0) != "0") sql = sql + " and fl_dept_id like '" + Session["uDept"].ToString().Replace("00", "") + "%' ";
-        }
-        sql += " order by fl_dept_id ";
-
-        Conn.Open();
-
-        command.CommandText = sql;
-        command.Connection = Conn;
-        OleDbDataReader rs = command.ExecuteReader();
-        while (rs.Read())
-        {
-            cmbDept.Items.Add(new ListItem(rs.GetString(1), rs.GetString(0)));
-        }
-        rs.Close();
-        Conn.Close();
-    }
 
     protected void dateDataSet()
     {
@@ -363,31 +334,14 @@ public partial class _train_member_entry: System.Web.UI.Page
         cmbBMM.Items.Clear();
         cmbBYY.Items.Clear();
 
-        cmbStartDD.Items.Clear();
-        cmbStartMM.Items.Clear();
-        cmbStartYY.Items.Clear();
 
-        cmbStopDD.Items.Clear();
-        cmbStopMM.Items.Clear();
-        cmbStopYY.Items.Clear();
-
-        cmbYear.Items.Clear();
-
-
-        cmbGen.Items.Clear();
 
 
         cmbBDD.Items.Add(new ListItem("", ""));
         cmbBMM.Items.Add(new ListItem("", ""));
         cmbBYY.Items.Add(new ListItem("", ""));
 
-        cmbStartDD.Items.Add(new ListItem("", ""));
-        cmbStartMM.Items.Add(new ListItem("", ""));
-        cmbStartYY.Items.Add(new ListItem("", ""));
 
-        cmbStopDD.Items.Add(new ListItem("", ""));
-        cmbStopMM.Items.Add(new ListItem("", ""));
-        cmbStopYY.Items.Add(new ListItem("", ""));
 
         //cmbYear.Items.Add(new ListItem("", ""));
         //cmbYearSearch.Items.Add(new ListItem("", ""));
@@ -398,15 +352,9 @@ public partial class _train_member_entry: System.Web.UI.Page
         for (int i = 1; i <= 31; i++)
         {
             cmbBDD.Items.Add(new ListItem(i.ToString().PadLeft(2,'0'),i.ToString().PadLeft(2,'0')));
-            cmbStartDD.Items.Add(new ListItem(i.ToString().PadLeft(2,'0'),i.ToString().PadLeft(2,'0')));
-            cmbStopDD.Items.Add(new ListItem(i.ToString().PadLeft(2,'0'),i.ToString().PadLeft(2,'0')));
         }
 
-        for (int i = 1; i <= 99; i++)
-        {
-            cmbGen.Items.Add(new ListItem(i.ToString().PadLeft(2, '0'), i.ToString().PadLeft(2, '0')));
-
-        }
+    
 
         for (int i = 1; i <= 12; i++)
         {
@@ -426,18 +374,12 @@ public partial class _train_member_entry: System.Web.UI.Page
             if(i==12) nameVal="ธันวาคม";
 
             cmbBMM.Items.Add(new ListItem(nameVal, i.ToString().PadLeft(2, '0')));
-            cmbStartMM.Items.Add(new ListItem(nameVal, i.ToString().PadLeft(2, '0')));
-            cmbStopMM.Items.Add(new ListItem(nameVal, i.ToString().PadLeft(2, '0')));
         }
 
         for (int i = 1900; i <= DateTime.Now.Year; i++)
         {
             int j = i + 543;
             cmbBYY.Items.Add(new ListItem(j.ToString(), i.ToString()));
-            cmbStartYY.Items.Add(new ListItem(j.ToString(), i.ToString()));
-            cmbStopYY.Items.Add(new ListItem(j.ToString(), i.ToString()));
-
-            cmbYear.Items.Add(new ListItem(j.ToString(), i.ToString()));
         }
     }
 
@@ -488,7 +430,6 @@ public partial class _train_member_entry: System.Web.UI.Page
         while (rs.Read())
         {
             cmbProvince.Items.Add(new ListItem(rs.GetString(1), rs.GetString(0)));
-            cmbTrainProvince.Items.Add(new ListItem(rs.GetString(1), rs.GetString(0)));
         }
         rs.Close();
         Conn.Close();
@@ -549,7 +490,7 @@ public partial class _train_member_entry: System.Web.UI.Page
     protected void clearBox(bool flag)
     {
         hidID.Value = "";
-        txtCardID.Text = "";
+       // txtCardID.Text = "";
         cmbTitle.SelectedValue = "";
         txtFName.Text = "";
         txtSName.Text = "";
@@ -559,10 +500,21 @@ public partial class _train_member_entry: System.Web.UI.Page
         txtSoy.Text = "";
         txtRoad.Text = "";
 
-        //cmbProvince.SelectedValue = "";
-        //cmbDistrict.Items.Clear();
+        if (cmbProvince.Items != null)
+        {
+            cmbProvince.Items.Add(new ListItem("ไม่กำหนด", ""));
+            cmbProvince.SelectedValue = "";
+        }
+        if (cmbDistrict.Items != null)
+        {
+            cmbDistrict.Items.Clear();
+        }
+        if (cmbTambon.Items != null)
+        {
+            cmbTambon.Items.Clear();
+        }
         //cmbDistrict.Items.Add(new ListItem("ไม่กำหนด", ""));
-        //cmbTambon.Items.Clear();
+      
         //cmbTambon.Items.Add(new ListItem("ไม่กำหนด", ""));
 
         txtMoo.Text = "";
@@ -604,6 +556,12 @@ public partial class _train_member_entry: System.Web.UI.Page
 
         lblCreate.Text = "";
         lblUpdate.Text = "";
+        txtEducational.Text = "";
+        txtTalent.Text = "";
+        txtJob.Text = "";
+        txtPosition.Text = "";
+        txtCurAddr.Text = "";
+        txtAcademy.Text = "";
     }
 
     protected void boxSet(string hid)
@@ -611,11 +569,8 @@ public partial class _train_member_entry: System.Web.UI.Page
         clearBox(true);
         String sql ="select * ";
             sql+="from tb_citizen ";
-            sql+="where 1=1 "; 
-            sql+="and fl_citizen_id='"+txtSearchSID.Text.Trim()+"' ";
-            sql+="and fl_fname like '"+txtSearchFName.Text.Trim()+"'  ";
-            sql+="and fl_sname like '"+txtSearchLName.Text.Trim()+"' ";
-            
+            sql+="where ";
+            sql += "fl_citizen_id='" + hid + "' ";
 
         OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
         OleDbCommand command = new OleDbCommand();
@@ -627,7 +582,7 @@ public partial class _train_member_entry: System.Web.UI.Page
         if (rs.Read())
         {
             hidID.Value = hid.Trim();
-            txtCardID.Text = Convert.ToString(rs["fl_fname"]);
+            txtCardID.Text = Convert.ToString(rs["fl_citizen_id"]);
             if (System.IO.File.Exists(Server.MapPath("CIMG") + "\\" + txtCardID.Text + ".jpg"))
             {
                 imgLink.ImageUrl = "CIMG/" + txtCardID.Text + ".jpg";
@@ -636,108 +591,89 @@ public partial class _train_member_entry: System.Web.UI.Page
             {
                 imgLink.ImageUrl = "CIMG/blank.gif";
             }
-
-            if (rs.GetString(1).Trim() != "")
+            String title = Convert.ToString(rs["fl_title"]);
+            if (title != "")
             {
-                cmbTitle.SelectedValue = Convert.ToString(rs["fl_fname"]);
+                cmbTitle.SelectedValue = title;
             }
 
             txtFName.Text = Convert.ToString(rs["fl_fname"]);
-            txtSName.Text = Convert.ToString(rs["fl_fname"]);
-            txtAddrNo.Text = Convert.ToString(rs["fl_fname"]);
-            txtMoo.Text = Convert.ToString(rs["fl_fname"]);
-            txtHome.Text = Convert.ToString(rs["fl_fname"]);
-            txtSoy.Text = Convert.ToString(rs["fl_fname"]);
-            txtRoad.Text = Convert.ToString(rs["fl_fname"]);
+            txtSName.Text = Convert.ToString(rs["fl_sname"]);
+            txtAddrNo.Text = Convert.ToString(rs["fl_addrno"]);
+            txtMoo.Text = Convert.ToString(rs["fl_moono"]);
+            txtHome.Text = Convert.ToString(rs["fl_home"]);
+            txtSoy.Text = Convert.ToString(rs["fl_soy"]);
+            txtRoad.Text = Convert.ToString(rs["fl_road"]);
 
-            if (rs.GetString(9).Trim() != "")
-                cmbProvince.SelectedValue = Convert.ToString(rs["fl_fname"]);
+            if (Convert.ToString(rs["fl_province_code"]).Trim() != "")
+            {
+                cmbProvince.SelectedValue = Convert.ToString(rs["fl_province_code"]);
+            }
             districtDataSet();
-            if (rs.GetString(10).Trim() != "")
-                cmbDistrict.SelectedValue = Convert.ToString(rs["fl_fname"]);
+            if (Convert.ToString(rs["fl_district"]).Trim() != "")
+            {
+                cmbDistrict.SelectedValue = Convert.ToString(rs["fl_district"]);
+            }
             tambonDataSet();
-            if (rs.GetString(11).Trim() != "")
-                cmbTambon.SelectedValue = Convert.ToString(rs["fl_fname"]);
-
-            txtPost.Text = Convert.ToString(rs["fl_fname"]);
-            txtTelNo.Text = Convert.ToString(rs["fl_fname"]);
-            txtOffNo.Text = Convert.ToString(rs["fl_fname"]);
-            txtMobNo.Text = Convert.ToString(rs["fl_fname"]);
-            txtEmail.Text = Convert.ToString(rs["fl_fname"]);
-
-            if (rs.GetString(17).Trim() != "")
+            if (Convert.ToString(rs["fl_tambon"]).Trim() != "")
             {
-                cmbBYY.SelectedValue = rs.GetString(17).Substring(0, 4);
-                cmbBMM.SelectedValue = rs.GetString(17).Substring(4, 2);
-                cmbBDD.SelectedValue = rs.GetString(17).Substring(6, 2);
+                cmbTambon.SelectedValue = Convert.ToString(rs["fl_tambon"]);
+            }
+            txtPost.Text = Convert.ToString(rs["fl_postcode"]);
+            txtTelNo.Text = Convert.ToString(rs["fl_telno"]);
+            txtOffNo.Text = Convert.ToString(rs["fl_offno"]);
+            txtMobNo.Text = Convert.ToString(rs["fl_mobno"]);
+            txtEmail.Text = Convert.ToString(rs["fl_email"]);
+            String birth = Convert.ToString(rs["fl_birth"]).Trim();
+            if (birth!= "")
+            {
+                cmbBYY.SelectedValue = birth.Substring(0, 4);
+                cmbBMM.SelectedValue = birth.Substring(4, 2);
+                cmbBDD.SelectedValue = birth.Substring(6, 2);
             }
 
-            if (rs.GetString(18) == "1")
+            if (Convert.ToString(rs["fl_targetFlag"]) == "1")
+            {
                 chkTargetFlag.Checked = true;
-            if (rs.GetString(19) != "1")
+            }
+            else
+            {
+                chkTargetFlag.Checked = false;
+            }
+
+
+            if (Convert.ToString(rs["fl_status"]) != "1")
+            {
                 chkStatus.Checked = true;
-
-            txtGoogle.Text = Convert.ToString(rs["fl_fname"]); ;
-
-            if (rs.GetString(21).Trim() != "") cmbCourse.SelectedValue = Convert.ToString(rs["fl_fname"]);
-            if (rs.GetString(22).Trim() != "") cmbGen.SelectedValue = Convert.ToString(rs["fl_fname"]);
-            if (rs.GetString(23).Trim() != "") cmbYear.SelectedValue = Convert.ToString(rs["fl_fname"]);
-            if (rs.GetString(24).Trim() != "") cmbDept.SelectedValue = Convert.ToString(rs["fl_fname"]);
-            if (rs.GetString(25).Trim() != "") cmbTrainProvince.SelectedValue = Convert.ToString(rs["fl_fname"]);
-
-            if (rs.GetString(26).Trim() != "") 
-                cmbPos.SelectedValue = Convert.ToString(rs["fl_fname"]);
-
-            if (rs.GetString(27).Trim() != "")
+            }
+            else
             {
-                if (rs.GetString(27).Trim() != "00000000000000")
-                {
-                    cmbStartYY.SelectedValue = rs.GetString(27).Substring(0, 4);
-                    cmbStartMM.SelectedValue = rs.GetString(27).Substring(4, 2);
-                    cmbStartDD.SelectedValue = rs.GetString(27).Substring(6, 2);
-                }
+                chkStatus.Checked = false;
             }
 
-            if (rs.GetString(28).Trim() != "")
-            {
-                if (rs.GetString(28).Trim() != "00000000000000")
-                {
-                    cmbStopYY.SelectedValue = rs.GetString(28).Substring(0, 4);
-                    cmbStopMM.SelectedValue = rs.GetString(28).Substring(4, 2);
-                    cmbStopDD.SelectedValue = rs.GetString(28).Substring(6, 2);
-                }
-            }
-            if (rs.GetString(29) != "") lblCreate.Text = rs.GetString(29).Substring(6, 2) + "-" + rs.GetString(29).Substring(4, 2) + "-" + rs.GetString(29).Substring(0, 4) + " " + rs.GetString(29).Substring(8, 2) + ":" + rs.GetString(29).Substring(10, 2) + ":" + rs.GetString(29).Substring(12, 2);
-            if (rs.GetString(30) != "") lblUpdate.Text = rs.GetString(30).Substring(6, 2) + "-" + rs.GetString(30).Substring(4, 2) + "-" + rs.GetString(30).Substring(0, 4) + " " + rs.GetString(30).Substring(8, 2) + ":" + rs.GetString(30).Substring(10, 2) + ":" + rs.GetString(30).Substring(12, 2);
+            txtGoogle.Text = Convert.ToString(rs["fl_google"]);
+            String creatDate = Convert.ToString(rs["fl_create_time"]);
+            if (creatDate != "") 
+                lblCreate.Text = creatDate.Substring(6, 2) + "-" + creatDate.Substring(4, 2) + "-" + creatDate.Substring(0, 4) + " " + creatDate.Substring(8, 2) + ":" + creatDate.Substring(10, 2) + ":" + creatDate.Substring(12, 2);
+            String updateDate = Convert.ToString(rs["fl_update_time"]);
+            if (updateDate != "") 
+                lblUpdate.Text = updateDate.Substring(6, 2) + "-" + updateDate.Substring(4, 2) + "-" + updateDate.Substring(0, 4) + " " + updateDate.Substring(8, 2) + ":" + updateDate.Substring(10, 2) + ":" + updateDate.Substring(12, 2);
+
+           
+            txtEducational.Text = Convert.ToString(rs["fl_educational"]);
+            txtTalent.Text = Convert.ToString(rs["fl_talent"]);
+            txtJob.Text = Convert.ToString(rs["fl_job"]);
+            txtPosition.Text = Convert.ToString(rs["fl_position"]);
+            txtCurAddr.Text = Convert.ToString(rs["fl_current_addr"]);
+            txtAcademy.Text = Convert.ToString(rs["fl_academy"]);
         }
         rs.Close();
         Conn.Close();
     }
     protected void boxSet(string hid,int flag)
     {
-        string sql = "SELECT distinct ,";
-        sql += " isnull(fl_citizen_id,''), ";
-        sql += " isnull(fl_title,''), ";
-        sql += " isnull(fl_fname,''), ";
-        sql += " isnull(fl_sname,''), ";
-        sql += " isnull(fl_addrno,''), ";
-        sql += " isnull(fl_moono,''), ";
-        sql += " isnull(fl_home,''), ";
-        sql += " isnull(fl_soy,''), ";
-        sql += " isnull(fl_road,''), ";
-        sql += " isnull(fl_province_code,''), ";
-        sql += " isnull(fl_district,''), ";
-        sql += " isnull(fl_tambon,''), ";
-        sql += " isnull(fl_postcode,''), ";
-        sql += " isnull(fl_telno,''), ";
-        sql += " isnull(fl_offno,''), ";
-        sql += " isnull(fl_mobno,''), ";
-        sql += " isnull(fl_email,''), ";
-        sql += " isnull(fl_birth,''), ";
-        sql += " isnull(fl_targetFlag,''), ";
-        sql += " isnull(fl_status,''), ";
-        sql += " isnull(fl_google,'') ";
-
+        clearBox(true);
+        string sql = "SELECT * ";
         sql += " from tb_citizen ";
         sql += " where fl_citizen_id='" + hid.Replace(";","").Replace("'","''") + "' ";
 
@@ -751,7 +687,7 @@ public partial class _train_member_entry: System.Web.UI.Page
         if (rs.Read())
         {
             hidID.Value = hid.Trim();
-            txtCardID.Text = rs.GetString(0);
+            txtCardID.Text = Convert.ToString(rs["fl_citizen_id"]);
             if (System.IO.File.Exists(Server.MapPath("CIMG") + "\\" + txtCardID.Text + ".jpg"))
             {
                 imgLink.ImageUrl = "CIMG/" + txtCardID.Text + ".jpg";
@@ -761,9 +697,10 @@ public partial class _train_member_entry: System.Web.UI.Page
                 imgLink.ImageUrl = "CIMG/blank.gif";
             }
 
-            if (Convert.ToString( rs["fl_title"]).Trim() != "")
+            String title = Convert.ToString(rs["fl_title"]);
+            if (title != "")
             {
-                cmbTitle.SelectedValue = Convert.ToString(rs["fl_title"]);
+                cmbTitle.SelectedValue = title;
             }
 
             txtFName.Text = Convert.ToString(rs["fl_fname"]);
@@ -774,33 +711,67 @@ public partial class _train_member_entry: System.Web.UI.Page
             txtSoy.Text = Convert.ToString(rs["fl_soy"]);
             txtRoad.Text = Convert.ToString(rs["fl_road"]);
 
-            if (rs.GetString(9).Trim() != "")
-                cmbProvince.SelectedValue = rs.GetString(9).Trim();
-            districtDataSet();
-            if (rs.GetString(10).Trim() != "") 
-                cmbDistrict.SelectedValue = rs.GetString(10).Trim();
-            tambonDataSet();
-            if (rs.GetString(11).Trim() != "") 
-                cmbTambon.SelectedValue = rs.GetString(11).Trim();
-
-            txtPost.Text = rs.GetString(12);
-            txtTelNo.Text = rs.GetString(13);
-            txtOffNo.Text = rs.GetString(14);
-            txtMobNo.Text = rs.GetString(15);
-            txtEmail.Text = rs.GetString(16);
-
-            if (rs.GetString(17).Trim() != "")
+            if (Convert.ToString(rs["fl_province_code"]).Trim() != "")
             {
-                cmbBYY.SelectedValue = rs.GetString(17).Substring(0, 4);
-                cmbBMM.SelectedValue = rs.GetString(17).Substring(4, 2);
-                cmbBDD.SelectedValue = rs.GetString(17).Substring(6, 2);
+                cmbProvince.SelectedValue = Convert.ToString(rs["fl_province_code"]);
+            }
+            districtDataSet();
+            if (Convert.ToString(rs["fl_district"]).Trim() != "")
+            {
+                cmbDistrict.SelectedValue = Convert.ToString(rs["fl_district"]);
+            }
+            tambonDataSet();
+            if (Convert.ToString(rs["fl_tambon"]).Trim() != "")
+            {
+                cmbTambon.SelectedValue = Convert.ToString(rs["fl_tambon"]);
+            }
+            txtPost.Text = Convert.ToString(rs["fl_postcode"]);
+            txtTelNo.Text = Convert.ToString(rs["fl_telno"]);
+            txtOffNo.Text = Convert.ToString(rs["fl_offno"]);
+            txtMobNo.Text = Convert.ToString(rs["fl_mobno"]);
+            txtEmail.Text = Convert.ToString(rs["fl_email"]);
+            String birth = Convert.ToString(rs["fl_birth"]).Trim();
+            if (birth != "")
+            {
+                cmbBYY.SelectedValue = birth.Substring(0, 4);
+                cmbBMM.SelectedValue = birth.Substring(4, 2);
+                cmbBDD.SelectedValue = birth.Substring(6, 2);
             }
 
-            if (rs.GetString(18) == "1") chkTargetFlag.Checked = true;
-            if (rs.GetString(19) != "1") chkStatus.Checked = true;
+            if (Convert.ToString(rs["fl_targetFlag"]) == "1")
+            {
+                chkTargetFlag.Checked = true;
+            }
+            else
+            {
+                chkTargetFlag.Checked = false;
+            }
 
-            txtGoogle.Text = rs.GetString(20).Trim();
 
+            if (Convert.ToString(rs["fl_status"]) != "1")
+            {
+                chkStatus.Checked = true;
+            }
+            else
+            {
+                chkStatus.Checked = false;
+            }
+
+            txtGoogle.Text = Convert.ToString(rs["fl_google"]);
+            String creatDate = Convert.ToString(rs["fl_create_time"]);
+            if (creatDate != "")
+                lblCreate.Text = creatDate.Substring(6, 2) + "-" + creatDate.Substring(4, 2) + "-" + creatDate.Substring(0, 4) + " " + creatDate.Substring(8, 2) + ":" + creatDate.Substring(10, 2) + ":" + creatDate.Substring(12, 2);
+            String updateDate = Convert.ToString(rs["fl_update_time"]);
+            if (updateDate != "")
+                lblUpdate.Text = updateDate.Substring(6, 2) + "-" + updateDate.Substring(4, 2) + "-" + updateDate.Substring(0, 4) + " " + updateDate.Substring(8, 2) + ":" + updateDate.Substring(10, 2) + ":" + updateDate.Substring(12, 2);
+
+
+            txtEducational.Text = Convert.ToString(rs["fl_educational"]);
+            txtTalent.Text = Convert.ToString(rs["fl_talent"]);
+            txtJob.Text = Convert.ToString(rs["fl_job"]);
+            txtPosition.Text = Convert.ToString(rs["fl_position"]);
+            txtCurAddr.Text = Convert.ToString(rs["fl_current_addr"]);
+            txtAcademy.Text = Convert.ToString(rs["fl_academy"]);
         }
         rs.Close();
         Conn.Close();
@@ -835,7 +806,7 @@ public partial class _train_member_entry: System.Web.UI.Page
             dateDataSet();
             titleDataSet();
             provinceDataSet();
-            deptDataSet();
+
 
 
             if (Request.QueryString["hid"] != null)
@@ -874,6 +845,7 @@ public partial class _train_member_entry: System.Web.UI.Page
 
     protected void userDataSet()
     {
+
         dtGrid.Rows.Clear();
         dtGrid.BorderColor = ConfigurationManager.AppSettings["gridBorderColor"];
         dtGrid.Border = 1;
@@ -933,18 +905,25 @@ public partial class _train_member_entry: System.Web.UI.Page
             return;
         }
         //Check filter command
-     
-        if (txtSearchSID.Text.Trim()!="")
+        String hid=Request.QueryString["hid"];
+        if (hid != null && hid != "")
         {
-            sql += " and fl_citizen_id='" + txtSearchSID.Text.Trim() + "' ";
+            sql += " and fl_citizen_id='" + hid.Trim() + "' ";
         }
-        if (txtSearchFName.Text.Trim() != "")
+        else
         {
-            sql += " and fl_fname like '%" + txtSearchFName.Text.Trim() + "%' ";
-        }
-        if (txtSearchLName.Text.Trim() != "")
-        {
-            sql += " and fl_sname like '%" + txtSearchLName.Text.Trim() + "%' ";
+            if (txtSearchSID.Text.Trim() != "")
+            {
+                sql += " and fl_citizen_id='" + txtSearchSID.Text.Trim() + "' ";
+            }
+            if (txtSearchFName.Text.Trim() != "")
+            {
+                sql += " and fl_fname like '%" + txtSearchFName.Text.Trim() + "%' ";
+            }
+            if (txtSearchLName.Text.Trim() != "")
+            {
+                sql += " and fl_sname like '%" + txtSearchLName.Text.Trim() + "%' ";
+            }
         }
 
         OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
@@ -1205,62 +1184,13 @@ public partial class _train_member_entry: System.Web.UI.Page
         tambonDataSet();
         userDataSet();
     }
-    protected void btnSave_Click(object sender, EventArgs e)
+
+    private void validateSave()
     {
         lblResponse.Text = "";
 
-        if (cmbCourse.SelectedValue == "")
-        {
-            lblResponse.Text = "ไม่มีชื่อหลักสูตร";
-            lblResponse.ForeColor = System.Drawing.Color.Red;
-            lblResponse.Visible = true;
-            userDataSet();
-            return;
-        }
-
-        if (cmbGen.SelectedValue == "")
-        {
-            lblResponse.Text = "ไม่มีเลขที่รุ่น";
-            lblResponse.ForeColor = System.Drawing.Color.Red;
-            lblResponse.Visible = true;
-            userDataSet();
-            return;
-        }
-
-        if (cmbYear.SelectedValue == "")
-        {
-            lblResponse.Text = "ไม่มีรุ่นปีที่อบรม";
-            lblResponse.ForeColor = System.Drawing.Color.Red;
-            lblResponse.Visible = true;
-            userDataSet();
-            return;
-        }
-
-        if (cmbTrainProvince.SelectedValue == "")
-        {
-            lblResponse.Text = "ไม่มีข้อมูลจังหวัดพื้นที่การอบรม";
-            lblResponse.ForeColor = System.Drawing.Color.Red;
-            lblResponse.Visible = true;
-            userDataSet();
-            return;
-        }
-
-        if (cmbDept.SelectedValue == "")
-        {
-            lblResponse.Text = "ไม่มีข้อมูลหน่วยงานผู้ทำการฝึกอบรม";
-            lblResponse.ForeColor = System.Drawing.Color.Red;
-            lblResponse.Visible = true;
-            userDataSet();
-            return;
-        }
-
         if (txtCardID.Text == "")
         {
-            //lblResponse.Text = "ไม่มีเลขที่บัตรประชาชน";
-            //lblResponse.ForeColor = System.Drawing.Color.Red;
-            //lblResponse.Visible = true;
-            //userDataSet();
-            //return;
 
             txtCardID.Text = transID(txtFName.Text.Trim().Replace(";", "").Replace("'", ""), txtSName.Text.Trim().Replace(";", "").Replace("'", ""));
             if (txtCardID.Text.Trim() == "")
@@ -1290,85 +1220,41 @@ public partial class _train_member_entry: System.Web.UI.Page
             userDataSet();
             return;
         }
+    }
+   
 
-        string tmpDate = cmbBYY.SelectedValue.Trim().Replace(";", "").Replace("'", "") + cmbBMM.SelectedValue.Trim().Replace(";", "").Replace("'", "") + cmbBDD.SelectedValue.Trim().Replace(";", "").Replace("'", "");
-        if (tmpDate.Length < 8) tmpDate = "";
-        if (tmpDate != "")
-        {
-            switch (cmbBMM.SelectedValue.Trim())
+       private String getCMBDate(){
+            string tmpDate = cmbBYY.SelectedValue.Trim().Replace(";", "").Replace("'", "") + cmbBMM.SelectedValue.Trim().Replace(";", "").Replace("'", "") + cmbBDD.SelectedValue.Trim().Replace(";", "").Replace("'", "");
+            if (tmpDate.Length < 8) tmpDate = "";
+            if (tmpDate != "")
             {
-                case "02":
-                    if (Convert.ToInt32(cmbBYY.SelectedValue) % 4 == 0)
-                    {
-                        if (Convert.ToInt32(cmbBDD.SelectedValue) > 29) cmbBDD.SelectedValue = "29";
-                    }
-                    else
-                    {
-                        if (Convert.ToInt32(cmbBDD.SelectedValue) > 28) cmbBDD.SelectedValue = "28";
-                    }
-                    break;
-                case "04":
-                case "06":
-                case "09":
-                case "11":
-                    if (Convert.ToInt32(cmbBDD.SelectedValue) > 30) cmbBDD.SelectedValue = "30";
-                    break;
+                switch (cmbBMM.SelectedValue.Trim())
+                {
+                    case "02":
+                        if (Convert.ToInt32(cmbBYY.SelectedValue) % 4 == 0)
+                        {
+                            if (Convert.ToInt32(cmbBDD.SelectedValue) > 29) cmbBDD.SelectedValue = "29";
+                        }
+                        else
+                        {
+                            if (Convert.ToInt32(cmbBDD.SelectedValue) > 28) cmbBDD.SelectedValue = "28";
+                        }
+                        break;
+                    case "04":
+                    case "06":
+                    case "09":
+                    case "11":
+                        if (Convert.ToInt32(cmbBDD.SelectedValue) > 30) cmbBDD.SelectedValue = "30";
+                        break;
+                }
+                tmpDate = cmbBYY.SelectedValue.Trim().Replace(";", "").Replace("'", "") + cmbBMM.SelectedValue.Trim().Replace(";", "").Replace("'", "") + cmbBDD.SelectedValue.Trim().Replace(";", "").Replace("'", "");
             }
-            tmpDate = cmbBYY.SelectedValue.Trim().Replace(";", "").Replace("'", "") + cmbBMM.SelectedValue.Trim().Replace(";", "").Replace("'", "") + cmbBDD.SelectedValue.Trim().Replace(";", "").Replace("'", "");
-        }
-        string tmpDateStart = cmbStartYY.SelectedValue.Trim().Replace(";", "").Replace("'", "") + cmbStartMM.SelectedValue.Trim().Replace(";", "").Replace("'", "") + cmbStartDD.SelectedValue.Trim().Replace(";", "").Replace("'", "");
-        if (tmpDateStart.Length < 8) tmpDateStart = "";
-        if (tmpDateStart != "")
-        {
-            switch (cmbStartMM.SelectedValue.Trim())
-            {
-                case "02":
-                    if (Convert.ToInt32(cmbStartYY.SelectedValue) % 4 == 0)
-                    {
-                        if (Convert.ToInt32(cmbStartDD.SelectedValue) > 29) cmbStartDD.SelectedValue = "29";
-                    }
-                    else
-                    {
-                        if (Convert.ToInt32(cmbStartDD.SelectedValue) > 28) cmbStartDD.SelectedValue = "28";
-                    }
-                    break;
-                case "04":
-                case "06":
-                case "09":
-                case "11":
-                    if (Convert.ToInt32(cmbStartDD.SelectedValue) > 30) cmbStartDD.SelectedValue = "30";
-                    break;
-            }
-            tmpDateStart = cmbStartYY.SelectedValue.Trim().Replace(";", "").Replace("'", "") + cmbStartMM.SelectedValue.Trim().Replace(";", "").Replace("'", "") + cmbStartDD.SelectedValue.Trim().Replace(";", "").Replace("'", "");
-        }
+            return tmpDate;
+       }
 
-
-        string tmpDateStop = cmbStopYY.SelectedValue.Trim().Replace(";", "").Replace("'", "") + cmbStopMM.SelectedValue.Trim().Replace(";", "").Replace("'", "") + cmbStopDD.SelectedValue.Trim().Replace(";", "").Replace("'", "");
-        if (tmpDateStop.Length < 8) tmpDateStop = "";
-        if (tmpDateStop != "")
-        {
-            switch (cmbStopMM.SelectedValue.Trim())
-            {
-                case "02":
-                    if (Convert.ToInt32(cmbStopYY.SelectedValue) % 4 == 0)
-                    {
-                        if (Convert.ToInt32(cmbStopDD.SelectedValue) > 29) cmbStopDD.SelectedValue = "29";
-                    }
-                    else
-                    {
-                        if (Convert.ToInt32(cmbStopDD.SelectedValue) > 28) cmbStopDD.SelectedValue = "28";
-                    }
-                    break;
-                case "04":
-                case "06":
-                case "09":
-                case "11":
-                    if (Convert.ToInt32(cmbStopDD.SelectedValue) > 30) cmbStopDD.SelectedValue = "30";
-                    break;
-            }
-            tmpDateStop = cmbStopYY.SelectedValue.Trim().Replace(";", "").Replace("'", "") + cmbStopMM.SelectedValue.Trim().Replace(";", "").Replace("'", "") + cmbStopDD.SelectedValue.Trim().Replace(";", "").Replace("'", "");
-        }
-
+    protected void btnSave_Click(object sender, EventArgs e)
+    {
+        String tmpDate = getCMBDate();
         string sql = "";
         string sql2;
         OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
@@ -1426,6 +1312,13 @@ public partial class _train_member_entry: System.Web.UI.Page
             sql = sql + " fl_update_time,";
             sql = sql + " fl_google ";
 
+            sql = sql + ",fl_educational";
+            sql = sql + ",fl_talent";
+            sql = sql + ",fl_job";
+            sql = sql + " ,fl_position";
+            sql = sql + ",fl_current_addr";
+            sql = sql + ",fl_academy";
+
             sql = sql + " ) values ( ";
             sql = sql + " '" + changeDigit(txtCardID.Text.Trim().Replace(";", "").Replace("'", "").Replace("-", "").Replace(".", "").Replace(" ", "")) + "',";
             sql = sql + " '" + cmbTitle.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "',";
@@ -1455,7 +1348,16 @@ public partial class _train_member_entry: System.Web.UI.Page
             sql += " '" + Session["uID"].ToString().Trim().Replace("'", "''") + "', ";
             sql += " '" + Request.UserHostAddress + "', ";
             sql += " '" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
-            sql = sql + " '" + txtGoogle.Text.Trim().Replace(";", "").Replace("'", "") + "'); ";
+            sql = sql + " '" + txtGoogle.Text.Trim().Replace(";", "").Replace("'", "") + "'";
+
+            sql = sql + " ,'" + txtEducational.Text.Trim() + "'";
+            sql = sql + " ,'" + txtTalent.Text.Trim() + "'";
+            sql = sql + " ,'" + txtJob.Text.Trim() + "'";
+            sql = sql + " ,'" + txtPosition.Text.Trim() + "'";
+            sql = sql + " ,'" + txtCurAddr.Text.Trim() + "'";
+            sql = sql + " ,'" + txtAcademy.Text.Trim() + "'";
+            sql = sql + ");";
+
 
             sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
             sql += " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
@@ -1491,6 +1393,13 @@ public partial class _train_member_entry: System.Web.UI.Page
             sql += " fl_update_ip ='" + Request.UserHostAddress + "', ";
             sql += " fl_update_time ='" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
             sql = sql + " fl_google='" + txtGoogle.Text.Trim().Replace(";", "").Replace("'", "") + "' ";
+            sql = sql + " ,fl_educational='" + txtEducational.Text.Trim() + "'";
+            sql = sql + " ,fl_talent='" + txtTalent.Text.Trim() + "'";
+            sql = sql + " ,fl_job='" + txtJob.Text.Trim() + "'";
+            sql = sql + " ,fl_position='" + txtPosition.Text.Trim() + "'";
+            sql = sql + " ,fl_current_addr='" + txtCurAddr.Text.Trim() + "'";
+            sql = sql + " ,fl_academy='" + txtAcademy.Text.Trim() + "'";
+
             sql = sql + " where fl_citizen_id='" + changeDigit(txtCardID.Text.Trim().Replace(";", "").Replace("'", "").Replace("-", "").Replace(".", "").Replace(" ", "")) + "'; ";
 
             sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
@@ -1503,104 +1412,7 @@ public partial class _train_member_entry: System.Web.UI.Page
         }
         #endregion
 
-        //Process traingroup
-        #region trainProc
-        procFlag = "UP";
-        if (txtCardID.Text.Trim().Replace(";", "").Replace("'", "") == "")
-        {
-            procFlag = "NA";
-        }
-        else
-        {
-            sql2 = "SELECT distinct fl_citizen_id from tb_train_detail ";
-            sql2 += "where fl_citizen_id ='" + changeDigit(txtCardID.Text.Trim().Replace(";", "").Replace("'", "").Replace("-", "").Replace(".", "").Replace(" ", "")) + "' ";
-            sql2 += " and isnull(fl_dept,'') ='" + cmbDept.SelectedValue.Trim() + "' ";
-            sql2 += " and fl_province_code='" + cmbTrainProvince.SelectedValue.Trim() + "' ";
-
-            sql2 += " and fl_course='" + cmbCourse.SelectedValue.Trim() + "' ";
-            sql2 += " and fl_gen='" + cmbGen.SelectedValue.Trim() + "' ";
-            sql2 += " and fl_year='" + cmbYear.SelectedValue.Trim() + "' ";
-            command.CommandText = sql2;
-            rs = command.ExecuteReader();
-            if (!rs.Read()) procFlag = "IN";
-            rs.Close();
-        }
-
-        if (procFlag == "IN")
-        {
-            sql = sql + "INSERT INTO tb_train_detail (";
-            sql = sql + " fl_citizen_id,";
-            sql = sql + " fl_dept,";
-            sql = sql + " fl_province_code,";
-            sql = sql + " fl_course,";
-            sql = sql + " fl_gen,";
-            sql = sql + " fl_year,";
-
-            sql = sql + " fl_pos,";
-            sql = sql + " fl_start,";
-            sql = sql + " fl_stop, ";
-            sql = sql + " fl_create_by,";
-            sql = sql + " fl_create_ip,";
-            sql = sql + " fl_create_time,";
-            sql = sql + " fl_update_by,";
-            sql = sql + " fl_update_IP,";
-            sql = sql + " fl_update_time";
-
-            sql = sql + " ) values ( ";
-
-            sql = sql + "'" + changeDigit(txtCardID.Text.Trim().Replace(";", "").Replace("'", "").Replace("-", "").Replace(".", "").Replace(" ", "")) + "', ";
-            sql += " '" + cmbDept.SelectedValue.Trim() + "', ";
-            sql += " '" + cmbTrainProvince.SelectedValue.Trim() + "', ";
-
-            sql += " '" + cmbCourse.SelectedValue.Trim() + "', ";
-            sql += " '" + cmbGen.SelectedValue.Trim() + "', ";
-            sql += " '" + cmbYear.SelectedValue.Trim() + "', ";
-
-            sql = sql + "'" + cmbPos.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "', ";
-            sql = sql + " '" + tmpDateStart + "',";
-            sql = sql + " '" + tmpDateStop + "',";
-
-            sql += " '" + Session["uID"].ToString().Trim().Replace("'", "''") + "', ";
-            sql += " '" + Request.UserHostAddress + "', ";
-            sql += " '" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
-            sql += " '" + Session["uID"].ToString().Trim().Replace("'", "''") + "', ";
-            sql += " '" + Request.UserHostAddress + "', ";
-            sql += " '" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "'); ";
-
-            sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
-            sql += " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
-            sql += " 'TRAIN MEMBER', ";
-            sql += " 'INSERT', ";
-            sql += " '" + changeDigit(txtCardID.Text.Trim().Replace(";", "").Replace("'", "").Replace("-", "").Replace(".", "").Replace(" ", "")) + "," + cmbCourse.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbGen.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbYear.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbTrainProvince.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbDept.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "', ";
-            sql += " '" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
-            sql += " '" + Request.UserHostAddress + "'); ";
-        }
-        else
-        {
-            sql = sql + "UPDATE tb_train_detail SET ";
-            sql = sql + " fl_pos='" + cmbPos.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "',";
-            sql = sql + " fl_start='" + tmpDateStart + "',";
-            sql = sql + " fl_stop='" + tmpDateStop + "', ";
-            sql += " fl_update_by ='" + Session["uID"].ToString().Trim().Replace("'", "''") + "', ";
-            sql += " fl_update_ip ='" + Request.UserHostAddress + "', ";
-            sql += " fl_update_time ='" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "' ";
-            sql = sql + " where fl_citizen_id='" + changeDigit(txtCardID.Text.Trim().Replace(";", "").Replace("'", "").Replace("-", "").Replace(".", "").Replace(" ", "")) + "' ";
-            sql += " and isnull(fl_dept,'') ='" + cmbDept.SelectedValue.Trim() + "' ";
-            sql += " and fl_province_code='" + cmbTrainProvince.SelectedValue.Trim() + "' ";
-
-            sql += " and fl_course='" + cmbCourse.SelectedValue.Trim() + "' ";
-            sql += " and fl_gen='" + cmbGen.SelectedValue.Trim() + "' ";
-            sql += " and fl_year='" + cmbYear.SelectedValue.Trim() + "'; ";
-
-            sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
-            sql += " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
-            sql += " 'TRAIN MEMBER', ";
-            sql += " 'UPDATE', ";
-            sql += " '" + changeDigit(txtCardID.Text.Trim().Replace(";", "").Replace("'", "").Replace("-", "").Replace(".", "").Replace(" ", "")) + "," + cmbCourse.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbGen.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbYear.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbTrainProvince.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbDept.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "', ";
-            sql += " '" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
-            sql += " '" + Request.UserHostAddress + "'); ";
-        }
-        #endregion
+      
         command.CommandText = sql;
         command.ExecuteNonQuery();
         Conn.Close();
@@ -2332,24 +2144,23 @@ public partial class _train_member_entry: System.Web.UI.Page
         OleDbCommand command = new OleDbCommand();
         Conn.Open();
         command.Connection = Conn;
-        string sql = "DELETE from tb_train_detail ";
+        string sql = "DELETE from tb_citizen ";
         sql = sql + " where fl_citizen_id='" + txtCardID.Text.Trim().Replace(";", "").Replace("'", "") + "' ";
-        sql += " and isnull(fl_dept,'') ='" + cmbDept.SelectedValue.Trim() + "' ";
-        sql += " and fl_province_code='" + cmbTrainProvince.SelectedValue.Trim() + "' ";
-        sql += " and fl_course='" + cmbCourse.SelectedValue.Trim() + "' ";
-        sql += " and fl_gen='" + cmbGen.SelectedValue.Trim() + "' ";
-        sql += " and fl_year='" + cmbYear.SelectedValue.Trim() + "'; ";
 
-        sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
-        sql += " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
-        sql += " 'TRAIN MEMBER', ";
-        sql += " 'DELETE', ";
-        sql += " '" + txtCardID.Text + "," + cmbCourse.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbGen.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbYear.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbTrainProvince.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbDept.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "', ";
-        sql += " '" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
-        sql += " '" + Request.UserHostAddress + "'); ";
+
+        //sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
+        //sql += " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
+        //sql += " 'MEMBER ENTRY', ";
+        //sql += " 'DELETE', ";
+        //sql += " '" + txtCardID.Text + "," + cmbCourse.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbGen.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbYear.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbTrainProvince.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbDept.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "', ";
+        //sql += " '" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
+        //sql += " '" + Request.UserHostAddress + "'); ";
 
         command.CommandText = sql;
         command.ExecuteNonQuery();
         Conn.Close();
+        userDataSet();
+        txtCardID.Text = "";
+        clearBox(true);
     }
 }

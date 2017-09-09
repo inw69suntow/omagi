@@ -4,6 +4,8 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <style type="text/css">
       #map_canvas { height: 100% }
+        .css
+        {}
     </style>
     <script type="text/javascript"
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBhV-8I34Asyh9676tt9tkHKN0oL4YCce4&sensor=true">
@@ -204,66 +206,7 @@ end sub
             <tr>
                 <td>
                     <table border="0" align="center" width="100%" cellspacing="0" cellpadding="0">                                    
-                        <tr height="20px">
-                            <td class="choice" style="width: 100px">หลักสูตร:</td>
-                            <td class="choice">
-                                <asp:DropDownList ID="cmbCourse" runat="server" CssClass="css"></asp:DropDownList>
-                                <font color="red">*</font>
-                            </td>
-                        </tr>
-                        <tr height="20px">
-                            <td class="choice" >รุ่น:</td>
-                            <td class="choice" >
-                                <asp:DropDownList ID="cmbGen" runat="server" CssClass="css"></asp:DropDownList>
-                                /
-                                <asp:DropDownList ID="cmbYear" runat="server" CssClass="css"></asp:DropDownList>
-                                <font color="red">*</font>
-                            </td>
-                        </tr>
-                        <tr height="20px">
-                            <td class="choice">จังหวัด:</td>
-                            <td class="choice">
-                                <asp:DropDownList ID="cmbTrainProvince" runat="server" CssClass="css"></asp:DropDownList>
-                                <font color="red">*</font>
-                            </td>
-                        </tr>
-                        <tr height="20px">
-                            <td class="choice">หน่วยงาน:</td>
-                            <td class="choice">
-                                <asp:DropDownList ID="cmbDept" runat="server" CssClass="css"></asp:DropDownList>
-                                <font color="red">*</font>
-                            </td>
-                        </tr>
-                        <tr height="20px">
-                            <td class="choice" >วันเริ่มฝึกอบรม:</td>
-                            <td class="choice" >
-                                <asp:DropDownList ID="cmbStartDD" runat="server" CssClass="css"></asp:DropDownList> -
-                                <asp:DropDownList ID="cmbStartMM" runat="server" CssClass="css"></asp:DropDownList> -
-                                <asp:DropDownList ID="cmbStartYY" runat="server" CssClass="css"></asp:DropDownList>
-                            </td>
-                        </tr>
-                        <tr height="20px">
-                            <td class="choice">วันสิ้นสุดการฝึกอบรม:</td>
-                            <td class="choice">
-                                <asp:DropDownList ID="cmbStopDD" runat="server" CssClass="css"></asp:DropDownList> -
-                                <asp:DropDownList ID="cmbStopMM" runat="server" CssClass="css"></asp:DropDownList> -
-                                <asp:DropDownList ID="cmbStopYY" runat="server" CssClass="css"></asp:DropDownList>
-                            </td>
-                        </tr>
-                       <tr height="20px">
-                            <td class="choice">ตำแหน่ง:</td>
-                            <td class="choice">
-                                <asp:DropDownList ID="cmbPos" runat="server" CssClass="css">
-                                    <asp:ListItem Text="ประธาน" Value="P"></asp:ListItem>
-                                    <asp:ListItem Text="รองประธาน" Value="V"></asp:ListItem>
-                                    <asp:ListItem Text="เลขานุการ" Value="Y"></asp:ListItem>
-                                    <asp:ListItem Text="สมาชิก" Value="Z"></asp:ListItem>
-                                </asp:DropDownList>
-                            </td>
-                        </tr>
-                        <tr height="20px">
-                            <td class="header_2" colspan="2">&nbsp;</td>
-                        </tr>
+                     
                         <tr height="20px">
                             <td class="choice" >บัตรประชาชน:</td>
                             <td class="choice" >
@@ -385,6 +328,47 @@ end sub
                                     Width="70px" onclick="btnUpload_Click"/>
                             </td>
                         </tr>
+
+                          <tr height="20px">
+                            <td class="choice" >ระดับการศึกษา:</td>
+                            <td class="choice" >
+                                  <asp:Textbox ID="txtEducational" runat="server" CssClass="css" Width="200" MaxLength="250" />
+                            </td>
+                        </tr>
+                           <tr height="20px">
+                            <td class="choice" >สถาบันการศึกษา:</td>
+                            <td class="choice" >
+                                  <asp:Textbox ID="txtAcademy" runat="server" CssClass="css" Width="200" MaxLength="250" />
+                            </td>
+                        </tr>
+                          <tr height="20px">
+                            <td class="choice" >ความสามารถพิเศษ:</td>
+                            <td class="choice" >
+                                  <asp:Textbox ID="txtTalent" runat="server" CssClass="css" Width="200" MaxLength="250" />
+                            </td>
+                        </tr>
+
+                           <tr height="20px">
+                            <td class="choice" >งาน:</td>
+                            <td class="choice" >
+                                  <asp:Textbox ID="txtJob" runat="server" CssClass="css" Width="200" MaxLength="250" />
+                            </td>
+                        </tr>
+                          <tr height="20px">
+                            <td class="choice" >ตำแหน่ง:</td>
+                            <td class="choice" >
+                                  <asp:Textbox ID="txtPosition" runat="server" CssClass="css" Width="200" MaxLength="250" />
+                            </td>
+                        </tr>
+                        <tr height="200px">
+                            <td class="choice" >ที่อยู่ปัจจุบัน:</td>
+                            <td class="choice" >
+                                  <asp:TextBox ID="txtCurAddr"  runat="server" CssClass="css" Width="500px" 
+                                      MaxLength="250" Height="200px" TextMode="MultiLine" />
+                            </td>
+                        </tr>
+
+
                         <tr height="200px">
                             <td class="choice" >รูปถ่ายที่บันทึกไว้<br />(150x200 JPG 10K):</td>
                             <td class="choice" >
