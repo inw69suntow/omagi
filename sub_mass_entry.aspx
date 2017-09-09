@@ -66,7 +66,7 @@ end sub
 
     function checkboxClick(chckbox, id, parent,master) {
         if ($(chckbox).is(':checked')) {
-            document.location = "sub_mass_entry.aspx?hid=" + id + "&parent_id=" + parent + "&page=master&parentSearch=" + master
+            document.location = "sub_mass_entry.aspx?hid=" + id + "&parent_id=" + parent + "&parentSearch=" + master
         } 
     }
 
@@ -212,6 +212,13 @@ end sub
                             </td>
                         </tr>
                         <tr height="20px">
+                            <td class="choice" >ชื่อโครงการย่อย 1:</td>
+                            <td class="choice" >              
+                                  <asp:DropDownList ID="ddParent1" runat="server" CssClass="css" 
+                                      ></asp:DropDownList>
+                            </td>
+                        </tr>
+                        <tr height="20px">
                             <td class="choice" >ชื่อโครงการย่อย:</td>
                             <td class="choice" >
                                 <asp:TextBox ID="txtMassName" runat="server" width="200px" MaxLength="500" CssClass="css"/>
@@ -220,7 +227,8 @@ end sub
                          <tr height="20px">
                             <td class="choice" >ระดับโครงการ:</td>
                             <td class="choice" >
-                                  <asp:DropDownList ID="ddProjectLevel" cssClass="css" runat="server">
+                                  <asp:DropDownList ID="ddProjectLevel" cssClass="css" runat="server"  
+                                      AutoPostBack="True" onselectedindexchanged="ddParent1_SelectedIndexChanged">
                                  </asp:DropDownList>
                             </td>
                         </tr>
