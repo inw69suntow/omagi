@@ -181,7 +181,8 @@ end sub
                         <tr height="20px">
                             <td class="choice" >ชื่อผู้เข้าอบรม:</td>
                             <td class="choice" >
-                                <asp:TextBox ID="txtKeyword" runat="server" CssClass="css" Width="90px"/>                        
+                                <asp:TextBox ID="txtKeyword" runat="server" CssClass="css" Width="90px" 
+                                    AutoPostBack="true" ontextchanged="txtKeyword_TextChanged" />                        
                                 <asp:ImageButton ID="btnSearch" runat="server" CssClass="css" ImageUrl="photo/search.gif" 
                                     Width="18px" Height="18px" onclick="btnSearch_Click" />
 	                            <asp:ImageButton ID="btnExport" class="css" runat="server" OnClick="btnExport_Click" ImageUrl="photo/x.gif"  Width="18px" Height="18px"/>

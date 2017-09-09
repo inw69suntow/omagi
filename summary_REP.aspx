@@ -28,6 +28,14 @@
     </td>
   </tr>
   <tr>
+    <td>
+        จังหวัด 
+        <asp:TextBox ID="txtProvince" runat="server" AutoPostBack="true" 
+            ontextchanged="txtProvince_TextChanged"></asp:TextBox>
+        <asp:ImageButton ID="btnSearch" runat="server" CssClass="css" ImageUrl="photo/search.gif"  Width="18px" Height="18px" onclick="btnSearch_Click" />
+    </td>
+  </tr>
+  <tr>
     <td align="center" valign="top"> 
     <table id="tab1" border="1" cellspacing="0" cellpadding="0" class="css" style="width: 750px; border-right: #f6a836; border-top: #f6a836; border-left: #f6a836; border-bottom: #f6a836;" runat="server" rules="all" ></table>
     </td>

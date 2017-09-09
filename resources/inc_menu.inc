@@ -109,7 +109,7 @@
                                  <li><a href="#">รายงานสรุปยอดโครงการ</a>                     
                                             <ul>
                                                 <li><a href='<%=Page.ResolveClientUrl("~/summary_REP.aspx?t=0")%>'>สรุปภาพรวม</a></li>
-                                                <li><a href='<%=Page.ResolveClientUrl("~/summary_REP.aspx?t=1")%>'>รายจังหวัดทั้งหมด</a></li>
+                                                <li><a href='<%=Page.ResolveClientUrl("~/summary_REP.aspx?t=1")%>'>รายจังหวัด</a></li>
                                                 <%
                sql = "SELECT distinct fl_dept_id,fl_dept_name from tb_dept where fl_dept_status='1' ";
                sql += " and fl_dept_id like '%00' ";

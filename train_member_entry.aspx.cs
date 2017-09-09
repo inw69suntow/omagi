@@ -2393,4 +2393,9 @@ public partial class _train_member_entry: System.Web.UI.Page
         command.ExecuteNonQuery();
         Conn.Close();
     }
+    protected void txtKeyword_TextChanged(object sender, EventArgs e)
+    {
+        clearBox(true);
+        userDataSet();
+    }
 }

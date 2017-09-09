@@ -816,7 +816,7 @@ public partial class _train_member_entry: System.Web.UI.Page
                     boxSet(Request.QueryString["hid"].ToString());
                 }
             }
-            userDataSet();
+            userDataSet(null);
 
 
             OleDbConnection Conn = null;
@@ -843,7 +843,7 @@ public partial class _train_member_entry: System.Web.UI.Page
        
     }
 
-    protected void userDataSet()
+    protected void userDataSet(String sid)
     {
 
         dtGrid.Rows.Clear();
@@ -896,35 +896,39 @@ public partial class _train_member_entry: System.Web.UI.Page
         string sql = "SELECT * ";
         sql = sql + " FROM tb_citizen ";
         sql = sql + " where 1=1 ";
-        if (txtSearchSID.Text.Trim() == "" && txtSearchFName.Text.Trim() == "" && txtSearchLName.Text.Trim()=="")
-        {
-            lblResponse.Text = "ต้องระบุเงื่อนไขการค้นหา";
-            lblResponse.ForeColor = System.Drawing.Color.Red;
-            lblResponse.Visible = true;
-            //userDataSet();
-            return;
-        }
-        //Check filter command
-        String hid=Request.QueryString["hid"];
-        if (hid != null && hid != "")
-        {
-            sql += " and fl_citizen_id='" + hid.Trim() + "' ";
-        }
-        else
-        {
-            if (txtSearchSID.Text.Trim() != "")
-            {
-                sql += " and fl_citizen_id='" + txtSearchSID.Text.Trim() + "' ";
-            }
-            if (txtSearchFName.Text.Trim() != "")
-            {
-                sql += " and fl_fname like '%" + txtSearchFName.Text.Trim() + "%' ";
-            }
-            if (txtSearchLName.Text.Trim() != "")
-            {
-                sql += " and fl_sname like '%" + txtSearchLName.Text.Trim() + "%' ";
-            }
-        }
+         String hid=Request.QueryString["hid"];
+         if (sid != null)
+         {
+             sql += " and fl_citizen_id='" + sid + "' ";
+         }
+         else if (hid != null && hid != "")
+         {
+             sql += " and fl_citizen_id='" + hid.Trim() + "' ";
+         }
+         else
+         {
+             if (txtSearchSID.Text.Trim() == "" && txtSearchFName.Text.Trim() == "" && txtSearchLName.Text.Trim() == "")
+             {
+                 lblResponse.Text = "ต้องระบุเงื่อนไขการค้นหา";
+                 lblResponse.ForeColor = System.Drawing.Color.Red;
+                 lblResponse.Visible = true;
+                 //userDataSet();
+                 return;
+             }
+
+             if (txtSearchSID.Text.Trim() != "")
+             {
+                 sql += " and fl_citizen_id='" + txtSearchSID.Text.Trim() + "' ";
+             }
+             if (txtSearchFName.Text.Trim() != "")
+             {
+                 sql += " and fl_fname like '%" + txtSearchFName.Text.Trim() + "%' ";
+             }
+             if (txtSearchLName.Text.Trim() != "")
+             {
+                 sql += " and fl_sname like '%" + txtSearchLName.Text.Trim() + "%' ";
+             }
+         }
 
         OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
         OleDbCommand command = new OleDbCommand();
@@ -1022,14 +1026,15 @@ public partial class _train_member_entry: System.Web.UI.Page
         if (i == 1)
         {
             //noDataFound
-            dtGrid.Rows.Add(new HtmlTableRow());
-            dtGrid.Rows[i].Attributes.Add("class", "off");
-            dtGrid.Rows[i].Attributes.Add("onmouseover", "this.className='on'");
-            dtGrid.Rows[i].Attributes.Add("onmouseout", "this.className='off'");
-            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
-            dtGrid.Rows[i].Cells[0].ColSpan = 7;
-            dtGrid.Rows[i].Cells[0].Align = "CENTER";
-            dtGrid.Rows[i].Cells[0].InnerHtml = "<font color='red' size='4'><b>" + ConfigurationManager.AppSettings["nodataMsg"] + "</b></font>";
+            HtmlTableRow row=new HtmlTableRow();
+            dtGrid.Rows.Add(row);
+            row.Attributes.Add("class", "off");
+            row.Attributes.Add("onmouseover", "this.className='on'");
+            row.Attributes.Add("onmouseout", "this.className='off'");
+            row.Cells.Add(new HtmlTableCell());
+            row.Cells[0].ColSpan = 10;
+            row.Cells[0].Align = "CENTER";
+            row.Cells[0].InnerHtml = "<font color='red' size='4'><b>" + ConfigurationManager.AppSettings["nodataMsg"] + "</b></font>";
         }
         rs.Close();
         Conn.Close();
@@ -1051,7 +1056,7 @@ public partial class _train_member_entry: System.Web.UI.Page
     protected void btnSearch_Click(object sender, EventArgs e)
     {
         clearBox(true);
-        userDataSet();
+        userDataSet(null);
     }
     protected void btnExport_Click(object sender, EventArgs e)
     {
@@ -1177,12 +1182,12 @@ public partial class _train_member_entry: System.Web.UI.Page
     protected void cmbProvince_SelectedIndexChanged(object sender, EventArgs e)
     {
         districtDataSet();
-        userDataSet();
+        userDataSet(this.txtCardID.Text);
     }
     protected void cmbDistrict_SelectedIndexChanged(object sender, EventArgs e)
     {
         tambonDataSet();
-        userDataSet();
+        userDataSet(this.txtCardID.Text);
     }
 
     private void validateSave()
@@ -1198,7 +1203,7 @@ public partial class _train_member_entry: System.Web.UI.Page
                 lblResponse.Text = "ไม่มีเลขที่บัตรประชาชน";
                 lblResponse.ForeColor = System.Drawing.Color.Red;
                 lblResponse.Visible = true;
-                userDataSet();
+                userDataSet(this.txtCardID.Text);
                 return;
             }
         }
@@ -1208,7 +1213,7 @@ public partial class _train_member_entry: System.Web.UI.Page
             lblResponse.Text = "ไม่มีชื่อผู้รับการฝึกอบรม";
             lblResponse.ForeColor = System.Drawing.Color.Red;
             lblResponse.Visible = true;
-            userDataSet();
+            userDataSet(this.txtCardID.Text);
             return;
         }
 
@@ -1217,7 +1222,7 @@ public partial class _train_member_entry: System.Web.UI.Page
             lblResponse.Text = "ไม่มีนามสถุลผู้รับการฝึกอบรม";
             lblResponse.ForeColor = System.Drawing.Color.Red;
             lblResponse.Visible = true;
-            userDataSet();
+            userDataSet(this.txtCardID.Text);
             return;
         }
     }
@@ -1421,7 +1426,7 @@ public partial class _train_member_entry: System.Web.UI.Page
         lblResponse.ForeColor = System.Drawing.Color.Green;
         lblResponse.Visible = true;
 
-        userDataSet();
+        userDataSet(this.txtCardID.Text);
     }
     protected void btnImport_Click(object sender, EventArgs e)
     {
@@ -2065,12 +2070,12 @@ public partial class _train_member_entry: System.Web.UI.Page
         lblResponse.ForeColor = System.Drawing.Color.Green;
         lblResponse.Visible = true;
 
-        userDataSet();
+        userDataSet(null);
     }
     protected void btnClear_Click(object sender, EventArgs e)
     {
         clearBox(false);
-        userDataSet();
+        userDataSet(null);
     }
     protected void btnUpload_Click(object sender, EventArgs e)
     {
@@ -2100,7 +2105,7 @@ public partial class _train_member_entry: System.Web.UI.Page
         if(errFound)
         {
             boxSet(hidID.Value);
-            userDataSet();
+            userDataSet(null);
             return;
         }
         try
@@ -2127,7 +2132,7 @@ public partial class _train_member_entry: System.Web.UI.Page
 
         boxSet(hidID.Value);
 
-        userDataSet();
+        userDataSet(null);
         lblResponse.Text = "จัดเก็บภาพสำเร็จ";
         lblResponse.ForeColor = System.Drawing.Color.Green;
 
@@ -2136,7 +2141,7 @@ public partial class _train_member_entry: System.Web.UI.Page
     {
         txtCardID.Text = txtCardID.Text.Trim().Replace(";", "");
         boxSet(txtCardID.Text,1);
-        userDataSet();
+        userDataSet(this.txtCardID.Text);
     }
     protected void btnDel_Click(object sender, EventArgs e)
     {
@@ -2159,7 +2164,7 @@ public partial class _train_member_entry: System.Web.UI.Page
         command.CommandText = sql;
         command.ExecuteNonQuery();
         Conn.Close();
-        userDataSet();
+        userDataSet(this.txtCardID.Text);
         txtCardID.Text = "";
         clearBox(true);
     }

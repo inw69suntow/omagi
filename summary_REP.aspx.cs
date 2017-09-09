@@ -203,7 +203,10 @@ public partial class _summary_REP : System.Web.UI.Page
             sql += " ) data ";
             sql += " on substring(main.fl_dept_id,1,1) = data.fl_dept ";
         }
-
+        if (txtProvince.Text.Trim() != "")
+        {
+            sql += " where main.fl_dept_name like '%" + txtProvince.Text.Trim() + "%' ";
+        }
         sql += orderClause;
         #endregion
 
@@ -639,5 +642,13 @@ public partial class _summary_REP : System.Web.UI.Page
         Response.AddHeader("content-disposition", "attachment; filename=" + fName);
         Response.BinaryWrite(renderedBytes);
         Response.End();
+    }
+    protected void txtProvince_TextChanged(object sender, EventArgs e)
+    {
+        makeReport();
+    }
+    protected void btnSearch_Click(object sender, ImageClickEventArgs e)
+    {
+        makeReport();
     }
 }

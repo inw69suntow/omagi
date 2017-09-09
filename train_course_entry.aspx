@@ -81,11 +81,14 @@
 </table>
 <script language="javascript">
     function composeValue() {
-        var i = document.getElementById("maxJ").value;
-        document.getElementById("newVal").value = "";
+        var maxJ = '<%= maxJ.ClientID %>';
+        var newVal = '<%= newVal.ClientID %>';
+        var i = document.getElementById(maxJ).value;
+        document.getElementById(newVal).value = "";
         for (x = 1; x < i; x++) {
-            if (document.getElementById("newVal").value != "") document.getElementById("newVal").value += ",";
-            document.getElementById("newVal").value += document.getElementById("id_" + x).value;
+            if (document.getElementById(newVal).value != "") 
+                document.getElementById(newVal).value += ",";
+            document.getElementById(newVal).value += document.getElementById("id_" + x).value;
         }
     }
 
