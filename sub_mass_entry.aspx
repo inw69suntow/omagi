@@ -146,12 +146,6 @@ end sub
                                 </asp:DropDownList>
                             </td>
                         </tr>
-                         <tr height="20px">
-                            <td class="choice" >โครงการหลัก:</td>
-                            <td class="choice" >
-                               <asp:TextBox ID="txtParentName" runat="server" CssClass="css"/>
-                            </td>
-                        </tr>
                         <tr height="20px">
                             <td class="choice" >โครงการย่อย:</td>
                             <td class="choice" >
@@ -208,16 +202,10 @@ end sub
                             <td class="choice" >ชื่อโครงการแม่:</td>
                             <td class="choice" >
                                 <asp:HiddenField ID="HiddenField1" runat="server" />
-                                <asp:Label ID="lbParentName" runat="server" ></asp:Label>
+                                <asp:Label ID="lbParentName" runat="server"></asp:Label>
+                                 <asp:DropDownList ID="ddParent1" runat="server" CssClass="css"  ></asp:DropDownList>
                             </td>
-                        </tr>
-                        <tr height="20px">
-                            <td class="choice" >ชื่อโครงการย่อย 1:</td>
-                            <td class="choice" >              
-                                  <asp:DropDownList ID="ddParent1" runat="server" CssClass="css" 
-                                      ></asp:DropDownList>
-                            </td>
-                        </tr>
+                        </tr>                     
                         <tr height="20px">
                             <td class="choice" >ชื่อโครงการย่อย:</td>
                             <td class="choice" >

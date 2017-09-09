@@ -18,6 +18,8 @@ using System.Collections.Generic;
 
 public partial class _mass_entry : System.Web.UI.Page
 {
+    
+
 
     override protected void OnInit(EventArgs e)
     {
@@ -258,7 +260,23 @@ public partial class _mass_entry : System.Web.UI.Page
                     if (ddProjectLevel.SelectedValue == "2")
                     {
                         bindDDparent1();
-                        ddParent1.SelectedValue = hdParentId.Value;
+                       // ddParent1.SelectedValue =
+                        for (int i=0;i<ddParent1.Items.Count;i++)
+                        {
+                            ListItem item = ddParent1.Items[i];
+                            if (item.Value == hdParentId.Value)
+                            {
+                                ddParent1.SelectedIndex = i;
+                                break;
+                            }
+                        }
+                        this.lbParentName.Visible = false;
+                        this.ddParent1.Visible = true;
+                    }
+                    else
+                    {
+                        this.lbParentName.Visible = true;
+                        this.ddParent1.Visible = false;
                     }
                 }
             }
@@ -351,14 +369,16 @@ public partial class _mass_entry : System.Web.UI.Page
             String parentSearch = Request.Params["parentSearch"];
             String page = Request.Params["page"];
             this.hdParentId.Value = parent == null ? "" : parent.Trim();
+      
             if ("master".Equals(page))
             {
-                this.hdParentIdSearch.Value = parentSearch == null ? "" : parentSearch.Trim();
-                dropdownLovel(page);
+                dropdownLevel(page);
+                this.hdParentIdSearch.Value = parent;
             }
             else
             {
-                dropdownLovel(null);
+                this.hdParentIdSearch.Value = parentSearch;
+                dropdownLevel(null);
             }
             if (Request.QueryString["hid"] != null)
             {
@@ -393,18 +413,30 @@ public partial class _mass_entry : System.Web.UI.Page
         }
         catch (Exception ex) { if (Conn != null) { if (Conn.State == ConnectionState.Open)Conn.Close(); } }
     }
-    private  void dropdownLovel(String page){
+    private  void dropdownLevel(String page){
         if ("master".Equals(page))
         {
             ddProjectLevel.DataSource = new String[] { "1" };
             ddProjectLevel.DataBind();
             ddProjectLevel.SelectedValue = "1";
+            this.lbParentName.Visible = true;
+            this.ddParent1.Visible = false;
         }
         else
         {
 
             ddProjectLevel.DataSource = new String[] { "1" ,"2"};
             ddProjectLevel.DataBind();
+            if (ddProjectLevel.SelectedIndex > -1)
+            {
+                this.lbParentName.Visible = false;
+                this.ddParent1.Visible = true;
+            }
+            else
+            {
+                this.lbParentName.Visible = true;
+                this.ddParent1.Visible = false;
+            }
         }
        
     }
@@ -426,48 +458,49 @@ public partial class _mass_entry : System.Web.UI.Page
         String parentId = this.hdParentIdSearch.Value;
         Dictionary<String, IList<Project>> mapProject2 = getProject2(parentId);
         IList<Project> listProject1 = getProject1(curPage);
-
         dtGrid.Rows.Clear();
         dtGrid.BorderColor = ConfigurationManager.AppSettings["gridBorderColor"];
         dtGrid.Border = 1;
         dtGrid.CellPadding = 0;
         dtGrid.CellSpacing = 0;
-        dtGrid.Rows.Add(new HtmlTableRow());
-        dtGrid.Rows[0].Attributes.Add("class", "head");
-        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[0].InnerHtml = "แก้ไข";
-        dtGrid.Rows[0].Cells[0].Width = "1%";
-        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[1].Width = "25%";
-        dtGrid.Rows[0].Cells[1].InnerHtml = "<center>โครงการหลักย่อย</center>";
+        HtmlTableRow rowHeader=new HtmlTableRow();
+        dtGrid.Rows.Add(rowHeader);
+        rowHeader.Attributes.Add("class", "head");
+        rowHeader.Cells.Add(new HtmlTableCell());
+        rowHeader.Cells[0].InnerHtml = "แก้ไข";
+        rowHeader.Cells[0].Width = "10%";
+        rowHeader.Cells.Add(new HtmlTableCell());
+        rowHeader.Cells[1].Width = "15%";
+        rowHeader.Cells[1].InnerHtml = "<center>โครงการหลักย่อย</center>";
 
-        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[2].Width = "5%";
-        dtGrid.Rows[0].Cells[2].InnerHtml = "<center>ระดับโครงการย่อย</center>";
+        rowHeader.Cells.Add(new HtmlTableCell());
+        rowHeader.Cells[2].Width = "5%";
+        rowHeader.Cells[2].InnerHtml = "<center>ระดับโครงการย่อย</center>";
 
-        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[3].Width = "25%";
-        dtGrid.Rows[0].Cells[3].InnerHtml = "<center>โครงการหลักหลัก</center>";
+        rowHeader.Cells.Add(new HtmlTableCell());
+        rowHeader.Cells[3].Width = "15%";
+        rowHeader.Cells[3].InnerHtml = "<center>โครงการหลักหลัก</center>";
 
-        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[4].Width = "20%";
-        dtGrid.Rows[0].Cells[4].InnerHtml = "<center>ประเภทโครงการ</center>";
+        rowHeader.Cells.Add(new HtmlTableCell());
+        rowHeader.Cells[4].Width = "20%";
+        rowHeader.Cells[4].InnerHtml = "<center>ประเภทโครงการ</center>";
 
-        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[5].Width = "15%";
-        dtGrid.Rows[0].Cells[5].InnerHtml = "<center>จังหวัด</center>";
+        rowHeader.Cells.Add(new HtmlTableCell());
+        rowHeader.Cells[5].Width = "15%";
+        rowHeader.Cells[5].InnerHtml = "<center>จังหวัด</center>";
 
-        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[6].Width = "10%";
-        dtGrid.Rows[0].Cells[6].InnerHtml = "<center>หน่วยงาน</center>";
+        rowHeader.Cells.Add(new HtmlTableCell());
+        rowHeader.Cells[6].Width = "15%";
+        rowHeader.Cells[6].InnerHtml = "<center>หน่วยงาน</center>";
 
-        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[7].Width = "4%";
-        dtGrid.Rows[0].Cells[7].InnerHtml = "<center>จำนวนรายงาน (คน)</center>";
+        rowHeader.Cells.Add(new HtmlTableCell());
+        rowHeader.Cells[7].Width = "5%";
+        rowHeader.Cells[7].InnerHtml = "<center>จำนวนรายงาน (คน)</center>";
 
         int i = 0;
         while (i < listProject1.Count)
         {
+            int row = i + 1;
             Project project = listProject1[i];
             //string action = "document.location='mass_entry.aspx?hid=" + rs.GetString(0) + "';";
             //string action = "document.location='sub_mass_entry.aspx?hid=" + project.Fl_id + "&parent_id=" + rs["parentId"] + "';";
@@ -492,17 +525,19 @@ public partial class _mass_entry : System.Web.UI.Page
         }
 
 
-        if ((i + 1) == 1)
+        if ( listProject1==null || listProject1.Count == 0)
         {
             //noDataFound
-            dtGrid.Rows.Add(new HtmlTableRow());
-            dtGrid.Rows[i].Attributes.Add("class", "off");
-            dtGrid.Rows[i].Attributes.Add("onmouseover", "this.className='on'");
-            dtGrid.Rows[i].Attributes.Add("onmouseout", "this.className='off'");
-            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
-            dtGrid.Rows[i].Cells[0].ColSpan = 5;
-            dtGrid.Rows[i].Cells[0].Align = "CENTER";
-            dtGrid.Rows[i].Cells[0].InnerHtml = "<font color='red' size='4'><b>" + ConfigurationManager.AppSettings["nodataMsg"] + "</b></font>";
+           
+            HtmlTableRow row=new HtmlTableRow();
+            dtGrid.Rows.Add(row);
+            row.Attributes.Add("class", "off");
+            row.Attributes.Add("onmouseover", "this.className='on'");
+            row.Attributes.Add("onmouseout", "this.className='off'");
+            row.Cells.Add(new HtmlTableCell());
+            row.Cells[0].ColSpan = 7;
+            row.Cells[0].Align = "CENTER";
+            row.Cells[0].InnerHtml = "<font color='red' size='4'><b>" + ConfigurationManager.AppSettings["nodataMsg"] + "</b></font>";
         }
     }
 
@@ -529,48 +564,59 @@ public partial class _mass_entry : System.Web.UI.Page
         {
             htmlRow.Attributes.Add("style", "background-color:#d5cccc");
         }
+        else
+        {
+            htmlRow.Attributes.Add("style", "background-color:#ffffff");
+        }
         htmlRow.Cells.Add(new HtmlTableCell());
         htmlRow.Cells[0].ColSpan = 1;
         htmlRow.Cells[0].Align = "CENTER";
-
+        htmlRow.Cells[0].Width = "10%";
         if (hidID.Value != project.Fl_id)
             htmlRow.Cells[0].InnerHtml = "<input type='checkbox' id='check_" + chk_index+ "' onClick=\'checkboxClick(this,\"" + project.Fl_id + "\",\"" + project.ParentId + "\",\"" + this.hdParentIdSearch.Value + "\")\' />";
         else
         {
-            htmlRow.Cells[0].InnerHtml = "<input type='checkbox' id='check_" + chk_index+ "' onClick=\'checkboxClick(this,\"" + project.Fl_id + "\",\"" + project.ParentId + "\",\"" + this.hdParentIdSearch.Value + "\")\' />";
+            htmlRow.Cells[0].InnerHtml = "<input type='checkbox' id='check_" + chk_index + "' onClick=\'checkboxClick(this,\"" + project.Fl_id + "\",\"" + project.ParentId + "\",\"" + this.hdParentIdSearch.Value + "\")\' />";
         }
 
 
         htmlRow.Cells.Add(new HtmlTableCell());
         htmlRow.Cells[1].Align = "LEFT";
+        htmlRow.Cells[1].Width = "15%";
         htmlRow.Cells[1].InnerHtml = "&nbsp;" + project.GroupName;
 
         htmlRow.Cells.Add(new HtmlTableCell());
         htmlRow.Cells[2].Align = "CENTER";
+        htmlRow.Cells[2].Width = "5%";
         htmlRow.Cells[2].InnerHtml = "&nbsp;" + project.Level;
 
 
         htmlRow.Cells.Add(new HtmlTableCell());
         htmlRow.Cells[3].Align = "LEFT";
+        htmlRow.Cells[3].Width = "15%";
         htmlRow.Cells[3].InnerHtml = "&nbsp;" + project.ParentName;
 
         htmlRow.Cells.Add(new HtmlTableCell());
         htmlRow.Cells[4].Align = "LEFT";
+        htmlRow.Cells[4].Width = "20%";
         htmlRow.Cells[4].InnerHtml = "&nbsp;" + project.MainGroupName;
 
 
         htmlRow.Cells.Add(new HtmlTableCell());
         htmlRow.Cells[5].Align = "LEFT";
+        htmlRow.Cells[5].Width = "15%";
         htmlRow.Cells[5].InnerHtml = "&nbsp;" + project.ProvinceName;
 
         htmlRow.Cells.Add(new HtmlTableCell());
         htmlRow.Cells[6].Align = "LEFT";
+        htmlRow.Cells[6].Width = "15%";
         htmlRow.Cells[6].InnerHtml = "&nbsp;" + project.DeptName;
 
 
 
         htmlRow.Cells.Add(new HtmlTableCell());
         htmlRow.Cells[7].Align = "RIGHT";
+        htmlRow.Cells[7].Width = "5%";
         htmlRow.Cells[7].InnerHtml = Convert.ToInt32(project.ReportMember).ToString("#,##0");
     }
 
@@ -677,23 +723,14 @@ public partial class _mass_entry : System.Web.UI.Page
             sql = sql + " left join tb_moicode c on a.fl_province = c.fl_province_code ";
             sql = sql + " left join tb_dept d on a.fl_dept=d.fl_dept_id ";
 
-            sql = sql + " where 1=1 ";
+           // sql = sql + " where 1=1 ";
             // update โครงการลูกเท่านั้น
             // String parent= Request.Params.Get("parent_id");
 
-            if (txtParentName.Text != null && txtParentName.Text.Trim() != "")
-            {
-                sql += " and parent.fl_groupname like \'%" + txtParentName.Text.Replace("'", "").Trim() + "%\' ";
+            String parentId = this.hdParentIdSearch.Value;
+            sql += " where a.fl_parent_id=\'" + parentId + "\' ";
+            sql += " and a.fl_parent_id is not null ";
 
-            }
-            else if (hdParentIdSearch.Value != null && !"".Equals(hdParentIdSearch.Value.Trim()))
-            {
-                sql += " and a.fl_parent_id=\'" + hdParentIdSearch.Value.Replace("'", "").Trim() + "\' ";
-            }
-            else
-            {
-                sql += " and a.fl_parent_id is not null ";
-            }
             //Check filter command
             if (cmbDeptSearch.SelectedValue.Trim() != "")
                 sql = sql + " and isnull(a.fl_dept,'') ='" + cmbDeptSearch.SelectedValue.Trim() + "' ";
@@ -817,7 +854,7 @@ public partial class _mass_entry : System.Web.UI.Page
 
     public void bindDDparent1()
     {
-        String parentId = hdParentId.Value;
+        String parentId = hdParentIdSearch.Value;
         String hid =hidID.Value;
         ddParent1.Items.Clear();
         //cmbDept.Items.Add(new ListItem("ไม่กำหนด", ""));
@@ -833,10 +870,15 @@ public partial class _mass_entry : System.Web.UI.Page
         {
             Conn.Open();
             command.Connection = Conn;
-            String sql = "select fl_id,fl_groupname from tb_detailgroup where fl_parent_id=" + parentId + " and fl_level=1 and fl_id <> "+hid;
+            String sql = "select fl_id,fl_groupname from tb_detailgroup where fl_parent_id=" + parentId;
+            if (hid != null && hid != "")
+            {
+                sql+=   " and fl_level=1 and fl_id <> "+hid;
+            }
+             
             command.CommandText = sql;
             rs = command.ExecuteReader();
-            if (rs.Read())
+            while (rs.Read())
             {
                 ddParent1.Items.Add(new ListItem(Convert.ToString(rs["fl_groupname"]),Convert.ToString( rs["fl_id"])));
             }
@@ -1212,7 +1254,7 @@ public partial class _mass_entry : System.Web.UI.Page
             sql += " '" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
             sql += " '" + cmbDept.SelectedValue.Trim() + "', ";
             sql += " '" + txtGoogle.Text.Trim().Replace("'", "''").Replace(";", "") + "', ";
-            sql += " '" + hdParentId.Value.Trim().Replace("'", "") + "', ";
+            sql += " '" +parentId+ "', ";
             sql += " " + ddProjectLevel.SelectedValue + " ";
             sql += ") ";
 
@@ -1390,6 +1432,12 @@ public partial class _mass_entry : System.Web.UI.Page
     {
         clearBox();
         userDataSet();
+        ddProjectLevel.DataSource = new String[] { "1", "2" };
+        ddProjectLevel.DataBind();
+        this.lbParentName.Visible = true;
+        this.ddParent1.Visible = false;
+        this.ddParent1.Items.Clear();
+       
     }
     protected void pageID_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -1411,9 +1459,8 @@ public partial class _mass_entry : System.Web.UI.Page
         OleDbCommand command = new OleDbCommand();
         Conn.Open();
         command.Connection = Conn;
-        string sql = "DELETE from tb_detailgroup ";
-        sql += " where fl_id = '" + hidID.Value.Trim() + "'; ";
-
+        string sql = "DELETE from tb_detailgroup where fl_id = '" + hidID.Value.Trim() + "'; ";
+        sql = sql + " DELETE from tb_detailgroup where fl_parent_id = '" + hidID.Value.Trim() + "'; ";
         //Write Log
         sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
         sql += " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
@@ -1426,14 +1473,26 @@ public partial class _mass_entry : System.Web.UI.Page
         command.CommandText = sql;
         command.ExecuteNonQuery();
         Conn.Close();
+
+        //show table
+        userDataSet();
     }
 
 
     protected void ddParent1_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (ddProjectLevel.SelectedIndex > 0)
+        if (ddProjectLevel.SelectedIndex > -1)
         {
-            bindDDparent1();
+            if (ddProjectLevel.Items[ddProjectLevel.SelectedIndex].Value == "2")
+            {
+                bindDDparent1();
+                this.lbParentName.Visible = false;
+                this.ddParent1.Visible = true;
+            }
+            else{
+                this.lbParentName.Visible = true;
+                this.ddParent1.Visible = false;
+            }
         }
         userDataSet();
     }
