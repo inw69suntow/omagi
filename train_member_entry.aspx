@@ -65,7 +65,17 @@
 //                     $('#member_detail').html(txt);       
 //                  
 //               });
-//           }
+           //           }
+
+
+           function sortColumn(title) {
+               var hdSortName = '<%= hdSortName.ClientID %>';
+               var btnSearch = '<%= btnSearch.ClientID %>';
+               document.getElementById(hdSortName).value = title;
+               document.getElementById(btnSearch).click();
+           }
+
+
     </script>
 </asp:Content>
 <asp:Content ID="content" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -101,6 +111,7 @@ end sub
 <table width="750px" border="0" align="center" cellspacing="0" cellpadding="0" class="css">
   <tr>
     <td style="height:25px; width: 750px;" class="header_1">ข้อมูลผู้เข้ารับการฝึกอบรม</td>
+     <asp:HiddenField ID="hdSortName" runat="server" />
   </tr>
 </table>
 

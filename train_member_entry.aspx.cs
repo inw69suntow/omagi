@@ -952,16 +952,16 @@ public partial class _train_member_entry: System.Web.UI.Page
         dtGrid.Rows[0].Cells[0].Width = "1%";
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[1].Width = "15%";
-        dtGrid.Rows[0].Cells[1].InnerHtml = "<center>เลขประจำตัว</center>";
+        dtGrid.Rows[0].Cells[1].InnerHtml =  genSortColumn("เลขประจำตัว");
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[2].Width = "25%";
-        dtGrid.Rows[0].Cells[2].InnerHtml = "<center>ชื่อ</center>";
+        dtGrid.Rows[0].Cells[2].InnerHtml =genSortColumn("ชื่อ");
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[3].Width = "25%";
-        dtGrid.Rows[0].Cells[3].InnerHtml = "<center>สกุล</center>";
+        dtGrid.Rows[0].Cells[3].InnerHtml =genSortColumn("สกุล");
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[4].Width = "20%";
-        dtGrid.Rows[0].Cells[4].InnerHtml = "<center>จังหวัด</center>";
+        dtGrid.Rows[0].Cells[4].InnerHtml =  genSortColumn("จังหวัด");
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[5].Width = "10%";
         dtGrid.Rows[0].Cells[5].InnerHtml = "<center>โทรศัพท์มือถือ</center>";
@@ -1028,9 +1028,28 @@ public partial class _train_member_entry: System.Web.UI.Page
 
         
         OleDbDataReader rs;
-        sql = sql + " order by ";
-        sql = sql + " fl_fname ASC, ";
-        sql = sql + " fl_sname ASC ";
+        if ("เลขประจำตัว".Equals(hdSortName.Value))
+        {
+            sql = sql + " order by fl_citizen_id ASC ";
+        }
+        else if ("ชื่อ".Equals(hdSortName.Value))
+        {
+            sql = sql + " order by fl_fname ASC ";
+        }
+        else if ("สกุล".Equals(hdSortName.Value))
+        {
+            sql = sql + " order by fl_sname ASC ";
+        }
+        else if ("จังหวัด".Equals(hdSortName.Value))
+        {
+            sql = sql + " order by provinceName ASC ";
+        }
+        else
+        {
+            sql = sql + " order by ";
+            sql = sql + " fl_fname ASC, ";
+            sql = sql + " fl_sname ASC ";
+        }
 
         int i = 1;
         command.CommandText = sql.Replace(";", "");
@@ -2398,4 +2417,12 @@ public partial class _train_member_entry: System.Web.UI.Page
         clearBox(true);
         userDataSet();
     }
+
+    private String genSortColumn(String solumnName)
+    {
+        String htmlSort = "<center><a style=\"text-decoration: none;\" href=\"#\" onclick=\"sortColumn('" + solumnName + "')\">" + solumnName + "</a></center>";
+        return htmlSort;
+    }
+
+
 }

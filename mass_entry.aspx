@@ -86,10 +86,17 @@ end sub
     function childClick(id, parent) {
         document.location = "sub_mass_entry.aspx?hid=" + id + "&parent_id=" + parent + "&page=master&parentSearch=" + parent;
     }
+    function sortColumn(title) {
+        var hdSortName = '<%= hdSortName.ClientID %>';
+        var btnSearch = '<%= btnSearch.ClientID %>';
+        document.getElementById(hdSortName).value = title;
+        document.getElementById(btnSearch).click();
+    }
 </script>
 <table width="750px" border="0" align="center" cellspacing="0" cellpadding="0" class="css">
   <tr>
     <td style="height:25px; width: 750px;" class="header_1">ข้อมูลโครงการ</td>
+        <asp:HiddenField ID="hdSortName" runat="server" />
   </tr>
 </table>
 

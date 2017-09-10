@@ -303,15 +303,15 @@ public partial class _mass_entry: System.Web.UI.Page
         dtGrid.Rows[0].Cells[0].Width = "1%";
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[1].Width = "25%";
-        dtGrid.Rows[0].Cells[1].InnerHtml = "<center>โครงการ</center>";
+        dtGrid.Rows[0].Cells[1].InnerHtml = genSortColumn("โครงการ");
 
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[2].Width = "20%";
-        dtGrid.Rows[0].Cells[2].InnerHtml = "<center>ประเภทโครงการ</center>"; 
+        dtGrid.Rows[0].Cells[2].InnerHtml = genSortColumn("ประเภทโครงการ");
 
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[3].Width = "15%";
-        dtGrid.Rows[0].Cells[3].InnerHtml = "<center>จังหวัด</center>";
+        dtGrid.Rows[0].Cells[3].InnerHtml = genSortColumn("จังหวัด");
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[4].Width = "15%";
         dtGrid.Rows[0].Cells[4].InnerHtml = "<center>หน่วยงาน</center>";
@@ -414,11 +414,29 @@ public partial class _mass_entry: System.Web.UI.Page
         if (pageID.SelectedValue == "1") btnPrev.Visible = false;
         if (pageID.SelectedValue == rCount.ToString()) btnNext.Visible = false;
 
-        sql = sql + " order by ";
-        sql = sql + " fl_dept ASC, ";
-        sql = sql + " reportMember DESC,";
-        sql = sql + " groupname ASC, ";
-        sql = sql + " provinceName ";
+        if ("โครงการ".Equals(hdSortName.Value))
+        {
+            sql = sql + " order by ";
+            sql = sql + " groupName ASC ";
+        }
+        else if ("ประเภทโครงการ".Equals(hdSortName.Value))
+        {
+            sql = sql + " order by ";
+            sql = sql + " mainGroupName ASC ";
+        }
+        else if ("จังหวัด".Equals(hdSortName.Value))
+        {
+            sql = sql + " order by ";
+            sql = sql + " provinceName ASC ";
+        }
+        else
+        {
+            sql = sql + " order by ";
+            sql = sql + " fl_dept ASC, ";
+            sql = sql + " reportMember DESC,";
+            sql = sql + " groupname ASC, ";
+            sql = sql + " provinceName ";
+        }
 
         int i = 0;
         command.CommandText = sql.Replace(";", "");
@@ -960,5 +978,12 @@ public partial class _mass_entry: System.Web.UI.Page
         command.CommandText = sql;
         command.ExecuteNonQuery();
         Conn.Close();
+    }
+
+
+    private String genSortColumn(String solumnName)
+    {
+        String htmlSort = "<center><a style=\"text-decoration: none;\" href=\"#\" onclick=\"sortColumn('" + solumnName + "')\">" + solumnName + "</a></center>";
+        return htmlSort;
     }
 }
