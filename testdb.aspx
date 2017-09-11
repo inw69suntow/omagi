@@ -12,7 +12,10 @@
     
     </div>
     <asp:Button ID="Button1" runat="server" onclick="Button1_Click" Text="Button" />
-    <asp:Label ID="lblResponse" runat="server" Text=""></asp:Label>
+    <asp:Label ID="lblResponse" runat="server" Text=""></asp:Label><br />
+
+    <asp:TextBox ID="txtPass" runat="server"></asp:TextBox>
+    <asp:Label ID="lbPassword" runat="server" Text="Label"></asp:Label>
     </form>
 </body>
 </html>

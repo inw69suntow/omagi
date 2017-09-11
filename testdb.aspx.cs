@@ -18,6 +18,7 @@ public partial class testdb : System.Web.UI.Page
         OleDbConnection Conn =null;
         try
         {
+            lbPassword.Text = txtPass.Text.GetHashCode();
             Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
             OleDbCommand command = Conn.CreateCommand();
             string sql = " SELECT distinct fl_user_id,fl_user_time from tb_logontime ";
