@@ -54,10 +54,24 @@ public partial class _train_course_entry : System.Web.UI.Page
             {
                 if (recStr.Trim() != "")
                 {
-                    sql += "INSERT INTO tb_train_Course ( ";
-                    sql += " fl_course ";
-                    sql += " ) VALUES ( ";
-                    sql += " '" + recStr.Trim().Replace("'", "''").Replace(";", "") + "'); ";
+
+                    String[] column = recStr.Split('|');
+                    if (column[0] != "")
+                    {
+                        String budget = column[2].Trim().Replace("'", "''").Replace(";", "");
+                        if (budget == "")
+                        {
+                            budget="0";
+                        }
+                        sql += "INSERT INTO tb_train_Course ( ";
+                        sql += " fl_course,fl_province,fl_budget,fl_objective ";
+                        sql += " ) VALUES ( ";
+                        sql += " '" + column[0].Trim().Replace("'", "''").Replace(";", "") + "'";
+                        sql += " ,'" + column[1].Trim().Replace("'", "''").Replace(";", "") + "'";
+                        sql += " ," + budget;
+                        sql += " ,'" + column[3].Trim().Replace("'", "''").Replace(";", "") + "'";
+                        sql += "); ";
+                    }
                 }
             }
 
@@ -117,16 +131,30 @@ public partial class _train_course_entry : System.Web.UI.Page
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[0].InnerHtml = "&nbsp;";
         dtGrid.Rows[0].Cells[0].Width = "5%";
+
+
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[1].Width = "95%";
+        dtGrid.Rows[0].Cells[1].Width = "20%";
         dtGrid.Rows[0].Cells[1].InnerHtml = "<center>ชื่อหลักสูตร</center>";
 
+
+        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
+        dtGrid.Rows[0].Cells[2].Width = "15%";
+        dtGrid.Rows[0].Cells[2].InnerHtml = "<center>จังหวัด</center>";
+
+        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
+        dtGrid.Rows[0].Cells[3].Width = "20%";
+        dtGrid.Rows[0].Cells[3].InnerHtml = "<center>งบประมาณ</center>";
+
+        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
+        dtGrid.Rows[0].Cells[4].Width = "30%";
+        dtGrid.Rows[0].Cells[4].InnerHtml = "<center>วัตถุประสงค์</center>";
         try
         {
             string strConnString = ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString;
             OleDbConnection con = new OleDbConnection(strConnString);
             con.Open();
-            string sql = "SELECT fl_course from tb_train_Course ";
+            string sql = "SELECT * from tb_train_Course ";
             if (course != null && !"".Equals(course))
             {
                 sql += " where fl_course like '%"+course.Replace("'","")+"%'";
@@ -156,8 +184,22 @@ public partial class _train_course_entry : System.Web.UI.Page
                     dtGrid.Rows[count].Cells.Add(new HtmlTableCell());
                     dtGrid.Rows[count].Cells[1].ColSpan = 1;
                     dtGrid.Rows[count].Cells[1].Align = "Left";
+                    dtGrid.Rows[count].Cells[1].InnerHtml = "<input type='text' id='id_" + count + "' value='" + dtReader["fl_course"] + "' style='width:200px' maxlength='255'>";
 
-                    dtGrid.Rows[count].Cells[1].InnerHtml = "<input type='text' id='id_" + count + "' value='" + dtReader.GetString(0) + "' style='width:600px' maxlength='255'>";
+                    dtGrid.Rows[count].Cells.Add(new HtmlTableCell());
+                    dtGrid.Rows[count].Cells[2].ColSpan = 1;
+                    dtGrid.Rows[count].Cells[2].Align = "Left";
+                    dtGrid.Rows[count].Cells[2].InnerHtml = "<input type='text' id='id_province_" + count + "' value='" + dtReader["fl_province"] + "' style='width:200px' maxlength='255'>";
+
+                    dtGrid.Rows[count].Cells.Add(new HtmlTableCell());
+                    dtGrid.Rows[count].Cells[3].ColSpan = 1;
+                    dtGrid.Rows[count].Cells[3].Align = "Left";
+                    dtGrid.Rows[count].Cells[3].InnerHtml = "<input type='text' id='id_budget_" + count + "' value='" + dtReader["fl_budget"] + "' style='width:200px' maxlength='15'>";
+
+                    dtGrid.Rows[count].Cells.Add(new HtmlTableCell());
+                    dtGrid.Rows[count].Cells[4].ColSpan = 1;
+                    dtGrid.Rows[count].Cells[4].Align = "Left";
+                    dtGrid.Rows[count].Cells[4].InnerHtml = "<input type='text' id='id_objective_" + count + "' value='" + dtReader["fl_objective"] + "' style='width:200px' maxlength='255'>";
                     count = count + 1;
                 }
             }
@@ -177,7 +219,22 @@ public partial class _train_course_entry : System.Web.UI.Page
             dtGrid.Rows[count].Cells.Add(new HtmlTableCell());
             dtGrid.Rows[count].Cells[1].ColSpan = 1;
             dtGrid.Rows[count].Cells[1].Align = "left";
-            dtGrid.Rows[count].Cells[1].InnerHtml = "<input type='text' id='id_" + count + "' value='' style='width:600px' maxlength='255'>";
+            dtGrid.Rows[count].Cells[1].InnerHtml = "<input type='text' id='id_" + count + "' value='' style='width:200px' maxlength='255'>";
+
+            dtGrid.Rows[count].Cells.Add(new HtmlTableCell());
+            dtGrid.Rows[count].Cells[2].ColSpan = 1;
+            dtGrid.Rows[count].Cells[2].Align = "Left";
+            dtGrid.Rows[count].Cells[2].InnerHtml = "<input type='text' id='id_province_" + count + "' value='' style='width:200px' maxlength='255'>";
+
+            dtGrid.Rows[count].Cells.Add(new HtmlTableCell());
+            dtGrid.Rows[count].Cells[3].ColSpan = 1;
+            dtGrid.Rows[count].Cells[3].Align = "Left";
+            dtGrid.Rows[count].Cells[3].InnerHtml = "<input type='text' id='id_budget_" + count + "' value='' style='width:200px' maxlength='15'>";
+
+            dtGrid.Rows[count].Cells.Add(new HtmlTableCell());
+            dtGrid.Rows[count].Cells[4].ColSpan = 1;
+            dtGrid.Rows[count].Cells[4].Align = "Left";
+            dtGrid.Rows[count].Cells[4].InnerHtml = "<input type='text' id='id_objective_" + count + "' value='' style='width:200px' maxlength='255'>";
             count = count + 1;
 
             maxJ.Value = count.ToString();

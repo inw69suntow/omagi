@@ -84,6 +84,7 @@
                         <td class="choice"><asp:Label ID="lblRight" runat="server" CssClass="css" Text="สิทธิ์ใช้งาน :"/></td>
                         <td class="choice" style="width: 20%">
                             <asp:DropDownList ID="cmbRight" runat="server" CssClass="css">
+                                <asp:ListItem Text="ผู้ชม" Value="V"></asp:ListItem>
                                 <asp:ListItem Text="ผู้ดูแลระบบ" Value="A"></asp:ListItem>
                                 <asp:ListItem Text="ผู้บริหาร" Value="M"></asp:ListItem>
                                 <asp:ListItem Text="เจ้าหน้าที่" Value="U"></asp:ListItem>

@@ -9,7 +9,7 @@
 
  <div class="menu-container">
     <div class="menu">
-     <% if (Session["uGroup"]!=null && ( Session["uGroup"].ToString() == "A" || Session["uGroup"].ToString() == "U" || Session["uGroup"].ToString() == "C" || Session["uGroup"].ToString() == "M"))
+     <% if (Session["uGroup"]!=null && ( Session["uGroup"].ToString() == "A" || Session["uGroup"].ToString() == "U" || Session["uGroup"].ToString() == "C" || Session["uGroup"].ToString() == "M" || Session["uGroup"].ToString() == "V" ))
         {%>
          <ul>
             <% if (Session["uGroup"].ToString() == "A" || Session["uGroup"].ToString() == "U")

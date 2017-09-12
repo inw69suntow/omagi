@@ -86,9 +86,14 @@
         var i = document.getElementById(maxJ).value;
         document.getElementById(newVal).value = "";
         for (x = 1; x < i; x++) {
-            if (document.getElementById(newVal).value != "") 
+            if (document.getElementById(newVal).value != "") {
                 document.getElementById(newVal).value += ",";
-            document.getElementById(newVal).value += document.getElementById("id_" + x).value;
+            }
+            var str=document.getElementById("id_" + x).value+"|"+
+                document.getElementById("id_province_" + x).value+"|"+
+                document.getElementById("id_budget_" + x).value+"|"+
+                document.getElementById("id_objective_" + x).value;
+            document.getElementById(newVal).value += str;
         }
     }
 
