@@ -130,7 +130,7 @@ end sub
         <table width="750px" border="1" style="border:1px solid;" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
             <tr>
                 <td>
-                    <table id="dtGrid" border="1" cellspacing="0" cellpadding="0" class="css" style="width: 740px; border-right: #f6a836; border-top: #f6a836; border-left: #f6a836; border-bottom: #f6a836;" runat="server" rules="all" ></table>
+                    <table id="dtGrid" border="1" cellspacing="0" cellpadding="0" class="css" style="width: 750px; border-right: #f6a836; border-top: #f6a836; border-left: #f6a836; border-bottom: #f6a836;" runat="server" rules="all" ></table>
                 </td>
             </tr>
        </table>

@@ -21,12 +21,12 @@ public partial class _mass_entry : System.Web.UI.Page
     
 
 
-    override protected void OnInit(EventArgs e)
-    {
-        btnImport.Attributes.Add("onclick",
-                  this.GetPostBackEventReference(btnImport));
-        base.OnInit(e);
-    }
+    //override protected void OnInit(EventArgs e)
+    //{
+    //    btnImport.Attributes.Add("onclick",
+    //              this.GetPostBackEventReference(btnImport));
+    //    base.OnInit(e);
+    //}
 
     protected void deptDataSet()
     {
@@ -302,13 +302,18 @@ public partial class _mass_entry : System.Web.UI.Page
 
 
 
-    protected void writeParentName()
+    protected String getParentName(String parentId)
     {
-  
+        String name = "";
+        if (parentId==null ||parentId == "")
+        {
+            return name;
+        }
         string sql = "SELECT distinct ";
         sql += " isnull(a.fl_groupname,'') fl_groupname";
         sql += " from tb_detailgroup a ";
-        sql += " where a.fl_id='" + hdParentId.Value + "' ";
+        sql += " where a.fl_id='" + parentId + "' ";
+        //sql += " where a.fl_id='" + hdParentId.Value + "' ";
 
         OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
         OleDbCommand command = new OleDbCommand();
@@ -321,7 +326,7 @@ public partial class _mass_entry : System.Web.UI.Page
             rs = command.ExecuteReader();
             if (rs.Read())
             {
-                this.lbParentName.Text = Convert.ToString( rs["fl_groupname"]);
+                name= Convert.ToString( rs["fl_groupname"]);
             }
         }
         catch (Exception e)
@@ -338,7 +343,19 @@ public partial class _mass_entry : System.Web.UI.Page
             Conn.Close();
 
         }
+        return name;
     }
+    protected void writeParentMasterName()
+    {
+       String name= getParentName(this.hdParentIdSearch.Value);
+       this.parentProjectName.Text = name;
+    }
+    protected void writeParentName()
+    {
+        String parentName=getParentName(hdParentId.Value);
+        this.lbParentName.Text = parentName;
+    }
+
     protected void Page_Load(object sender, EventArgs e)
     {
         try
@@ -389,6 +406,7 @@ public partial class _mass_entry : System.Web.UI.Page
             }
             userDataSet();
             writeParentName();
+            writeParentMasterName();
         }
        
         if (Session["uGroup"].ToString() == "C") btnSave.Enabled = false;
@@ -1283,6 +1301,8 @@ public partial class _mass_entry : System.Web.UI.Page
     {
         if (hidID.Value != "") Response.Redirect("mass_member_entry.aspx?id=" + hidID.Value); else userDataSet();
     }
+
+    /*
     protected void btnImport_Click(object sender, EventArgs e)
     {
         //Import
@@ -1427,7 +1447,7 @@ public partial class _mass_entry : System.Web.UI.Page
         lblResponse.Visible = true;
 
         userDataSet();
-    }
+    }*/
     protected void btnClear_Click(object sender, EventArgs e)
     {
         clearBox();

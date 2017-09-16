@@ -315,13 +315,14 @@ public partial class _mass_entry: System.Web.UI.Page
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[4].Width = "15%";
         dtGrid.Rows[0].Cells[4].InnerHtml = "<center>หน่วยงาน</center>";
-        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[5].Width = "10%";
-        dtGrid.Rows[0].Cells[5].InnerHtml = "<center>จำนวนรายงาน (คน)</center>";
 
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[5].Width = "10%";
-        dtGrid.Rows[0].Cells[5].InnerHtml = "";
+        dtGrid.Rows[0].Cells[5].InnerHtml = "<center>จำนวนรายงาน<br/> (คน)</center>";
+
+        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
+        dtGrid.Rows[0].Cells[6].Width = "10%";
+        dtGrid.Rows[0].Cells[6].InnerHtml = "";
 
         string sql = "SELECT distinct fl_id,";
         sql = sql + " case isnull(a.fl_groupname,'') when '' then isnull(b.fl_group_name,'') else isnull(a.fl_groupname,'') end groupName, ";

@@ -74,7 +74,9 @@ end sub
 
 <table width="750px" border="0" align="center" cellspacing="0" cellpadding="0" class="css">
   <tr>
-    <td style="height:25px; width: 750px;" class="header_1">ข้อมูลโครงการย่อย</td>
+    <td style="height:25px; width: 750px;" class="header_1">ข้อมูลโครงการย่อย ของ โครงการหลัก  
+     <asp:Label ID="parentProjectName" runat="server" Text=""></asp:Label>
+    </td>
   </tr>
 </table>
 
@@ -108,7 +110,7 @@ end sub
         <table width="750px" border="1" style="border:1px solid;" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
             <tr>
                 <td>
-                    <table id="dtGrid" border="1" cellspacing="0" cellpadding="0" class="css" style="width: 740px; border-right: #f6a836; border-top: #f6a836; border-left: #f6a836; border-bottom: #f6a836;" runat="server" rules="all" ></table>
+                    <table id="dtGrid" border="1" cellspacing="0" cellpadding="0" class="css" style="width: 750px; border-right: #f6a836; border-top: #f6a836; border-left: #f6a836; border-bottom: #f6a836;" runat="server" rules="all" ></table>
                 </td>
             </tr>
        </table>
@@ -151,7 +153,6 @@ end sub
                             <td class="choice" >
                                 <asp:TextBox ID="txtKeyword" runat="server" CssClass="css"/>
                                 <asp:ImageButton ID="btnSearch" runat="server" CssClass="css" ImageUrl="~/photo/search.gif" Width="18px" Height="18px" OnClick="btnSearch_Click" />
-	                            <asp:ImageButton ID="btnExport" class="css" runat="server" OnClick="btnExport_Click" ImageUrl="~/photo/x.gif"  Width="18px" Height="18px"/>
                             </td>
                         </tr>
                       </table>
@@ -170,12 +171,7 @@ end sub
                     แบบบันทึกข้อมูล</b></div></th>
                 <th style="height:20px; width:500px;"  background="photo/box_topbg.gif">
 		<div align="right">
-			<b>นำเข้าจาก Excel : </b>
-	                             <input type="file" id="exclFile" class="css"/>
-                                	<asp:Button ID="btnImport" runat="server" CssClass="css" Text="นำเข้า" 
-                                    Width="70px" OnClick="btnImport_Click" OnClientClick="prepareText()"/>
-                                	<asp:HiddenField ID="importText" runat="server" value=""/>
-	                            <asp:Button ID="btnClear" Cssclass="css" runat="server" OnClick="btnClear_Click" Text="สร้างใหม่"  Width="70px"/>
+			<asp:Button ID="btnClear" Cssclass="css" runat="server" OnClick="btnClear_Click" Text="สร้างใหม่"  Width="70px"/>
 		</div>
 	</th>
                 <td width="6px" style="height:23px;" background="photo/box_topright.gif"></td>   

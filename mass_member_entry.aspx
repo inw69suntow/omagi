@@ -207,6 +207,11 @@ end sub
                                 <asp:TextBox ID="txtCardID" runat="server" width="200px" MaxLength="500" 
                                     CssClass="css" AutoPostBack="true" ontextchanged="txtCardID_TextChanged"/>
                                 <font color="red">*</font>
+
+                                 <asp:RegularExpressionValidator ID="egtxtCardID"  ControlToValidate="txtCardID" runat="server"
+                                    ErrorMessage="ต้องเป็นตัวเลขเท่านั้น"
+                                    ValidationExpression="\d+">
+                                </asp:RegularExpressionValidator>
                             </td>
                         </tr>
                         <tr height="20px">
@@ -222,6 +227,7 @@ end sub
                             <td class="choice">บ้านเลขที่:</td>
                             <td class="choice">
                                 <asp:Textbox ID="txtAddrNo" runat="server" CssClass="css" Width="200" MaxLength="250" />
+                              
                             </td>
                         </tr>
                         <tr height="20px">
@@ -262,30 +268,51 @@ end sub
                         <tr height="20px">
                             <td class="choice">หมู่ที่:</td>
                             <td class="choice">
-                                <asp:Textbox ID="txtMoo" runat="server" CssClass="css" Width="30px" MaxLength="2"/>                            </td>
+                                <asp:Textbox ID="txtMoo" runat="server" CssClass="css" Width="30px" MaxLength="2"/> 
+                                <asp:RegularExpressionValidator ID="egtxtMoo"  ControlToValidate="txtMoo" runat="server"
+                                    ErrorMessage="ต้องเป็นตัวเลขเท่านั้น"
+                                    ValidationExpression="\d+">
+                                </asp:RegularExpressionValidator>                           </td>
                         </tr>
                        <tr height="20px">
                             <td class="choice">รหัสไปรษณีย์:</td>
                             <td class="choice">
                                 <asp:Textbox ID="txtPost" runat="server" CssClass="css" Width="100" MaxLength="5" />
+                                <asp:RegularExpressionValidator ID="rgtxtPost"  ControlToValidate="txtPost" runat="server"
+                                    ErrorMessage="ต้องเป็นตัวเลขเท่านั้น"
+                                    ValidationExpression="\d+">
+                                </asp:RegularExpressionValidator>
                             </td>
                         </tr>
                         <tr height="20px">
                             <td class="choice" >โทรศัพท์บ้าน:</td>
                             <td class="choice" >
                                 <asp:Textbox ID="txtTelNo" runat="server" CssClass="css" Width="100" MaxLength="10" />
+                                 <asp:RegularExpressionValidator ID="rgtxtTelNo"  ControlToValidate="txtTelNo" runat="server"
+                                    ErrorMessage="ต้องเป็นตัวเลขเท่านั้น"
+                                    ValidationExpression="\d+">
+                                </asp:RegularExpressionValidator>
                             </td>
                         </tr>
                        <tr height="20px">
                             <td class="choice">โทรศัพท์ที่ทำงาน:</td>
                             <td class="choice">
                                 <asp:Textbox ID="txtOffNo" runat="server" CssClass="css" Width="100" MaxLength="10" />
-                            </td>
+                                <asp:RegularExpressionValidator ID="rgtxtOffNo"  ControlToValidate="txtOffNo" runat="server"
+                                    ErrorMessage="ต้องเป็นตัวเลขเท่านั้น"
+                                    ValidationExpression="\d+">
+                                </asp:RegularExpressionValidator>
+                           
+                             </td>
                         </tr>
                         <tr height="20px">
                             <td class="choice" >โทรศัพท์มือถือ:</td>
                             <td class="choice" >
                                 <asp:Textbox ID="txtMobNo" runat="server" CssClass="css" Width="100" MaxLength="10" />
+                                 <asp:RegularExpressionValidator ID="rgtxtMobNo"  ControlToValidate="txtMobNo" runat="server"
+                                    ErrorMessage="ต้องเป็นตัวเลขเท่านั้น"
+                                    ValidationExpression="\d+">
+                                </asp:RegularExpressionValidator>
                             </td>
                         </tr>
                        <tr height="20px">
