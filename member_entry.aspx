@@ -41,6 +41,7 @@
 
                 // Enter is pressed
                 if (e.keyCode == 13) {
+                    var btnSearch = '<%= btnSearch.ClientID %>';
                     document.getElementById(btnSearch).click();
                 }
             }, false);
@@ -133,12 +134,19 @@ end sub
   <tr>
     <td align="left" valign="top">
         <table width="750px" border="1" style="border:1px solid;" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+          
             <tr>
                 <td>
-                    <table id="dtGrid" border="1" cellspacing="0" cellpadding="0" class="css" style="width: 740px; border-right: #f6a836; border-top: #f6a836; border-left: #f6a836; border-bottom: #f6a836;" runat="server" rules="all" ></table>
+                    <table id="dtGrid" border="1" cellspacing="0" cellpadding="0" class="css" style="width: 750px; border-right: #f6a836; border-top: #f6a836; border-left: #f6a836; border-bottom: #f6a836;" runat="server" rules="all" ></table>
                 </td>
             </tr>
        </table>
+    </td>
+  </tr>
+  <tr>
+    <td align="right" valign="top">
+            <input id="btnDeleteJS" type="button" value="ลบข้อมูลที่เลือก" onclick=""/>
+            <asp:Button ID="btnDelete" runat="server" Text="ลบข้อมูลที่เลือก" onclick="btnDelete_Click" Visible="false" />
     </td>
   </tr>
 <tr>
@@ -203,9 +211,9 @@ end sub
                 <th style="height:20px; width:500px;"  background="photo/box_topbg.gif">
 		<div align="right">
 			<b>นำเข้าจาก Excel : </b>
-                                <input type="file" id="exclFile" class="css"/>
+                                <%--<input type="file" id="exclFile" class="css"/>
                                 <asp:Button ID="btnImport" runat="server" CssClass="css" Text="นำเข้า" 
-                                    Width="70px" onclick="btnImport_Click" OnClientClick="prepareText()"/>
+                                    Width="70px" onclick="btnImport_Click" OnClientClick="prepareText()"/>--%>
                                 <asp:HiddenField ID="importText" runat="server" value=""/>
 	                            <asp:Button ID="btnClear" Cssclass="css" runat="server" OnClick="btnClear_Click" Text="สร้างใหม่"  Width="70px"/>
 		</div>

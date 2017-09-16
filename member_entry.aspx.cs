@@ -16,12 +16,7 @@ using System.Data.OleDb;
 
 public partial class _train_member_entry: System.Web.UI.Page
 {
-    override protected void OnInit(EventArgs e)
-    {
-        btnImport.Attributes.Add("onclick",
-                  this.GetPostBackEventReference(btnImport));
-        base.OnInit(e);
-    }
+  
 
     protected bool checkID(string param)
     {
@@ -976,10 +971,13 @@ public partial class _train_member_entry: System.Web.UI.Page
             dtGrid.Rows[i].Cells[0].Align = "CENTER";
 
             if (hidID.Value != rs.GetString(0))
-                dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\"" + action + "\">"; 
-            else 
+            {
+                dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\"" + action + "\">";
+            }
+            else
+            {
                 dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' checked onClick=\"" + action + "\">";
-
+            }
 
             dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
             dtGrid.Rows[i].Cells[1].Align = "LEFT";
@@ -2186,5 +2184,9 @@ public partial class _train_member_entry: System.Web.UI.Page
     {
         String htmlSort = "<center><a style=\"text-decoration: none;\" href=\"#\" onclick=\"sortColumn('" + solumnName + "')\">" + solumnName + "</a></center>";
         return htmlSort;
+    }
+    protected void btnDelete_Click(object sender, EventArgs e)
+    {
+
     }
 }
