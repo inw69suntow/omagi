@@ -12,11 +12,16 @@ using System.Web.Configuration;
 using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
+using log4net;
 
 public partial class _login: System.Web.UI.Page
 {
+
+    ILog logger = LogUtils.LOGGER;
+
     protected void btt1_Click(object sender, EventArgs e)
     {
+        logger.Info("login start");
         try
         {
             if ((pwd.Text != "") && (eotp.Text.Trim().CompareTo(Session["rand"].ToString().Trim()) == 0))

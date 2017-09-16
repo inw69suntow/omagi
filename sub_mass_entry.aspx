@@ -224,6 +224,10 @@ end sub
                             <td class="choice" >จำนวนคนตามรายงาน:</td>
                             <td class="choice" >
                                 <asp:Textbox ID="txtReportAmount" runat="server" CssClass="css" Width="100" MaxLength="10" /> คน
+                                <asp:RegularExpressionValidator ID="egtxtReportAmount"  ControlToValidate="txtReportAmount" runat="server"
+                                    ErrorMessage="ต้องเป็นตัวเลขเท่านั้น"
+                                    ValidationExpression="\d+">
+                                </asp:RegularExpressionValidator>
                             </td>
                         </tr>
                         <tr height="20px">
@@ -258,6 +262,10 @@ end sub
                             <td class="choice">หมู่ที่:</td>
                             <td class="choice">
                                 <asp:Textbox ID="txtMoo" runat="server" CssClass="css" Width="30px" MaxLength="2"/>
+                                 <asp:RegularExpressionValidator ID="rgtxtMoo"  ControlToValidate="txtMoo" runat="server"
+                                    ErrorMessage="ต้องเป็นตัวเลขเท่านั้น"
+                                    ValidationExpression="\d+">
+                                </asp:RegularExpressionValidator>
                             </td>
                         </tr>
                        <tr height="20px" valign="top">
