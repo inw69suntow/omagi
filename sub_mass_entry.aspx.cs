@@ -1511,6 +1511,8 @@ public partial class _mass_entry : System.Web.UI.Page
             }
             else{
                 this.lbParentName.Visible = true;
+                 String name= getParentName(this.hdParentIdSearch.Value);
+                 this.lbParentName.Text = name;
                 this.ddParent1.Visible = false;
             }
         }

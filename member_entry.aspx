@@ -142,14 +142,7 @@ end sub
             </tr>
        </table>
     </td>
-  </tr>
-  <tr>
-    <td align="right" valign="top">
-            <input id="btnDeleteJS" type="button" value="Åº¢éÍÁÙÅ·ÕèàÅ×Í¡" onclick=""/>
-            <asp:Button ID="btnDelete" runat="server" Text="Åº¢éÍÁÙÅ·ÕèàÅ×Í¡" onclick="btnDelete_Click" Visible="false" />
-    </td>
-  </tr>
-<tr>
+  </tr>s
     <td>
         <table width="750px" border="0" cellspacing="0" cellpadding="0" class="css">
             <tr>
