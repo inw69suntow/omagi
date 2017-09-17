@@ -119,7 +119,7 @@ end sub
     <asp:HiddenField ID="hdSortName" runat="server" />
 <table width="750px" border="0" align="center" cellspacing="0" cellpadding="0" class="css">
   <tr>
-    <td style="height:25px; width: 750px;" class="header_1">ข้อมูลผู้เข้ารับการฝึกอบรม</td>
+    <td style="height:25px; width: 750px;" class="header_1">ข้อมูลสมาชิก</td>
   </tr>
 </table>
 
@@ -210,7 +210,6 @@ end sub
                     แบบบันทึกข้อมูล</b></div></th>
                 <th style="height:20px; width:500px;"  background="photo/box_topbg.gif">
 		<div align="right">
-			<b>นำเข้าจาก Excel : </b>
                                 <%--<input type="file" id="exclFile" class="css"/>
                                 <asp:Button ID="btnImport" runat="server" CssClass="css" Text="นำเข้า" 
                                     Width="70px" onclick="btnImport_Click" OnClientClick="prepareText()"/>--%>
