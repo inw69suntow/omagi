@@ -2,9 +2,11 @@
 <%@ Page Language="C#" AutoEventWireup="true" CodeFile="train_course_entry.aspx.cs" Inherits="_train_course_entry" MasterPageFile="~/MasterPage.master" ViewStateEncryptionMode="Always"%>
 <asp:Content ID="content" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
+
 <table width="750px" border="0" align="center" cellspacing="0" cellpadding="0" class="css">
   <tr>
     <td style="height:25px; width: 750px;" class="header_1">&nbsp;ข้อมูลหลักสูตรการฝึกอบรม</td>
+    <asp:HiddenField ID="hdSortName" runat="server" />
   </tr>
 </table>
 
@@ -79,7 +81,7 @@
           </tr>
           </tr>
 </table>
-<script language="javascript">
+<script type="text/javascript">
     function composeValue() {
         var maxJ = '<%= maxJ.ClientID %>';
         var newVal = '<%= newVal.ClientID %>';
@@ -111,5 +113,13 @@
             }
         }, false);
     });
+
+
+    function sortColumn(title) {
+        var hdSortName = '<%= hdSortName.ClientID %>';
+        var btnSearch = '<%= btnSearch.ClientID %>';
+        document.getElementById(hdSortName).value = title;
+        document.getElementById(btnSearch).click();
+    }
 </script>
 </asp:Content>

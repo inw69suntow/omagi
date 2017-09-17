@@ -135,20 +135,20 @@ public partial class _train_course_entry : System.Web.UI.Page
 
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[1].Width = "20%";
-        dtGrid.Rows[0].Cells[1].InnerHtml = "<center>ชื่อหลักสูตร</center>";
+        dtGrid.Rows[0].Cells[1].InnerHtml = genSortColumn("ชื่อหลักสูตร");
 
 
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[2].Width = "15%";
-        dtGrid.Rows[0].Cells[2].InnerHtml = "<center>จังหวัด</center>";
+        dtGrid.Rows[0].Cells[2].InnerHtml = genSortColumn("จังหวัด");
 
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[3].Width = "20%";
-        dtGrid.Rows[0].Cells[3].InnerHtml = "<center>งบประมาณ</center>";
+        dtGrid.Rows[0].Cells[3].InnerHtml = genSortColumn("งบประมาณ");
 
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[4].Width = "30%";
-        dtGrid.Rows[0].Cells[4].InnerHtml = "<center>วัตถุประสงค์</center>";
+        dtGrid.Rows[0].Cells[4].InnerHtml = genSortColumn("วัตถุประสงค์");
         try
         {
             string strConnString = ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString;
@@ -160,7 +160,26 @@ public partial class _train_course_entry : System.Web.UI.Page
                 sql += " where fl_course like '%"+course.Replace("'","")+"%'";
                // sql += " where fl_course LIKE '%@course%' ";
             }
-            sql +=" order by fl_course ";
+            else if ("ชื่อหลักสูตร".Equals(hdSortName.Value))
+            {
+                sql += " order by fl_course ASC";
+            }
+            else if ("จังหวัด".Equals(hdSortName.Value))
+            {
+                sql += " order by fl_province ASC";
+            }
+            else if ("งบประมาณ".Equals(hdSortName.Value))
+            {
+                sql += " order by fl_budget ASC ";
+            }
+            else if ("วัตถุประสงค์".Equals(hdSortName.Value))
+            {
+                sql += " order by fl_objective ASC ";
+            }
+            else
+            {
+                sql += " order by fl_course ASC ";
+            }
             OleDbDataReader dtReader;
             OleDbCommand objCmd = new OleDbCommand();
             objCmd.CommandText = sql;
@@ -310,5 +329,10 @@ public partial class _train_course_entry : System.Web.UI.Page
     {
         Load_Table(txtKeyword.Text.Trim());
     }
-  
+    private String genSortColumn(String solumnName)
+    {
+        String htmlSort = "<center><a style=\"text-decoration: none;\" href=\"#\" onclick=\"sortColumn('" + solumnName + "')\">" + solumnName + "</a></center>";
+        return htmlSort;
+    }
+
 }

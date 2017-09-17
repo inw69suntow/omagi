@@ -529,6 +529,7 @@ public partial class _mass_entry : System.Web.UI.Page
                 for (int j = 0; j < listChild.Count;j++ )
                 {
                     Project child = listChild[j];
+                    child.ParentName = project.GroupName;
                     printBody(child, dtGrid,"child_"+j);
                 }
 
@@ -644,9 +645,19 @@ public partial class _mass_entry : System.Web.UI.Page
     {
         //IList<Project> listProject = new List<Project>();
         Dictionary<String, IList<Project>> mapProject = new Dictionary<String, IList<Project>>();
-        String sql = "select * from tb_detailgroup ";
-        sql += " where fl_parent_id in (SELECT DISTINCT fl_id FROM tb_detailgroup where fl_parent_id=\'" + parentId1 + "\') ";
-        sql += " and fl_level=2";
+       // String sql = "select * from tb_detailgroup ";
+        //sql += " where fl_parent_id in (SELECT DISTINCT fl_id FROM tb_detailgroup where fl_parent_id=\'" + parentId1 + "\') ";
+        //sql += " and fl_level=2";
+
+
+        String sql = "select distinct a.*,g.fl_group_name fl_group_name,m.fl_province_name fl_province_name,d.fl_dept_name fl_dept_name ";
+        sql += "from tb_detailgroup a ";
+        sql += "left join tb_maingroup g on a.fl_group_id=g.fl_group_id ";
+        sql += "left join tb_moicode m on m.fl_province_code=a.fl_province ";
+        sql += "left join tb_dept d on d.fl_dept_id=a.fl_dept ";
+        sql += "where a.fl_parent_id in (SELECT DISTINCT fl_id FROM tb_detailgroup where fl_parent_id=\'" + parentId1 + "\')  ";
+        sql += "and a.fl_level=2 ";
+
         OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
         OleDbCommand command = new OleDbCommand();
         OleDbDataReader rs = null;
@@ -663,11 +674,11 @@ public partial class _mass_entry : System.Web.UI.Page
                 Project project = new Project();
                 project.Fl_id = Convert.ToString(rs["fl_id"]);
                 project.GroupName = Convert.ToString(rs["fl_groupname"]);
-                project.ParentName = "";//Convert.ToString(rs["ParentName"]);
-                project.MainGroupId = "";// Convert.ToString(rs["MainGroupId"]);
-                project.MainGroupName = "";//Convert.ToString(rs["MainGroupName"]);
-                project.ProvinceName = "";// Convert.ToString(rs["ProvinceName"]);
-                project.DeptName = "";// Convert.ToString(rs["DeptName"]);
+               // project.ParentName = "";Convert.ToString(rs["ParentName"]);
+                project.MainGroupId = Convert.ToString(rs["fl_group_id"]);
+                project.MainGroupName = Convert.ToString(rs["fl_group_name"]);
+                project.ProvinceName =  Convert.ToString(rs["fl_province_name"]);
+                project.DeptName = Convert.ToString(rs["fl_dept_name"]);
                 project.ReportMember = Convert.ToString(rs["fl_reportMember"]);
                 project.Fl_dept = Convert.ToString(rs["fl_dept"]);
                 project.ParentId = Convert.ToString(rs["fl_parent_id"]);

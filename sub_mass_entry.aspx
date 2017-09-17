@@ -67,8 +67,22 @@ end sub
     function checkboxClick(chckbox, id, parent,master) {
         if ($(chckbox).is(':checked')) {
             document.location = "sub_mass_entry.aspx?hid=" + id + "&parent_id=" + parent + "&parentSearch=" + master
-        } 
+        }
     }
+
+    $(function () {
+        var txtKeyWord = '<%= txtKeyword.ClientID %>';
+        var btnSearch = '<%= btnSearch.ClientID %>';
+        document.getElementById(txtKeyWord).addEventListener("keydown", function (e) {
+            if (!e) { var e = window.event; }
+            //e.preventDefault(); // sometimes useful
+
+            // Enter is pressed
+            if (e.keyCode == 13) {
+                document.getElementById(btnSearch).click();
+            }
+        }, false);
+    });
 
 </script>
 

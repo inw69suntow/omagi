@@ -908,6 +908,16 @@ public partial class _train_member_entry: System.Web.UI.Page
                  lblResponse.ForeColor = System.Drawing.Color.Red;
                  lblResponse.Visible = true;
                  //userDataSet();
+                 //noDataFound
+                 HtmlTableRow row = new HtmlTableRow();
+                 dtGrid.Rows.Add(row);
+                 row.Attributes.Add("class", "off");
+                 row.Attributes.Add("onmouseover", "this.className='on'");
+                 row.Attributes.Add("onmouseout", "this.className='off'");
+                 row.Cells.Add(new HtmlTableCell());
+                 row.Cells[0].ColSpan = 10;
+                 row.Cells[0].Align = "CENTER";
+                 row.Cells[0].InnerHtml = "<font color='red' size='4'><b>ต้องระบุเงื่อนไขการค้นหา</b></font>";
                  return;
              }
 
@@ -998,9 +1008,17 @@ public partial class _train_member_entry: System.Web.UI.Page
             dtGrid.Rows[i].Cells[4].Align = "LEFT";
             dtGrid.Rows[i].Cells[4].InnerHtml = Convert.ToString(rs["fl_sname"]);
 
+            String birth = Convert.ToString(rs["fl_birth"]);
+            String birthDate = "";
+            if (birth != "" && birth.Length >= 8) 
+            {
+                int thaiyear=Convert.ToInt32(birth.Substring(0, 4)) + 543;
+                birthDate = birth.Substring(6, 2) + "/" + birth.Substring(4, 2) + "/" + Convert.ToString(thaiyear);
+            }
             dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
             dtGrid.Rows[i].Cells[5].Align = "LEFT";
-            dtGrid.Rows[i].Cells[5].InnerHtml = Convert.ToString(rs["fl_birthdate"]);
+            dtGrid.Rows[i].Cells[5].InnerHtml = birthDate;
+
 
             dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
             dtGrid.Rows[i].Cells[6].Align = "LEFT";

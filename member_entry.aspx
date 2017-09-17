@@ -33,53 +33,60 @@
             });
         }
 
-
-        $(function () {
-            document.getElementById(txtKeyWord).addEventListener("keydown", function (e) {
-                if (!e) { var e = window.event; }
-                //e.preventDefault(); // sometimes useful
-
-                // Enter is pressed
-                if (e.keyCode == 13) {
-                    var btnSearch = '<%= btnSearch.ClientID %>';
-                    document.getElementById(btnSearch).click();
-                }
-            }, false);
-        });
-
-
-
-        function openMember(action,checkbox) {
-              if (checkbox.checked) {
-                   document.location="train_member_entry.aspx?hid=" + action;
-                }
-           }
-
-
-//             function openMember(action, checkbox) {
-//               $.ajax({
-//                   type: "GET",
-//                   url: "train_member_entry.aspx?hid=" + action,
-//                   dataType: "text/heml",
-//                   success: function (txt) {
-//                     $('#member_detail').html('');
-//                     $('#member_detail').html(txt);       
-//                  
-//               });
-           //           }
-
-
-
-           function sortColumn(title) {
-               var hdSortName = '<%= hdSortName.ClientID %>';
-               var btnSearch = '<%= btnSearch.ClientID %>';
-               document.getElementById(hdSortName).value = title;
-               document.getElementById(btnSearch).click();
-           }
-
     </script>
 </asp:Content>
 <asp:Content ID="content" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+<script type="text/javascript">
+
+
+    $(function () {
+        onloadSearchBox();
+    });
+
+    function onloadSearchBox() {
+        var txtSearchSID = '<%= txtSearchSID.ClientID %>';
+        var txtSearchFName = '<%= txtSearchFName.ClientID %>';
+        var txtSearchLName = '<%= txtSearchLName.ClientID %>';
+        var btnSearch = '<%= btnSearch.ClientID %>';
+        document.getElementById(txtSearchSID).addEventListener("keydown", function (e) {
+            if (!e) { var e = window.event; }
+            if (e.keyCode == 13) {
+                document.getElementById(btnSearch).click();
+            }
+        }, false);
+
+        document.getElementById(txtSearchFName).addEventListener("keydown", function (e) {
+            if (!e) { var e = window.event; }
+            if (e.keyCode == 13) {
+                document.getElementById(btnSearch).click();
+            }
+        }, false);
+
+
+        document.getElementById(txtSearchLName).addEventListener("keydown", function (e) {
+            if (!e) { var e = window.event; }
+            if (e.keyCode == 13) {
+                document.getElementById(btnSearch).click();
+            }
+        }, false);
+
+    }
+
+    function openMember(action, checkbox) {
+        if (checkbox.checked) {
+            document.location = "train_member_entry.aspx?hid=" + action;
+        }
+    }
+
+    function sortColumn(title) {
+        var hdSortName = '<%= hdSortName.ClientID %>';
+        var btnSearch = '<%= btnSearch.ClientID %>';
+        document.getElementById(hdSortName).value = title;
+        document.getElementById(btnSearch).click();
+    }
+
+</script>
+
     <script language="vbscript">
 sub prepareText()    
     fileName=document.getElementById("exclFile").value
@@ -89,7 +96,7 @@ sub prepareText()
 	    Set WB = Excl.Activeworkbook
         Set WS = WB.Worksheets(1)
 
-        document.getElementById("ctl00_ContentPlaceHolder1_importText").value=""
+        document.getElementById("ctl00_ContentPlaceHolder1_importText").value="";
 	    i=2
 	    while ws.cells(i,2)<>""
 		    if document.getElementById("ctl00_ContentPlaceHolder1_importText").value<>"" then document.getElementById("ctl00_ContentPlaceHolder1_importText").value=document.getElementById("ctl00_ContentPlaceHolder1_importText").value & ","
@@ -124,7 +131,7 @@ end sub
             <tr>
                 <td width="6px" style="height:23px;" background="photo/box_topleft.gif"></td>   
                 <th style="height:20px; width:738px;"  background="photo/box_topbg.gif">
-                    <div align="left"  valign="middle"><b>รายนามผู้เข้ารับการฝึกอบรม</b></div>
+                    <div align="left"  valign="middle"><b>รายนามสมาชิก</b></div>
                 </th>
                 <td width="6px" style="height:23px;" background="photo/box_topright.gif"></td>   
             </tr>
@@ -142,7 +149,7 @@ end sub
             </tr>
        </table>
     </td>
-  </tr>s
+  </tr>
     <td>
         <table width="750px" border="0" cellspacing="0" cellpadding="0" class="css">
             <tr>
@@ -175,7 +182,7 @@ end sub
                         <tr height="20px">
                             <td class="choice" >ชื่อ:</td>
                             <td class="choice" >
-                                <asp:TextBox ID="txtSearchFName" runat="server"></asp:TextBox>
+                                <asp:TextBox ID="txtSearchFName" runat="server" ></asp:TextBox>
                             </td>
                         </tr>
                         <tr height="20px">
