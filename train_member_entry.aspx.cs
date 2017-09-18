@@ -937,8 +937,20 @@ public partial class _train_member_entry: System.Web.UI.Page
         }
        
     }
-
     protected void userDataSet()
+    {
+        if (pageID.SelectedValue != "")
+        {
+            userDataSet(Convert.ToInt32(pageID.SelectedValue));
+        }
+        else
+        {
+            userDataSet(1);
+        }
+    }
+
+
+    protected void userDataSet(int curPage)
     {
         dtGrid.Rows.Clear();
         dtGrid.BorderColor = ConfigurationManager.AppSettings["gridBorderColor"];
@@ -1019,7 +1031,7 @@ public partial class _train_member_entry: System.Web.UI.Page
         }
 
         //if (hidID.Value != "") sql += " and b.fl_citizen_id='" + hidID.Value + "' ";
-
+        int row = DaoUtils.count(sql);
         OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
         OleDbCommand command = new OleDbCommand();
 
@@ -1056,7 +1068,8 @@ public partial class _train_member_entry: System.Web.UI.Page
         Session["userSQL"]= sql.Replace(";", "");
 
         rs = command.ExecuteReader();
-        while (rs.Read())
+       int pageSize= PageUtils.processPage(pageID, btnPrev, btnNext, row, curPage, rs);
+       while (rs.Read() && (i <= pageSize))
         {
             string action = "document.location='train_member_entry.aspx?hid=" + rs.GetString(0);
             action += "&cs=" + cmbCourseSearch.SelectedValue;
@@ -2424,5 +2437,19 @@ public partial class _train_member_entry: System.Web.UI.Page
         return htmlSort;
     }
 
-
+    protected void pageID_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        userDataSet( Convert.ToInt32(pageID.SelectedValue));
+        // userDataSet(this.txtCardID.Text);
+    }
+    protected void btnPrev_Click(object sender, EventArgs e)
+    {
+        userDataSet( Convert.ToInt32(pageID.SelectedValue) - 1);
+        //userDataSet(this.txtCardID.Text);
+    }
+    protected void btnNext_Click(object sender, EventArgs e)
+    {
+        userDataSet(Convert.ToInt32(pageID.SelectedValue) + 1);
+        //userDataSet(this.txtCardID.Text);
+    }
 }

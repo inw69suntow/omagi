@@ -837,8 +837,17 @@ public partial class _train_member_entry: System.Web.UI.Page
         }
        
     }
-
     protected void userDataSet(String sid)
+    {
+        if (pageID.SelectedValue != "")
+        {
+            userDataSet(sid,Convert.ToInt32(pageID.SelectedValue));
+        }
+        else {
+            userDataSet(sid,1); 
+        }
+    }
+    protected void userDataSet(String sid,int curPage)
     {
 
         dtGrid.Rows.Clear();
@@ -892,11 +901,7 @@ public partial class _train_member_entry: System.Web.UI.Page
         sql = sql + " FROM tb_citizen ";
         sql = sql + " where 1=1 ";
          String hid=Request.QueryString["hid"];
-         if (sid != null)
-         {
-             sql += " and fl_citizen_id='" + sid + "' ";
-         }
-         else if (hid != null && hid != "")
+         if (hid != null && hid != "")
          {
              sql += " and fl_citizen_id='" + hid.Trim() + "' ";
          }
@@ -934,7 +939,7 @@ public partial class _train_member_entry: System.Web.UI.Page
                  sql += " and fl_sname like '%" + txtSearchLName.Text.Trim() + "%' ";
              }
          }
-
+       int count = DaoUtils.count(sql);
         OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
         OleDbCommand command = new OleDbCommand();
 
@@ -960,12 +965,15 @@ public partial class _train_member_entry: System.Web.UI.Page
             sql = sql + " fl_sname ASC ";
         }
 
-        int i = 1;
+        //int i = 1;
         command.CommandText = sql.Replace(";", "");
         Session["userSQL"]= sql.Replace(";", "");
 
+       
         rs = command.ExecuteReader();
-        while (rs.Read())
+        int pageSize= PageUtils.processPage(pageID, btnPrev, btnNext, count,curPage, rs);
+        int i = 1;
+        while (rs.Read() && (i <= pageSize))
         {
             string action = "document.location='member_entry.aspx?hid=" + rs.GetString(0);
             action += "';";
@@ -2206,5 +2214,21 @@ public partial class _train_member_entry: System.Web.UI.Page
     protected void btnDelete_Click(object sender, EventArgs e)
     {
 
+    }
+
+    protected void pageID_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        userDataSet(this.hidID.Value,Convert.ToInt32(pageID.SelectedValue));
+       // userDataSet(this.txtCardID.Text);
+    }
+    protected void btnPrev_Click(object sender, EventArgs e)
+    {
+        userDataSet(this.hidID.Value,Convert.ToInt32(pageID.SelectedValue) - 1);
+        //userDataSet(this.txtCardID.Text);
+    }
+    protected void btnNext_Click(object sender, EventArgs e)
+    {
+        userDataSet(this.hidID.Value,Convert.ToInt32(pageID.SelectedValue) + 1);
+        //userDataSet(this.txtCardID.Text);
     }
 }

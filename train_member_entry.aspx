@@ -122,8 +122,17 @@ end sub
         <table width="750px" border="0" cellspacing="0" cellpadding="0" class="css">
             <tr>
                 <td width="6px" style="height:23px;" background="photo/box_topleft.gif"></td>   
-                <th style="height:20px; width:738px;"  background="photo/box_topbg.gif">
+                <th style="height:20px; width:700px;"  background="photo/box_topbg.gif">
                     <div align="left"  valign="middle"><b>รายนามผู้เข้ารับการฝึกอบรม</b></div>
+                </th>
+                <th style="height:20px; width:178px;"  background="photo/box_topbg.gif">
+                    หน้าที่ <asp:DropDownList ID="pageID" CssClass="css" 
+                        runat="server" AutoPostBack="true" 
+                        onselectedindexchanged="pageID_SelectedIndexChanged" />
+                    <asp:Button ID="btnPrev" runat="server" CssClass="css" Width="18px" 
+                        Text="&lt;" OnClick="btnPrev_Click" />
+                    <asp:Button ID="btnNext" runat="server" CssClass="css" Width="18px" 
+                        Text="&gt;" OnClick="btnNext_Click"/>
                 </th>
                 <td width="6px" style="height:23px;" background="photo/box_topright.gif"></td>   
             </tr>
