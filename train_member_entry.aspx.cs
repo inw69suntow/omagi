@@ -966,10 +966,10 @@ public partial class _train_member_entry: System.Web.UI.Page
         dtGrid.Rows[0].Cells[1].Width = "15%";
         dtGrid.Rows[0].Cells[1].InnerHtml =  genSortColumn("‡≈¢ª√–®”µ—«");
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[2].Width = "25%";
+        dtGrid.Rows[0].Cells[2].Width = "15%";
         dtGrid.Rows[0].Cells[2].InnerHtml =genSortColumn("™◊ËÕ");
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[3].Width = "25%";
+        dtGrid.Rows[0].Cells[3].Width = "15%";
         dtGrid.Rows[0].Cells[3].InnerHtml =genSortColumn(" °ÿ≈");
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[4].Width = "20%";
@@ -980,6 +980,10 @@ public partial class _train_member_entry: System.Web.UI.Page
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[6].Width = "10%";
         dtGrid.Rows[0].Cells[6].InnerHtml = "<center>Õ’‡¡≈Ï</center>";
+
+        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
+        dtGrid.Rows[0].Cells[7].Width = "10%";
+        dtGrid.Rows[0].Cells[7].InnerHtml = "";
 
         string sql = "SELECT distinct b.fl_citizen_id,";
         sql = sql + " fl_fname, ";
@@ -1071,13 +1075,13 @@ public partial class _train_member_entry: System.Web.UI.Page
        int pageSize= PageUtils.processPage(pageID, btnPrev, btnNext, row, curPage, rs);
        while (rs.Read() && (i <= pageSize))
         {
-            string action = "document.location='train_member_entry.aspx?hid=" + rs.GetString(0);
+            string action = "document.location=\'train_member_entry.aspx?hid=" + rs.GetString(0);
             action += "&cs=" + cmbCourseSearch.SelectedValue;
             action += "&gs=" + cmbGenSearch.SelectedValue;
             action += "&ys=" + cmbYearSearch.SelectedValue;
             action += "&ps=" + cmbProvinceSearch.SelectedValue;
             action += "&ds=" + cmbDeptSearch.SelectedValue;
-            action += "';";
+            action += "\'";
 
             dtGrid.Rows.Add(new HtmlTableRow());
             dtGrid.Rows[i].Attributes.Add("class", "off");
@@ -1090,10 +1094,16 @@ public partial class _train_member_entry: System.Web.UI.Page
             dtGrid.Rows[i].Cells[0].Align = "CENTER";
 
             if (hidID.Value != rs.GetString(0))
-                dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\"" + action + "\">"; 
-            else 
-                dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' checked onClick=\"" + action + "\">";
-
+            {
+                //dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\"" + action + "\">";
+                dtGrid.Rows[i].Cells[0].InnerHtml = CheckBoxListUtils.getChkBox(Convert.ToString(i), rs.GetString(0));
+            }
+            else
+            {
+                //dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' checked onClick=\"" + action + "\">";
+                dtGrid.Rows[i].Cells[0].InnerHtml = CheckBoxListUtils.getChkBoxCheck(Convert.ToString(i), rs.GetString(0));
+            
+            }
             for (int j = 0; j < 6; j++)
             {
                 dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
@@ -1101,6 +1111,9 @@ public partial class _train_member_entry: System.Web.UI.Page
                 dtGrid.Rows[i].Cells[j+1].InnerHtml = rs.GetString(j);
             }
 
+            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
+            dtGrid.Rows[i].Cells[7].Align = "LEFT";
+            dtGrid.Rows[i].Cells[7].InnerHtml = CheckBoxListUtils.getEditButton(Convert.ToString(i), action);
             i = i + 1;
         }
         rs.Close();
@@ -1113,7 +1126,7 @@ public partial class _train_member_entry: System.Web.UI.Page
             dtGrid.Rows[i].Attributes.Add("onmouseover", "this.className='on'");
             dtGrid.Rows[i].Attributes.Add("onmouseout", "this.className='off'");
             dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
-            dtGrid.Rows[i].Cells[0].ColSpan = 7;
+            dtGrid.Rows[i].Cells[0].ColSpan = 8;
             dtGrid.Rows[i].Cells[0].Align = "CENTER";
             dtGrid.Rows[i].Cells[0].InnerHtml = "<font color='red' size='4'><b>" + ConfigurationManager.AppSettings["nodataMsg"] + "</b></font>";
         }
@@ -2451,5 +2464,23 @@ public partial class _train_member_entry: System.Web.UI.Page
     {
         userDataSet(Convert.ToInt32(pageID.SelectedValue) + 1);
         //userDataSet(this.txtCardID.Text);
+    }
+
+    protected void btnDelAll_client_Click(object sender, EventArgs e)
+    {
+        if (this.hdDelAll.Value != "")
+        {
+            OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
+            OleDbCommand command = new OleDbCommand();
+            Conn.Open();
+            command.Connection = Conn;
+            string sql = "DELETE from tb_train_detail ";
+            sql = sql + " where fl_citizen_id in (" + hdDelAll.Value.Trim() + ") ";
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
+            Conn.Close();
+        }
+        clearBox(true);
+        userDataSet();
     }
 }

@@ -508,13 +508,17 @@ public partial class _mass_entry : System.Web.UI.Page
         rowHeader.Cells[5].InnerHtml = "<center>จังหวัด</center>";
 
         rowHeader.Cells.Add(new HtmlTableCell());
-        rowHeader.Cells[6].Width = "15%";
+        rowHeader.Cells[6].Width = "10%";
         rowHeader.Cells[6].InnerHtml = "<center>หน่วยงาน</center>";
 
         rowHeader.Cells.Add(new HtmlTableCell());
         rowHeader.Cells[7].Width = "5%";
         rowHeader.Cells[7].InnerHtml = "<center>จำนวนรายงาน (คน)</center>";
 
+
+        rowHeader.Cells.Add(new HtmlTableCell());
+        rowHeader.Cells[8].Width = "5%";
+        rowHeader.Cells[8].InnerHtml = "";
         int i = 0;
         while (i < listProject1.Count)
         {
@@ -587,15 +591,18 @@ public partial class _mass_entry : System.Web.UI.Page
         {
             htmlRow.Attributes.Add("style", "background-color:#ffffff");
         }
+        String action="checkboxClick(this,\'" + project.Fl_id + "\',\'" + project.ParentId + "\',\'" + this.hdParentIdSearch.Value + "\')";
         htmlRow.Cells.Add(new HtmlTableCell());
         htmlRow.Cells[0].ColSpan = 1;
         htmlRow.Cells[0].Align = "CENTER";
         htmlRow.Cells[0].Width = "10%";
         if (hidID.Value != project.Fl_id)
-            htmlRow.Cells[0].InnerHtml = "<input type='checkbox' id='check_" + chk_index+ "' onClick=\'checkboxClick(this,\"" + project.Fl_id + "\",\"" + project.ParentId + "\",\"" + this.hdParentIdSearch.Value + "\")\' />";
+            htmlRow.Cells[0].InnerHtml = CheckBoxListUtils.getChkBox(chk_index,project.Fl_id);
+        //"<input type='checkbox' id='check_" + chk_index+ "' onClick=\'checkboxClick(this,\"" + project.Fl_id + "\",\"" + project.ParentId + "\",\"" + this.hdParentIdSearch.Value + "\")\' />";
         else
         {
-            htmlRow.Cells[0].InnerHtml = "<input type='checkbox' id='check_" + chk_index + "' onClick=\'checkboxClick(this,\"" + project.Fl_id + "\",\"" + project.ParentId + "\",\"" + this.hdParentIdSearch.Value + "\")\' />";
+            htmlRow.Cells[0].InnerHtml = CheckBoxListUtils.getChkBoxCheck(chk_index, project.Fl_id); ;
+            //"<input type='checkbox' id='check_" + chk_index + "' onClick=\'checkboxClick(this,\"" + project.Fl_id + "\",\"" + project.ParentId + "\",\"" + this.hdParentIdSearch.Value + "\")\' />";
         }
 
 
@@ -637,6 +644,10 @@ public partial class _mass_entry : System.Web.UI.Page
         htmlRow.Cells[7].Align = "RIGHT";
         htmlRow.Cells[7].Width = "5%";
         htmlRow.Cells[7].InnerHtml = Convert.ToInt32(project.ReportMember).ToString("#,##0");
+
+        htmlRow.Cells.Add(new HtmlTableCell());
+        htmlRow.Cells[8].Align = "RIGHT";
+        htmlRow.Cells[8].InnerHtml = CheckBoxListUtils.getEditButton(chk_index, action);
     }
 
 
@@ -1528,5 +1539,36 @@ public partial class _mass_entry : System.Web.UI.Page
             }
         }
         userDataSet();
+    }
+
+    protected void btnDelAll_client_Click(object sender, EventArgs e)
+    {
+        if (this.hdDelAll.Value != "")
+        {
+
+            OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
+            OleDbCommand command = new OleDbCommand();
+            Conn.Open();
+            command.Connection = Conn;
+            string sql = "DELETE from tb_detailgroup where fl_id in (" + hdDelAll.Value.Trim() + "); ";
+            sql = sql + " DELETE from tb_detailgroup where fl_parent_id in (" + hdDelAll.Value.Trim() + "); ";
+            //Write Log
+            sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
+            sql += " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
+            sql += " 'MASS GROUP', ";
+            sql += " 'DELETE', ";
+            sql += " '" + hidID.Value.Trim() + "', ";
+            sql += " '" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
+            sql += " '" + Request.UserHostAddress + "'); ";
+
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
+            Conn.Close();
+
+            //show table
+            
+        }
+        userDataSet();
+        clearBox();
     }
 }

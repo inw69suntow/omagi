@@ -878,25 +878,28 @@ public partial class _train_member_entry: System.Web.UI.Page
         dtGrid.Rows[0].Cells[4].InnerHtml = "<center>สกุล</center>";
 
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[5].Width = "20%";
+        dtGrid.Rows[0].Cells[5].Width = "5%";
         dtGrid.Rows[0].Cells[5].InnerHtml = "<center>วันเกิด</center>";
 
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[6].Width = "10%";
+        dtGrid.Rows[0].Cells[6].Width = "15%";
         dtGrid.Rows[0].Cells[6].InnerHtml = "<center>ระดับการศึกษา</center>";
 
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[7].Width = "10%";
+        dtGrid.Rows[0].Cells[7].Width = "15%";
         dtGrid.Rows[0].Cells[7].InnerHtml = "<center>สถานศึกษา</center>";
 
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[8].Width = "10%";
+        dtGrid.Rows[0].Cells[8].Width = "5%";
         dtGrid.Rows[0].Cells[8].InnerHtml = "<center>เบอร์โทร</center>";
 
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[9].Width = "10%";
         dtGrid.Rows[0].Cells[9].InnerHtml = "<center>อีเมลล์</center>";
-
+         
+        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
+        dtGrid.Rows[0].Cells[10].Width = "10%";
+        dtGrid.Rows[0].Cells[10].InnerHtml = " ";
         string sql = "SELECT * ";
         sql = sql + " FROM tb_citizen ";
         sql = sql + " where 1=1 ";
@@ -975,8 +978,7 @@ public partial class _train_member_entry: System.Web.UI.Page
         int i = 1;
         while (rs.Read() && (i <= pageSize))
         {
-            string action = "document.location='member_entry.aspx?hid=" + rs.GetString(0);
-            action += "';";
+            string action = "document.location=\'member_entry.aspx?hid=" + rs.GetString(0)+"\'";
 
             dtGrid.Rows.Add(new HtmlTableRow());
             dtGrid.Rows[i].Attributes.Add("class", "off");
@@ -990,11 +992,13 @@ public partial class _train_member_entry: System.Web.UI.Page
 
             if (hidID.Value != rs.GetString(0))
             {
-                dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\"" + action + "\">";
+               // dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\"" + action + "\">";
+                dtGrid.Rows[i].Cells[0].InnerHtml = CheckBoxListUtils.getChkBox(Convert.ToString(i), Convert.ToString(rs["fl_citizen_id"]));
             }
             else
             {
-                dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' checked onClick=\"" + action + "\">";
+               // dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' checked onClick=\"" + action + "\">";
+                dtGrid.Rows[i].Cells[0].InnerHtml = CheckBoxListUtils.getChkBoxCheck(Convert.ToString(i), Convert.ToString(rs["fl_citizen_id"]));
             }
 
             dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
@@ -1056,6 +1060,10 @@ public partial class _train_member_entry: System.Web.UI.Page
             //dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
             //dtGrid.Rows[i].Cells[9].Align = "LEFT";
             //dtGrid.Rows[i].Cells[9].InnerHtml = Convert.ToString(rs["fl_position"]);
+
+            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
+            dtGrid.Rows[i].Cells[10].Align = "LEFT";
+            dtGrid.Rows[i].Cells[10].InnerHtml = CheckBoxListUtils.getEditButton(Convert.ToString(i), action);
             i = i + 1;
         }
         rs.Close();
@@ -2230,5 +2238,26 @@ public partial class _train_member_entry: System.Web.UI.Page
     {
         userDataSet(this.hidID.Value,Convert.ToInt32(pageID.SelectedValue) + 1);
         //userDataSet(this.txtCardID.Text);
+    }
+
+ 
+    protected void btnDelAll_client_Click(object sender, EventArgs e)
+    {
+        if (this.hdDelAll.Value != "")
+        {
+            OleDbConnection Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
+            OleDbCommand command = new OleDbCommand();
+            Conn.Open();
+            command.Connection = Conn;
+            string sql = "DELETE from tb_citizen ";
+            sql = sql + " where fl_citizen_id in (" + this.hdDelAll.Value.Trim() + ") ";
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
+            Conn.Close();
+         
+        }
+        userDataSet(null);
+        txtCardID.Text = "";
+        clearBox(true);
     }
 }

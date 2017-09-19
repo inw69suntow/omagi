@@ -310,10 +310,11 @@ public partial class _mass_entry: System.Web.UI.Page
         dtGrid.Rows[0].Cells[2].InnerHtml = genSortColumn("ประเภทโครงการ");
 
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[3].Width = "15%";
+        dtGrid.Rows[0].Cells[3].Width = "10%";
+
         dtGrid.Rows[0].Cells[3].InnerHtml = genSortColumn("จังหวัด");
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
-        dtGrid.Rows[0].Cells[4].Width = "15%";
+        dtGrid.Rows[0].Cells[4].Width = "10%";
         dtGrid.Rows[0].Cells[4].InnerHtml = "<center>หน่วยงาน</center>";
 
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
@@ -323,6 +324,10 @@ public partial class _mass_entry: System.Web.UI.Page
         dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
         dtGrid.Rows[0].Cells[6].Width = "10%";
         dtGrid.Rows[0].Cells[6].InnerHtml = "";
+
+        dtGrid.Rows[0].Cells.Add(new HtmlTableCell());
+        dtGrid.Rows[0].Cells[7].Width = "10%";
+        dtGrid.Rows[0].Cells[7].InnerHtml = "";
 
         string sql = "SELECT distinct fl_id,";
         sql = sql + " case isnull(a.fl_groupname,'') when '' then isnull(b.fl_group_name,'') else isnull(a.fl_groupname,'') end groupName, ";
@@ -448,7 +453,7 @@ public partial class _mass_entry: System.Web.UI.Page
         i = 1;
         while ((rs.Read()) && (i <= pageSize))
         {
-            string action = "document.location='mass_entry.aspx?hid=" + rs.GetString(0) + "';";
+            string action = "document.location=\'mass_entry.aspx?hid=" + rs.GetString(0) + "\'";
             dtGrid.Rows.Add(new HtmlTableRow());
             if (rs.GetInt32(5) > 0)
             {
@@ -468,26 +473,37 @@ public partial class _mass_entry: System.Web.UI.Page
             dtGrid.Rows[i].Cells[0].ColSpan = 1;
             dtGrid.Rows[i].Cells[0].Align = "CENTER";
 
-            if (hidID.Value != rs.GetString(0)) 
-                dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\"" + action + "\">"; 
-            else 
-                dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' checked onClick=\"" + action + "\">";
-
-            for (int j = 1; j <= 4; j++)
+            if (hidID.Value != rs.GetString(0))
             {
-                dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
-                dtGrid.Rows[i].Cells[j].Align = "LEFT";
-                dtGrid.Rows[i].Cells[j].InnerHtml = "&nbsp;" + rs.GetString(j);
+                // dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' onClick=\"" + action + "\">"; 
+                dtGrid.Rows[i].Cells[0].InnerHtml = CheckBoxListUtils.getChkBox(Convert.ToString(i), rs.GetString(0));
             }
+            else
+            {
+                //dtGrid.Rows[i].Cells[0].InnerHtml = "<input type='checkbox' id='check_" + i.ToString() + "' checked onClick=\"" + action + "\">";
+                dtGrid.Rows[i].Cells[0].InnerHtml = CheckBoxListUtils.getChkBoxCheck(Convert.ToString(i), rs.GetString(0));
+            }
+                for (int j = 1; j <= 4; j++)
+                {
+                    dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
+                    dtGrid.Rows[i].Cells[j].Align = "LEFT";
+                    dtGrid.Rows[i].Cells[j].InnerHtml = "&nbsp;" + rs.GetString(j);
+                }
             dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
             dtGrid.Rows[i].Cells[5].Align = "RIGHT";
             dtGrid.Rows[i].Cells[5].InnerHtml = rs.GetInt32(5).ToString("#,##0");
+
+            
+           
 
             dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
             dtGrid.Rows[i].Cells[6].ColSpan = 1;
             dtGrid.Rows[i].Cells[6].Align = "CENTER";
             dtGrid.Rows[i].Cells[6].InnerHtml = "<a href=\"sub_mass_entry.aspx?parent_id=" + rs.GetString(0) + "&page=master&parentSearch=" + rs.GetString(0) + "\">โครงการย่อย</a>";
-
+            
+            dtGrid.Rows[i].Cells.Add(new HtmlTableCell());
+            dtGrid.Rows[i].Cells[7].Align = "RIGHT";
+            dtGrid.Rows[i].Cells[7].InnerHtml = CheckBoxListUtils.getEditButton(Convert.ToString(i),action);
 
             i = i + 1;
         }
@@ -987,4 +1003,79 @@ public partial class _mass_entry: System.Web.UI.Page
         String htmlSort = "<center><a style=\"text-decoration: none;\" href=\"#\" onclick=\"sortColumn('" + solumnName + "')\">" + solumnName + "</a></center>";
         return htmlSort;
     }
+
+    protected void btnDelAll_client_Click(object sender, EventArgs e)
+    {
+        if (this.hdDelAll.Value != "")
+        {
+            String[] ids = this.hdDelAll.Value.Split(',');
+            for (int i = 0; i < ids.Length; i++)
+            {
+                String id = ids[i];
+                int size = getChildSize(id);
+                if (size == 0)
+                {
+                    delete(id);
+                }
+                else
+                {
+                    lblResponse.Text = "มีโครงการย่อยในหน่อยงาน "+id;
+                    lblResponse.ForeColor = System.Drawing.Color.Red;
+                    lblResponse.Visible = true;
+                    break;
+                }
+            }
+        }
+        userDataSet();
+    }
+
+
+    public void delete(String id)
+    {
+        OleDbConnection Conn = null;
+        try
+        {
+            Conn = new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
+            OleDbCommand command = new OleDbCommand();
+            Conn.Open();
+            command.Connection = Conn;
+            string sql = "DELETE from tb_detailgroup ";
+            sql += " where fl_id =" + id;
+
+            //Write Log
+            sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
+            sql += " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
+            sql += " 'MASS GROUP', ";
+            sql += " 'DELETE', ";
+            sql += " '" + id + "', ";
+            sql += " '" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
+            sql += " '" + Request.UserHostAddress + "'); ";
+
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            if (Conn != null)
+            {
+                Conn.Close();
+            }
+           
+        }
+       
+    }
+
+
+    public int getChildSize(String id){
+         string sql = "select * from tb_detailgroup where fl_parent_id ="+id;
+         int size = 0;
+         size = DaoUtils.count(sql);
+         return size;
+    }
+
+
 }

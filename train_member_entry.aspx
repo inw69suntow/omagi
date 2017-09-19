@@ -32,49 +32,7 @@
         }
 
 
-        $(function () {
-            var txtKeyWord = '<%= txtKeyword.ClientID %>';
-            var btnSearch = '<%= btnSearch.ClientID %>';
-            document.getElementById(txtKeyWord).addEventListener("keydown", function (e) {
-                if (!e) { var e = window.event; }
-                //e.preventDefault(); // sometimes useful
-
-                // Enter is pressed
-                if (e.keyCode == 13) {
-                    document.getElementById(btnSearch).click();
-                }
-            }, false);
-        });
-
-
-
-        function openMember(action,checkbox) {
-              if (checkbox.checked) {
-                   document.location="train_member_entry.aspx?hid=" + action;
-                }
-           }
-
-
-//             function openMember(action, checkbox) {
-//               $.ajax({
-//                   type: "GET",
-//                   url: "train_member_entry.aspx?hid=" + action,
-//                   dataType: "text/heml",
-//                   success: function (txt) {
-//                     $('#member_detail').html('');
-//                     $('#member_detail').html(txt);       
-//                  
-//               });
-           //           }
-
-
-           function sortColumn(title) {
-               var hdSortName = '<%= hdSortName.ClientID %>';
-               var btnSearch = '<%= btnSearch.ClientID %>';
-               document.getElementById(hdSortName).value = title;
-               document.getElementById(btnSearch).click();
-           }
-
+ 
 
     </script>
 </asp:Content>
@@ -106,6 +64,66 @@ sub prepareText()
         Set Excl = Nothing
     end if
 end sub
+</script>
+<script type="text/javascript">
+
+
+    $(function () {
+        var txtKeyWord = '<%= txtKeyword.ClientID %>';
+        var btnSearch = '<%= btnSearch.ClientID %>';
+        document.getElementById(txtKeyWord).addEventListener("keydown", function (e) {
+            if (!e) { var e = window.event; }
+            //e.preventDefault(); // sometimes useful
+
+            // Enter is pressed
+            if (e.keyCode == 13) {
+                document.getElementById(btnSearch).click();
+            }
+        }, false);
+    });
+
+
+
+    function openMember(action, checkbox) {
+        if (checkbox.checked) {
+            document.location = "train_member_entry.aspx?hid=" + action;
+        }
+    }
+
+
+    function sortColumn(title) {
+        var hdSortName = '<%= hdSortName.ClientID %>';
+        var btnSearch = '<%= btnSearch.ClientID %>';
+        document.getElementById(hdSortName).value = title;
+        document.getElementById(btnSearch).click();
+    }
+
+
+    function chkClick() {
+        if (confirm('ยืนยันลบขู้มูล ?')) {
+            var hdDelAll = '<%= hdDelAll.ClientID %>';
+            var sidList = "";
+            var count = 0;
+            $('input[id^="check_"]').each(function (i) {
+                //child_
+                if ($(this).is(":checked")) {
+                    var sid = $('#hd_' + $(this).prop('id') + '').val();
+                    if (count == 0) {
+                        sidList += "'" + sid + "'";
+                    } else {
+                        sidList += ",'" + sid + "'";
+                    }
+                    count++;
+                }
+            });
+            $('#' + hdDelAll).val(sidList);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 </script>
     <div align="center">
 <table width="750px" border="0" align="center" cellspacing="0" cellpadding="0" class="css">
@@ -147,6 +165,12 @@ end sub
                     <table id="dtGrid" border="1" cellspacing="0" cellpadding="0" class="css" style="width: 740px; border-right: #f6a836; border-top: #f6a836; border-left: #f6a836; border-bottom: #f6a836;" runat="server" rules="all" ></table>
                 </td>
             </tr>
+             <tr align="right"><td>
+                 <asp:Button ID="btnDelAll_client" runat="server" OnClientClick="return chkClick()" 
+                     Text="ลบข้อมูลที่เลือก" onclick="btnDelAll_client_Click" />
+        
+                <asp:HiddenField ID="hdDelAll" runat="server" />
+            </td></tr>
        </table>
     </td>
   </tr>

@@ -65,9 +65,9 @@ end sub
 
 
     function checkboxClick(chckbox, id, parent,master) {
-        if ($(chckbox).is(':checked')) {
-            document.location = "sub_mass_entry.aspx?hid=" + id + "&parent_id=" + parent + "&parentSearch=" + master
-        }
+       // if ($(chckbox).is(':checked')) {
+        document.location = "sub_mass_entry.aspx?hid=" + id + "&parent_id=" + parent + "&parentSearch=" + master
+        //}
     }
 
     $(function () {
@@ -83,6 +83,31 @@ end sub
             }
         }, false);
     });
+
+
+    function chkClick() {
+        if (confirm('ยืนยันลบขู้มูล ?')) {
+            var hdDelAll = '<%= hdDelAll.ClientID %>';
+            var sidList = "";
+            var count = 0;
+            $('input[id^="check_"]').each(function (i) {
+                //child_
+                if ($(this).is(":checked")) {
+                    var sid = $('#hd_' + $(this).prop('id') + '').val();
+                    if (count == 0) {
+                        sidList += "'" + sid + "'";
+                    } else {
+                        sidList += ",'" + sid + "'";
+                    }
+                    count++;
+                }
+            });
+            $('#' + hdDelAll).val(sidList);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 </script>
 
@@ -127,6 +152,12 @@ end sub
                     <table id="dtGrid" border="1" cellspacing="0" cellpadding="0" class="css" style="width: 750px; border-right: #f6a836; border-top: #f6a836; border-left: #f6a836; border-bottom: #f6a836;" runat="server" rules="all" ></table>
                 </td>
             </tr>
+              <tr align="right"><td>
+                 <asp:Button ID="btnDelAll_client" runat="server" OnClientClick="return chkClick()" 
+                     Text="ลบข้อมูลที่เลือก" onclick="btnDelAll_client_Click" />
+        
+                <asp:HiddenField ID="hdDelAll" runat="server" />
+            </td></tr>
        </table>
     </td>
   </tr>
