@@ -903,10 +903,10 @@ public partial class _train_member_entry: System.Web.UI.Page
         string sql = "SELECT * ";
         sql = sql + " FROM tb_citizen ";
         sql = sql + " where 1=1 ";
-         String hid=Request.QueryString["hid"];
-         if (hid != null && hid != "")
+        // String hid=Request.QueryString["hid"];
+        if (sid != null && sid != "")
          {
-             sql += " and fl_citizen_id='" + hid.Trim() + "' ";
+             sql += " and fl_citizen_id='" + sid.Trim() + "' ";
          }
          else
          {

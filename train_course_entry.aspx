@@ -67,7 +67,6 @@
                                         <asp:TextBox  ID="txtKeyword" runat="server" CssClass="css"/>
                                         <asp:ImageButton ID="btnSearch" runat="server" CssClass="css" ImageUrl="photo/search.gif" 
                                     Width="18px" Height="18px" onclick="btnSearch_Click"  />
-	                                    <asp:ImageButton ID="btnExport" class="css" runat="server" ImageUrl="photo/x.gif"  Width="18px" Height="18px"/>
                                     </td>
                                 </tr>
                               </table>

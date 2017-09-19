@@ -1553,13 +1553,13 @@ public partial class _mass_entry : System.Web.UI.Page
             string sql = "DELETE from tb_detailgroup where fl_id in (" + hdDelAll.Value.Trim() + "); ";
             sql = sql + " DELETE from tb_detailgroup where fl_parent_id in (" + hdDelAll.Value.Trim() + "); ";
             //Write Log
-            sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
-            sql += " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
-            sql += " 'MASS GROUP', ";
-            sql += " 'DELETE', ";
-            sql += " '" + hidID.Value.Trim() + "', ";
-            sql += " '" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
-            sql += " '" + Request.UserHostAddress + "'); ";
+            //sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
+            //sql += " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
+            //sql += " 'MASS GROUP', ";
+            //sql += " 'DELETE', ";
+            //sql += " '" + hidID.Value.Trim() + "', ";
+            //sql += " '" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
+            //sql += " '" + Request.UserHostAddress + "'); ";
 
             command.CommandText = sql;
             command.ExecuteNonQuery();

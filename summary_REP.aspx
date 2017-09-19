@@ -29,7 +29,7 @@
   </tr>
   <tr>
     <td>
-        จังหวัด 
+         หน่วยงาน 
         <asp:TextBox ID="txtProvince" runat="server" AutoPostBack="true" 
             ontextchanged="txtProvince_TextChanged"></asp:TextBox>
         <asp:ImageButton ID="btnSearch" runat="server" CssClass="css" ImageUrl="photo/search.gif"  Width="18px" Height="18px" onclick="btnSearch_Click" />
