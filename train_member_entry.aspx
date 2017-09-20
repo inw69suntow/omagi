@@ -464,6 +464,47 @@ end sub
                                 <asp:CheckBox ID="chkStatus" runat="server" CssClass="css" Text="ยกเลิก/เสียชีวิต" />
                             </td>
                         </tr>
+
+                          <tr height="20px">
+                            <td class="choice" >ระดับการศึกษา:</td>
+                            <td class="choice" >
+                                  <asp:Textbox ID="txtEducational" runat="server" CssClass="css" Width="200" MaxLength="250" />
+                            </td>
+                        </tr>
+                           <tr height="20px">
+                            <td class="choice" >สถาบันการศึกษา:</td>
+                            <td class="choice" >
+                                  <asp:Textbox ID="txtAcademy" runat="server" CssClass="css" Width="200" MaxLength="250" />
+                            </td>
+                        </tr>
+                          <tr height="20px">
+                            <td class="choice" >ความสามารถพิเศษ:</td>
+                            <td class="choice" >
+                                  <asp:Textbox ID="txtTalent" runat="server" CssClass="css" Width="200" MaxLength="250" />
+                            </td>
+                        </tr>
+
+                           <tr height="20px">
+                            <td class="choice" >งาน:</td>
+                            <td class="choice" >
+                                  <asp:Textbox ID="txtJob" runat="server" CssClass="css" Width="200" MaxLength="250" />
+                            </td>
+                        </tr>
+                          <tr height="20px">
+                            <td class="choice" >ตำแหน่ง:</td>
+                            <td class="choice" >
+                                  <asp:Textbox ID="txtPosition" runat="server" CssClass="css" Width="200" MaxLength="250" />
+                            </td>
+                        </tr>
+                        <tr height="200px">
+                            <td class="choice" valign="top">ที่อยู่ปัจจุบัน:</td>
+                            <td class="choice" >
+                                  <asp:TextBox ID="txtCurAddr"  runat="server" CssClass="css" Width="500px" 
+                                      MaxLength="250" Height="200px" TextMode="MultiLine" />
+                            </td>
+                        </tr>
+
+
                         <tr height="20px">
                             <td class="choice" >รูปถ่ายใหม่:</td>
                             <td class="choice" >

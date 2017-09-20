@@ -405,15 +405,7 @@ end sub
                                 <asp:CheckBox ID="chkStatus" runat="server" CssClass="css" Text="ยกเลิก/เสียชีวิต" />
                             </td>
                         </tr>
-                        <tr height="20px">
-                            <td class="choice" >รูปถ่ายใหม่:</td>
-                            <td class="choice" >
-                                <asp:FileUpload id="imgFile" cssclass="css" runat="server"/>
-                                <asp:Button ID="btnUpload" runat="server" CssClass="css" Text="จัดเก็บ" 
-                                    Width="70px" onclick="btnUpload_Click"/>
-                            </td>
-                        </tr>
-
+                       
                           <tr height="20px">
                             <td class="choice" >ระดับการศึกษา:</td>
                             <td class="choice" >
@@ -446,13 +438,21 @@ end sub
                             </td>
                         </tr>
                         <tr height="200px">
-                            <td class="choice" >ที่อยู่ปัจจุบัน:</td>
+                            <td class="choice" valign="top" >ที่อยู่ปัจจุบัน:</td>
                             <td class="choice" >
                                   <asp:TextBox ID="txtCurAddr"  runat="server" CssClass="css" Width="500px" 
                                       MaxLength="250" Height="200px" TextMode="MultiLine" />
                             </td>
                         </tr>
 
+                         <tr height="20px">
+                            <td class="choice" >รูปถ่ายใหม่:</td>
+                            <td class="choice" >
+                                <asp:FileUpload id="imgFile" cssclass="css" runat="server"/>
+                                <asp:Button ID="btnUpload" runat="server" CssClass="css" Text="จัดเก็บ" 
+                                    Width="70px" onclick="btnUpload_Click"/>
+                            </td>
+                        </tr>
 
                         <tr height="200px">
                             <td class="choice" >รูปถ่ายที่บันทึกไว้<br />(150x200 JPG 10K):</td>
