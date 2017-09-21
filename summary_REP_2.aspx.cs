@@ -302,11 +302,11 @@ public partial class _summary_REP_2 : System.Web.UI.Page
 
         DataRow dr = dt.NewRow();
         dr["param1"] = "รายงานสรุปตามเงื่อนไข";
-        dr["name1"] = "ลำดับ";
-        dr["name2"] = "หน่วยงาน";
-        dr["name3"] = "ปี อบรม";
-        dr["name4"] = "คำนำหน้า";
-        dr["name5"] = "รวม"; 
+       // dr["name1"] = "ลำดับ";
+      //  dr["name2"] = "หน่วยงาน";
+       // dr["name3"] = "ปี อบรม";
+       // dr["name4"] = "คำนำหน้า";
+       // dr["name5"] = "รวม"; 
         #endregion
 
         string sql = Session["sumREPSQL"].ToString(); 
@@ -350,7 +350,7 @@ public partial class _summary_REP_2 : System.Web.UI.Page
         //
         LocalReport rpt = new LocalReport();
         string fName = "summary_rep.pdf";
-        rpt.ReportPath = "Memo2.rdlc";
+        rpt.ReportPath = "Memo2_2.rdlc";
         rpt.DataSources.Clear();
         rpt.DataSources.Add(new ReportDataSource("DataSet1_DataTable1", dt));
         rpt.Refresh();
