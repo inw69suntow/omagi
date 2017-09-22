@@ -23,8 +23,11 @@
                 </th>
                 <th style="height:20px; width:200px;"  background="photo/box_topbg.gif">
                 <div align="right">
+                <%if (Session["uGroup"].ToString() != "V")
+                  { %>
                     <asp:Button ID="btnCreate" runat="server" class="css" Text="บันทึก" OnClick="btnCreate_Click" OnClientClick="composeValue();" Width="70px"/>
                     <input type="reset" value="คืนค่า" class="css" style="width:70px" />
+                    <%} %>
                 </div>
                 </th>
                 <td width="6px" style="height:23px;" background="photo/box_topright.gif"></td>   

@@ -15,6 +15,7 @@ using System.Text;
 using System.Data.OleDb;
 using Microsoft.Reporting.WebForms;
 using System.IO;
+using System.Globalization;
 
 public partial class _summary_REP_2 : System.Web.UI.Page
 {
@@ -40,6 +41,7 @@ public partial class _summary_REP_2 : System.Web.UI.Page
             titleDataSet();
             provinceDataSet();
             courseDataSet();
+            yearDataSet();
             chkDist.Value = "";
             cmbDept.Value = "";
             makeReport();
@@ -88,7 +90,7 @@ public partial class _summary_REP_2 : System.Web.UI.Page
 
         tab1.Rows[0].Cells.Add(new HtmlTableCell());
         tab1.Rows[0].Cells[1].InnerHtml = "หน่วยงาน";
-        tab1.Rows[0].Cells[1].Width = "430px";
+        tab1.Rows[0].Cells[1].Width = "330px";
 
         tab1.Rows[0].Cells.Add(new HtmlTableCell());
         tab1.Rows[0].Cells[2].InnerHtml = "<center>ปี อบรม</center>";
@@ -96,12 +98,15 @@ public partial class _summary_REP_2 : System.Web.UI.Page
 
         tab1.Rows[0].Cells.Add(new HtmlTableCell());
         tab1.Rows[0].Cells[3].InnerHtml = "<center>คำนำหน้า</center>";
-        tab1.Rows[0].Cells[3].Width = "100";
-  
+        tab1.Rows[0].Cells[3].Width = "100px";
 
         tab1.Rows[0].Cells.Add(new HtmlTableCell());
-        tab1.Rows[0].Cells[4].InnerHtml = "<center>รวม</center>";
+        tab1.Rows[0].Cells[4].InnerHtml = "<center>จังหวัด</center>";
         tab1.Rows[0].Cells[4].Width = "100px";
+
+        tab1.Rows[0].Cells.Add(new HtmlTableCell());
+        tab1.Rows[0].Cells[5].InnerHtml = "<center>รวม</center>";
+        tab1.Rows[0].Cells[5].Width = "100px";
   
 
 
@@ -136,11 +141,14 @@ public partial class _summary_REP_2 : System.Web.UI.Page
             tab1.Rows[i].Cells.Add(new HtmlTableCell());
             tab1.Rows[i].Cells[3].Align = "LEFT";
             tab1.Rows[i].Cells[3].InnerHtml = Convert.ToString(rs["fl_title"]);
-            
 
             tab1.Rows[i].Cells.Add(new HtmlTableCell());
-            tab1.Rows[i].Cells[4].Align = "RIGHT";
-            tab1.Rows[i].Cells[4].InnerHtml = Convert.ToInt32(rs["size"]).ToString("#,##0");
+            tab1.Rows[i].Cells[4].Align = "LEFT";
+            tab1.Rows[i].Cells[4].InnerHtml = Convert.ToString(rs["fl_province_name"]);
+
+            tab1.Rows[i].Cells.Add(new HtmlTableCell());
+            tab1.Rows[i].Cells[5].Align = "RIGHT";
+            tab1.Rows[i].Cells[5].InnerHtml = Convert.ToInt32(rs["size"]).ToString("#,##0");
             i++;
            
         }
@@ -172,7 +180,7 @@ public partial class _summary_REP_2 : System.Web.UI.Page
     private String getQuery()
     {
         String sql = "";
-        sql+=" select count(c.fl_title) size,td.fl_course,td.fl_year,t.fl_title ";
+        sql += " select count(c.fl_title) size,td.fl_course,(td.fl_year+543) fl_year,t.fl_title,m.fl_province_name ";
         sql+=" from tb_train_detail td";
         sql+=" left join tb_train_course tc";
         sql+=" on td.fl_course=tc.fl_course";
@@ -180,6 +188,8 @@ public partial class _summary_REP_2 : System.Web.UI.Page
         sql+=" on td.fl_citizen_id=c.fl_citizen_id";
         sql+=" left join tb_title t";
         sql+=" on c.fl_title=t.fl_code";
+        sql+=" left join tb_moicode m ";
+        sql+=" on m.fl_province_code=c.fl_province_code ";
         sql+=" where 1=1 ";
         if (cmbCourse.SelectedValue.Trim() != "")
         {
@@ -188,6 +198,10 @@ public partial class _summary_REP_2 : System.Web.UI.Page
         if (cmbTitle.SelectedValue.Trim() != "")
         {
             sql += " and c.fl_title='" + cmbTitle.SelectedValue.Trim() + "' ";
+        }
+        if (cmdYear.SelectedValue.Trim() != "")
+        {
+            sql += " and (td.fl_year+543)='" + cmdYear.SelectedValue.Trim() + "' ";
         }
         //sql+=" and c.fl_educational is null ";
         if (txtEdu.Text.Trim() != "")
@@ -200,7 +214,7 @@ public partial class _summary_REP_2 : System.Web.UI.Page
         }
         //sql+=" and c.fl_province_code =77";
         //sql+=" and c.fl_birth> '19580814' and c.fl_birth < '19860805'";
-        sql +=" group by td.fl_course,td.fl_year,td.fl_gen,t.fl_title";
+        sql += " group by td.fl_course,td.fl_year,td.fl_gen,t.fl_title,m.fl_province_name";
         return sql;
         
     }
@@ -260,6 +274,28 @@ public partial class _summary_REP_2 : System.Web.UI.Page
     }
 
 
+
+    protected void yearDataSet()
+    {
+        cmdYear.Items.Clear();
+        cmbTitle.Items.Add(new ListItem("ไม่กำหนด", ""));
+        //CultureInfo ThaiCulture = new CultureInfo("th-TH");
+        //IFormatProvider culture = CultureInfo.CreateSpecificCulture("th-TH");
+        //String year = DateTime.Now.Year;
+        int thaiyear = DateTime.Now.Year+543;
+        int index=0;
+        for (int i = thaiyear - 30; i <= thaiyear; i++)
+        {
+            String runYear = Convert.ToString(i);
+            cmdYear.Items.Add(new ListItem(runYear, runYear));
+            if (i == thaiyear)
+            {
+                cmdYear.SelectedIndex = index;
+            }
+            index++;
+        }
+       
+    }
     protected void courseDataSet()
     {
         cmbCourse.Items.Clear();
@@ -298,7 +334,7 @@ public partial class _summary_REP_2 : System.Web.UI.Page
         dt.Columns.Add("name3");
         dt.Columns.Add("name4");
         dt.Columns.Add("name5");
-        //dt.Columns.Add("name6");
+        dt.Columns.Add("name6");
 
         DataRow dr = dt.NewRow();
         dr["param1"] = "รายงานสรุปตามเงื่อนไข";
@@ -330,7 +366,8 @@ public partial class _summary_REP_2 : System.Web.UI.Page
             dr["name2"] = Convert.ToString(rs["fl_course"]);
             dr["name3"] = Convert.ToString(rs["fl_year"]);
             dr["name4"] = Convert.ToString(rs["fl_title"]);
-            dr["name5"] = Convert.ToInt32(rs["size"]).ToString("#,##0");
+            dr["name5"] = Convert.ToString(rs["fl_province_name"]);
+            dr["name6"] = Convert.ToInt32(rs["size"]).ToString("#,##0");
             i++;
 
         }

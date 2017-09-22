@@ -158,10 +158,13 @@ end sub
                 </td>
             </tr>
              <tr align="right"><td>
+            <%if (Session["uGroup"].ToString() != "V")
+              { %>
                  <asp:Button ID="btnDelAll_client" runat="server" OnClientClick="return chkClick()" 
                      Text="ลบข้อมูลที่เลือก" onclick="btnDelAll_client_Click" />
-        
+        <%} %>
                 <asp:HiddenField ID="hdDelAll" runat="server" />
+             
             </td></tr>
        </table>
     </td>
@@ -225,12 +228,15 @@ end sub
                     แบบบันทึกข้อมูล</b></div></th>
                 <th style="height:20px; width:500px;"  background="photo/box_topbg.gif">
 		<div align="right">
+        <%if (Session["uGroup"].ToString() != "V")
+          { %>
 			<b>นำเข้าจาก Excel : </b>
 	                             <input type="file" id="exclFile" class="css"/>
                                 	<asp:Button ID="btnImport" runat="server" CssClass="css" Text="นำเข้า" 
                                     Width="70px" OnClick="btnImport_Click" OnClientClick="prepareText()"/>
                                 	<asp:HiddenField ID="importText" runat="server" value=""/>
 	                            <asp:Button ID="btnClear" Cssclass="css" runat="server" OnClick="btnClear_Click" Text="สร้างใหม่"  Width="70px"/>
+                                <%} %>
 		</div>
 	</th>
                 <td width="6px" style="height:23px;" background="photo/box_topright.gif"></td>   
@@ -323,14 +329,18 @@ end sub
                             <asp:HiddenField ID="hidID" Value="" runat="server" />
                               <asp:HiddenField ID="maxi" Value="" runat="server" />
                                 <asp:Label ID="lblResponse" runat="server" CssClass="css" Width="95%"/>
+                                 <%if (Session["uGroup"].ToString() != "V")
+                                   { %>
                                 <asp:Button ID="btnSave" runat="server" CssClass="css" Text="ปรับปรุง" 
                                     Width="70px" OnClick="btnSave_Click" />
                                 <asp:Button ID="btnMember" CssClass="css" runat="server" Text="สมาชิก" 
-                                    Width="70px" OnClick="btnMember_Click" />
+                                    Width="70px" OnClick="btnMember_Click"  />
                                 <asp:Button ID="btnDel" runat="server" CssClass="css" Text="ลบข้อมูล" 
-                                    Width="70px" OnClick="btnDel_Click"  />
+                                    Width="70px" OnClick="btnDel_Click"   />
+                                    <%} %>
                             </td>
                         </tr>
+
                         <tr height="20px">
                             <td class="choice">Create:</td>
                             <td class="choice">

@@ -12,7 +12,7 @@
      <% if (Session["uGroup"]!=null && ( Session["uGroup"].ToString() == "A" || Session["uGroup"].ToString() == "U" || Session["uGroup"].ToString() == "C" || Session["uGroup"].ToString() == "M" || Session["uGroup"].ToString() == "V" ))
         {%>
          <ul>
-            <% if (Session["uGroup"].ToString() == "A" || Session["uGroup"].ToString() == "U")
+            <% if (Session["uGroup"].ToString() == "A" || Session["uGroup"].ToString() == "U" || Session["uGroup"].ToString() == "V")
                { %>
                 <li><a href="#">บันทึกข้อมูล</a>
                     <ul>

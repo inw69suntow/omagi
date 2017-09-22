@@ -59,6 +59,16 @@
   
         </td>
       </tr>
+
+       <tr>
+         <td class="choice">ปี</td>
+        <td class="choice">
+          
+             <asp:DropDownList ID="cmdYear" runat="server" CssClass="css"></asp:DropDownList>
+  
+        </td>
+      </tr>
+
          <tr>
           <td class="choice">วุฒิการศึกษา</td>
         <td class="choice">

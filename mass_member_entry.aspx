@@ -127,7 +127,10 @@ end sub
                                 <asp:TextBox ID="txtKeyword" runat="server" CssClass="css" Width="90px"/>                        
                                 <asp:ImageButton ID="btnSearch" runat="server" CssClass="css" ImageUrl="photo/search.gif" 
                                     Width="18px" Height="18px" onclick="btnSearch_Click" />
+                                     <%if (Session["uGroup"].ToString() != "V")
+                                       { %>
 	                            <asp:ImageButton ID="btnExport" class="css" runat="server" OnClick="btnExport_Click" ImageUrl="photo/x.gif"  Width="18px" Height="18px"/>
+                            <%} %>
                             </td>
                         </tr>
                       </table>
@@ -146,12 +149,15 @@ end sub
                     แบบบันทึกข้อมูล</b></div></th>
                 <th style="height:20px; width:500px;"  background="photo/box_topbg.gif">
 		<div align="right">
+         <%if (Session["uGroup"].ToString() != "V")
+           { %>
 			<b>นำเข้าจาก Excel : </b>
                                 <input type="file" id="exclFile" class="css"/>
                                 <asp:Button ID="btnImport" runat="server" CssClass="css" Text="นำเข้า" 
                                     Width="70px" onclick="btnImport_Click" OnClientClick="prepareText()"/>
                                 <asp:HiddenField ID="importText" runat="server" value=""/>
 	                            <asp:Button ID="btnClear" Cssclass="css" runat="server" OnClick="btnClear_Click" Text="สร้างใหม่"  Width="70px"/>
+                                <%} %>
 		</div>
 	</th>
                 <td width="6px" style="height:23px;" background="photo/box_topright.gif"></td>   
@@ -372,10 +378,13 @@ end sub
                             <asp:HiddenField ID="hidID" Value="" runat="server" />
                               <asp:HiddenField ID="maxi" Value="" runat="server" />
                                 <asp:Label ID="lblResponse" runat="server" CssClass="css" Width="95%"/>
+                                 <%if (Session["uGroup"].ToString() != "V")
+                                   { %>
                                 <asp:Button ID="btnSave" runat="server" CssClass="css" Text="ปรับปรุง" 
                                     Width="70px" onclick="btnSave_Click" />
                                 <asp:Button ID="btnDel" runat="server" CssClass="css" Text="ลบข้อมูล" 
                                     Width="70px" onclick="btnDel_Click" />
+                                    <%} %>
                             </td>
                         </tr>
                         <tr height="20px">

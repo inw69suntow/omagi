@@ -180,10 +180,13 @@ end sub
                     <table id="dtGrid" border="1" cellspacing="0" cellpadding="0" class="css" style="width: 750px; border-right: #f6a836; border-top: #f6a836; border-left: #f6a836; border-bottom: #f6a836;" runat="server" rules="all" ></table>
                 </td>
             </tr>
+
             <tr align="right"><td>
+             <%if (Session["uGroup"].ToString() != "V")
+               { %>
                  <asp:Button ID="btnDelAll_client" runat="server" OnClientClick="return chkClick()" 
                      Text="Åº¢éÍÁÙÅ·ÕèàÅ×Í¡" onclick="btnDelAll_client_Click" />
-        
+        <%} %>
                 <asp:HiddenField ID="hdDelAll" runat="server" />
             </td></tr>
        </table>
@@ -230,7 +233,10 @@ end sub
                                 <asp:TextBox ID="txtSearchLName" runat="server"></asp:TextBox>                      
                                 <asp:ImageButton ID="btnSearch" runat="server" CssClass="css" ImageUrl="photo/search.gif" 
                                     Width="18px" Height="18px" onclick="btnSearch_Click" />
+                                    <%if (Session["uGroup"].ToString() != "V")
+                                      { %>
 	                            <asp:ImageButton ID="btnExport" class="css" runat="server" OnClick="btnExport_Click" ImageUrl="photo/x.gif"  Width="18px" Height="18px"/>
+                                <%} %>
                             </td>
                         </tr>
                       </table>
@@ -253,7 +259,10 @@ end sub
                                 <asp:Button ID="btnImport" runat="server" CssClass="css" Text="¹Óà¢éÒ" 
                                     Width="70px" onclick="btnImport_Click" OnClientClick="prepareText()"/>--%>
                                 <asp:HiddenField ID="importText" runat="server" value=""/>
+                                 <%if (Session["uGroup"].ToString() != "V")
+                                   { %>
 	                            <asp:Button ID="btnClear" Cssclass="css" runat="server" OnClick="btnClear_Click" Text="ÊÃéÒ§ãËÁè"  Width="70px"/>
+                                <%} %>
 		</div>
 	</th>
                 <td width="6px" style="height:23px;" background="photo/box_topright.gif"></td>   
@@ -477,10 +486,13 @@ end sub
                             <asp:HiddenField ID="hidID" Value="" runat="server" />
                               <asp:HiddenField ID="maxi" Value="" runat="server" />
                                 <asp:Label ID="lblResponse" runat="server" CssClass="css" Width="95%"/>
+                                 <%if (Session["uGroup"].ToString() != "V")
+                                   { %>
                                 <asp:Button ID="btnSave" runat="server" CssClass="css" Text="»ÃÑº»ÃØ§" 
                                     Width="70px" onclick="btnSave_Click" />
                                 <asp:Button ID="btnDel" runat="server" CssClass="css" Text="Åº¢éÍÁÙÅ" 
                                     Width="70px" onclick="btnDel_Click" />
+                                    <%} %>
                             </td>
                         </tr>
                         <tr height="20px">
