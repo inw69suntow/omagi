@@ -431,7 +431,7 @@ public partial class _train_member_entry: System.Web.UI.Page
             cmbStopMM.Items.Add(new ListItem(nameVal, i.ToString().PadLeft(2, '0')));
         }
 
-        for (int i = 1900; i <= DateTime.Now.Year; i++)
+        for (int i = 1900; i <= DateTime.Now.Year+10; i++)
         {
             int j = i + 543;
             cmbBYY.Items.Add(new ListItem(j.ToString(), i.ToString()));

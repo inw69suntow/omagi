@@ -216,8 +216,8 @@ end sub
                                 <asp:TextBox ID="txtSearchSID" runat="server"></asp:TextBox>                              
                                 
                                <asp:RegularExpressionValidator ID="rgtxtSearchSID"  ControlToValidate="txtSearchSID" runat="server"
-                                    ErrorMessage="ต้องเป็นตัวเลขเท่านั้น"
-                                    ValidationExpression="\d+">
+                                    ErrorMessage="ต้องเป็นตัวเลข 13 หลัก เท่านั้น"
+                                    ValidationExpression="^\d{13,13}$">
                                 </asp:RegularExpressionValidator>
                             </td>
                         </tr>
@@ -285,7 +285,7 @@ end sub
                                 <font color="red">*</font>
                                 <asp:RegularExpressionValidator ID="retxtCardID"  ControlToValidate="txtCardID" runat="server"
                                     ErrorMessage="ต้องเป็นตัวเลขเท่านั้น"
-                                    ValidationExpression="\d+">
+                                    ValidationExpression="^\d{13,13}$">
                                 </asp:RegularExpressionValidator>
                             </td>
                         </tr>
