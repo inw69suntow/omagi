@@ -284,7 +284,7 @@ end sub
                                     CssClass="css" AutoPostBack="true" ontextchanged="txtCardID_TextChanged"/>
                                 <font color="red">*</font>
                                 <asp:RegularExpressionValidator ID="retxtCardID"  ControlToValidate="txtCardID" runat="server"
-                                    ErrorMessage="ต้องเป็นตัวเลขเท่านั้น"
+                                    ErrorMessage="ต้องเป็นตัวเลข 13 หลัก เท่านั้น"
                                     ValidationExpression="^\d{13,13}$">
                                 </asp:RegularExpressionValidator>
                             </td>
