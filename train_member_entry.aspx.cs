@@ -2417,27 +2417,27 @@ public partial class _train_member_entry: System.Web.UI.Page
             userDataSet();
             return;
         }
-        try
-        {
-            imgFile.PostedFile.SaveAs(Server.MapPath("CIMG") + "\\" + txtCardID.Text.Trim() + ".jpg");
-            OleDbConnection Conn=new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
-            OleDbCommand command=new OleDbCommand();
+        //try
+        //{
+        //    imgFile.PostedFile.SaveAs(Server.MapPath("CIMG") + "\\" + txtCardID.Text.Trim() + ".jpg");
+        //    OleDbConnection Conn=new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
+        //    OleDbCommand command=new OleDbCommand();
 
-            Conn.Open();
-            command.Connection = Conn;
+        //    Conn.Open();
+        //    command.Connection = Conn;
 
-            string sql="";
-            sql = "INSERT INTO tb_LOG(fl_email,fl_module,fl_action,fl_keyword,fl_date,fl_machine) VALUES(";
-            sql = sql + " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
-            sql = sql + " 'IMAGE FILE', ";
-            sql = sql + " 'UPLOAD', ";
-            sql = sql + " '" + txtCardID.Text.Trim().Replace("'", "''") + "', ";
-            sql = sql + " '" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
-            sql = sql + " '" + Request.UserHostAddress + "') ";
-            command.CommandText = sql;
-            command.ExecuteNonQuery();
-            Conn.Close();
-        }catch(Exception ex){}
+        //    string sql="";
+        //    sql = "INSERT INTO tb_LOG(fl_email,fl_module,fl_action,fl_keyword,fl_date,fl_machine) VALUES(";
+        //    sql = sql + " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
+        //    sql = sql + " 'IMAGE FILE', ";
+        //    sql = sql + " 'UPLOAD', ";
+        //    sql = sql + " '" + txtCardID.Text.Trim().Replace("'", "''") + "', ";
+        //    sql = sql + " '" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
+        //    sql = sql + " '" + Request.UserHostAddress + "') ";
+        //    command.CommandText = sql;
+        //    command.ExecuteNonQuery();
+        //    Conn.Close();
+        //}catch(Exception ex){}
 
         boxSet(hidID.Value);
 
@@ -2466,17 +2466,19 @@ public partial class _train_member_entry: System.Web.UI.Page
         sql += " and fl_gen='" + cmbGen.SelectedValue.Trim() + "' ";
         sql += " and fl_year='" + cmbYear.SelectedValue.Trim() + "'; ";
 
-        sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
-        sql += " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
-        sql += " 'TRAIN MEMBER', ";
-        sql += " 'DELETE', ";
-        sql += " '" + txtCardID.Text + "," + cmbCourse.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbGen.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbYear.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbTrainProvince.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbDept.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "', ";
-        sql += " '" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
-        sql += " '" + Request.UserHostAddress + "'); ";
+        //sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
+        //sql += " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
+        //sql += " 'TRAIN MEMBER', ";
+        //sql += " 'DELETE', ";
+        //sql += " '" + txtCardID.Text + "," + cmbCourse.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbGen.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbYear.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbTrainProvince.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "," + cmbDept.SelectedValue.Trim().Replace(";", "").Replace("'", "") + "', ";
+        //sql += " '" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
+        //sql += " '" + Request.UserHostAddress + "'); ";
 
         command.CommandText = sql;
         command.ExecuteNonQuery();
         Conn.Close();
+        clearBox(true);
+        userDataSet();
     }
     protected void txtKeyword_TextChanged(object sender, EventArgs e)
     {
