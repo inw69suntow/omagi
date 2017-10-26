@@ -152,9 +152,15 @@ end sub
          <%if (Session["uGroup"].ToString() != "V")
            { %>
 			<b>นำเข้าจาก Excel : </b>
-                                <input type="file" id="exclFile" class="css"/>
+                               <%-- <input type="file" id="exclFile" class="css"/>
                                 <asp:Button ID="btnImport" runat="server" CssClass="css" Text="นำเข้า" 
-                                    Width="70px" onclick="btnImport_Click" OnClientClick="prepareText()"/>
+                                    Width="70px" onclick="btnImport_Click" OnClientClick="prepareText()"/>--%>
+
+           
+                                 <asp:FileUpload ID="exclFile" runat="server" class="css"/>
+                                 <asp:Button ID="btnImport" runat="server" CssClass="css" Text="นำเข้า" 
+                                    Width="70px" onclick="btnImport_Click"/>
+
                                 <asp:HiddenField ID="importText" runat="server" value=""/>
 	                            <asp:Button ID="btnClear" Cssclass="css" runat="server" OnClick="btnClear_Click" Text="สร้างใหม่"  Width="70px"/>
                                 <%} %>

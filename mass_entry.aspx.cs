@@ -13,6 +13,8 @@ using System.Data;
 using System.Data.Common;
 using System.Text;
 using System.Data.OleDb;
+using System.IO;
+using OfficeOpenXml;
 
 public partial class _mass_entry: System.Web.UI.Page
 {
@@ -810,8 +812,54 @@ public partial class _mass_entry: System.Web.UI.Page
     {
         if (hidID.Value != "") Response.Redirect("mass_member_entry.aspx?id=" + hidID.Value); else userDataSet();
     }
+
+
+    protected void prepareText()
+    {
+        if (exclFile.HasFile && Path.GetExtension(exclFile.FileName) == ".xlsx")
+        {
+
+            using (ExcelPackage excel = new ExcelPackage(exclFile.FileContent))
+            {
+                //var tbl = new DataTable();
+                ExcelWorksheet ws = excel.Workbook.Worksheets[1];
+                bool hasHeader = true;  // adjust accordingly
+                // add DataColumns to DataTable
+                //foreach (var firstRowCell in ws.Cells[1, 1, 1, ws.Dimension.End.Column])
+                //   tbl.Columns.Add(hasHeader ? firstRowCell.Text
+                //       : String.Format("Column {0}", firstRowCell.Start.Column));
+
+                // add DataRows to DataTable
+                int startRow = hasHeader ? 2 : 1;
+                // int startRow = 1;
+                String text = "";
+                while (ws.Cells[startRow, 2].Text != "")
+                {
+                    // var wsRow = ws.Cells[rowNum, 1, rowNum, ws.Dimension.End.Column];
+                    if (text != "")
+                    {
+                        text += ",";
+                    }
+                    for (int j = 1; j < 11; j++)
+                    {
+                        text += ws.Cells[startRow, j].Text + "|";
+                    }
+                    startRow++;
+                }
+                importText.Value = text;
+                //   UploadStatusLabel.Text = msg;
+            }
+        }
+        else
+        {
+            //  UploadStatusLabel.Text = "You did not specify a file to upload.";
+        }
+    }
+
+
     protected void btnImport_Click(object sender, EventArgs e)
     {
+        prepareText();
         //Import
         if (importText.Value.Trim() != "")
         {

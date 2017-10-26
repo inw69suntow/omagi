@@ -13,6 +13,8 @@ using System.Data;
 using System.Data.Common;
 using System.Text;
 using System.Data.OleDb;
+using OfficeOpenXml;
+using System.IO;
 
 public partial class _train_member_entry: System.Web.UI.Page
 {
@@ -1737,13 +1739,57 @@ public partial class _train_member_entry: System.Web.UI.Page
 
         userDataSet();
     }
+
+
+    protected void prepareText()
+    {
+        if (exclFile.HasFile && Path.GetExtension(exclFile.FileName) == ".xlsx")
+        {
+       
+            using (ExcelPackage excel = new ExcelPackage(exclFile.FileContent))
+            {
+                //var tbl = new DataTable();
+                ExcelWorksheet ws = excel.Workbook.Worksheets[1];
+                bool hasHeader = true;  // adjust accordingly
+                // add DataColumns to DataTable
+                //foreach (var firstRowCell in ws.Cells[1, 1, 1, ws.Dimension.End.Column])
+                //   tbl.Columns.Add(hasHeader ? firstRowCell.Text
+                //       : String.Format("Column {0}", firstRowCell.Start.Column));
+
+                // add DataRows to DataTable
+                int startRow = hasHeader ? 2 : 1;
+               // int startRow = 1;
+                String text = "";
+                while (ws.Cells[startRow, 2].Text != "")
+                {
+                    // var wsRow = ws.Cells[rowNum, 1, rowNum, ws.Dimension.End.Column];
+                    if (text != "")
+                    {
+                        text += ",";
+                    }
+                    for (int j = 1; j < 29; j++)
+                    {
+                        text += ws.Cells[startRow, j].Text + "|";
+                    }
+                    startRow++;
+                }
+                importText.Value = text;
+                //   UploadStatusLabel.Text = msg;
+            }
+        }
+        else
+        {
+            //  UploadStatusLabel.Text = "You did not specify a file to upload.";
+        }
+    }
+
     protected void btnImport_Click(object sender, EventArgs e)
     {
         string tmpImport = "";
         string errLine = "";
         int successLine = 0;
         int LineNo = 1;
-
+        prepareText();
         //Import
         if (importText.Value.Trim() != "")
         {
@@ -2314,7 +2360,7 @@ public partial class _train_member_entry: System.Web.UI.Page
 
                         sql += " fl_update_by ='" + Session["uID"].ToString().Trim().Replace("'", "''") + "', ";
                         sql += " fl_update_ip ='" + Request.UserHostAddress + "', ";
-                        sql += " fl_update_time ='" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
+                        sql += " fl_update_time ='" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "' ";
 
                         tmpImport = changeDigit(colToken[0].Trim().Replace(";", "").Replace("'", "").Replace("-", "").Replace(".", "").Replace(" ", ""));
                         if (tmpImport.Length > 20) tmpImport = tmpImport.Substring(0, 20);
@@ -2353,13 +2399,13 @@ public partial class _train_member_entry: System.Web.UI.Page
                     errLine += LineNo.ToString() + ",";
                 }
             }
-            sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
-            sql += " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
-            sql += " 'TRAIN MEMBER', ";
-            sql += " 'IMPORT', ";
-            sql += " '', ";
-            sql += " '" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
-            sql += " '" + Request.UserHostAddress + "'); ";
+            //sql += "INSERT INTO tb_LOG(fl_id,fl_module,fl_action,fl_keyword,fl_datetime,fl_ip) VALUES(";
+            //sql += " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
+            //sql += " 'TRAIN MEMBER', ";
+            //sql += " 'IMPORT', ";
+            //sql += " '', ";
+            //sql += " '" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
+            //sql += " '" + Request.UserHostAddress + "'); ";
 
             sql += "DELETE from tb_CITIZEN where fl_citizen_id=''; ";
             sql += "DELETE from tb_train_detail where fl_citizen_id = '' or fl_citizen_id not in (select distinct fl_citizen_id from tb_citizen) ";

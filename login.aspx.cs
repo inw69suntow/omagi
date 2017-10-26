@@ -44,7 +44,7 @@ public partial class _login: System.Web.UI.Page
 
                 if (rs.Read())
                 {
-                    lblResponse.Text = "This login is currently in-use";
+                   // lblResponse.Text = "This login is currently in-use";
                 }
                 else
                 {
@@ -52,12 +52,12 @@ public partial class _login: System.Web.UI.Page
                 }
                 rs.Close();
 
-                if (lblResponse.Text == "This login is currently in-use")
-                {
-                    lblResponse.Visible = true;
-                    Conn.Close();
-                    return;
-                }
+                //if (lblResponse.Text == "This login is currently in-use")
+                //{
+                //    lblResponse.Visible = true;
+                //    Conn.Close();
+                //    return;
+                //}
 
                 Session.Clear();
                 Session["uID"] = "";
