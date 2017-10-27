@@ -44,7 +44,8 @@ sub prepareText()
 
 	    i=1
 	    while ws.cells(i,2)<>""
-		    if document.getElementById("ctl00_ContentPlaceHolder1_importText").value<>"" then document.getElementById("ctl00_ContentPlaceHolder1_importText").value=document.getElementById("ctl00_ContentPlaceHolder1_importText").value & ","
+		    if document.getElementById("ctl00_ContentPlaceHolder1_importText").value<>"" 
+                then document.getElementById("ctl00_ContentPlaceHolder1_importText").value=document.getElementById("ctl00_ContentPlaceHolder1_importText").value & ","
 		
             for j=1 to 10
     		    document.getElementById("ctl00_ContentPlaceHolder1_importText").value=document.getElementById("ctl00_ContentPlaceHolder1_importText").value & ws.cells(i,j) & "|"
@@ -167,7 +168,7 @@ end sub
 			<b>นำเข้าจาก Excel : </b>
 	                             <input type="file" id="exclFile" class="css"/>
                                 	<asp:Button ID="btnImport" runat="server" CssClass="css" Text="นำเข้า" 
-                                    Width="70px" OnClick="btnImport_Click" OnClientClick="prepareText()"/>
+                                    Width="70px" OnClick="btnImport_Click" /><%--OnClientClick="prepareText()"--%>
                                 	<asp:HiddenField ID="importText" runat="server" value=""/>
 	                            <asp:Button ID="btnClear" Cssclass="css" runat="server" OnClick="btnClear_Click" Text="สร้างใหม่"  Width="70px"/>
 		</div>

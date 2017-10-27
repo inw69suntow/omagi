@@ -44,7 +44,7 @@ public partial class _login: System.Web.UI.Page
 
                 if (rs.Read())
                 {
-                    lblResponse.Text = "This login is currently in-use";
+                   // lblResponse.Text = "This login is currently in-use";
                 }
                 else
                 {
@@ -52,12 +52,12 @@ public partial class _login: System.Web.UI.Page
                 }
                 rs.Close();
 
-                if (lblResponse.Text == "This login is currently in-use")
-                {
-                    lblResponse.Visible = true;
-                    Conn.Close();
-                    return;
-                }
+                //if (lblResponse.Text == "This login is currently in-use")
+                //{
+                //    lblResponse.Visible = true;
+                //    Conn.Close();
+                //    return;
+                //}
 
                 Session.Clear();
                 Session["uID"] = "";
@@ -125,35 +125,35 @@ public partial class _login: System.Web.UI.Page
                     command.ExecuteNonQuery();
                 }
 
-                if (Session["UserUpdateTime"].ToString() != "")
-                {
-                    string dF = Session["UserUpdateTime"].ToString().Substring(0, 4) + "-" + Session["UserUpdateTime"].ToString().Substring(4, 2) + "-" + Session["UserUpdateTime"].ToString().Substring(6, 2);
-                    string nowDate = DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "-" + DateTime.Now.Day.ToString().PadLeft(2, '0');
-                    TimeSpan dSP = System.Convert.ToDateTime(nowDate).Subtract(System.Convert.ToDateTime(dF));
-                    dF = dSP.TotalDays.ToString();
-                    if(dF.IndexOf('.')>0) dF = dF.Substring(0, dF.IndexOf('.'));
-                    long dTotal = Convert.ToInt32(dF);
+                //if (Session["UserUpdateTime"].ToString() != "")
+                //{
+                //    string dF = Session["UserUpdateTime"].ToString().Substring(0, 4) + "-" + Session["UserUpdateTime"].ToString().Substring(4, 2) + "-" + Session["UserUpdateTime"].ToString().Substring(6, 2);
+                //    string nowDate = DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "-" + DateTime.Now.Day.ToString().PadLeft(2, '0');
+                //    TimeSpan dSP = System.Convert.ToDateTime(nowDate).Subtract(System.Convert.ToDateTime(dF));
+                //    dF = dSP.TotalDays.ToString();
+                //    if(dF.IndexOf('.')>0) dF = dF.Substring(0, dF.IndexOf('.'));
+                //    long dTotal = Convert.ToInt32(dF);
 
-                    //Buddhist Year Correction
-                    if (dTotal >= 198327) dTotal = dTotal - 198327;
 
-                    if (dTotal > 90)
-                    {
-                        if (dTotal < 100)
-                        {
-                            Session["alert"] = "รหัสผ่านสำหรับท่านไม่ได้ทำการปรับปรุงมานานกว่า 90 วัน โปรดปรับปรุงรหัสผ่านของท่านภายใน " + ((int)(100 - dTotal)).ToString() + " วัน";
-                        }
-                        else
-                        {
-                            Session["alert"] = "รหัสผ่านสำหรับท่านไม่ได้ทำการปรับปรุงมานานกว่า 90 วัน โปรดปรับปรุงรหัสผ่านของท่านทันที";
-                            sql = "UPDATE tb_User set fl_user_status='0' where fl_user_id=? ";
-                            command.CommandText = sql;
-                            command.Parameters.Clear();
-                            command.Parameters.AddWithValue("", uID);
-                            command.ExecuteNonQuery();
-                        }
-                    }
-                }
+                //    if (dTotal >= 198327) dTotal = dTotal - 198327; //Buddhist Year Correction
+
+                //    if (dTotal > 90)
+                //    {
+                //        if (dTotal < 100)
+                //        {
+                //            Session["alert"] = "รหัสผ่านสำหรับท่านไม่ได้ทำการปรับปรุงมานานกว่า 90 วัน โปรดปรับปรุงรหัสผ่านของท่านภายใน " + ((int)(100 - dTotal)).ToString() + " วัน";
+                //        }
+                //        else
+                //        {
+                //            Session["alert"] = "รหัสผ่านสำหรับท่านไม่ได้ทำการปรับปรุงมานานกว่า 90 วัน โปรดปรับปรุงรหัสผ่านของท่านทันที";
+                //            sql = "UPDATE tb_User set fl_user_status='0' where fl_user_id=? ";
+                //            command.CommandText = sql;
+                //            command.Parameters.Clear();
+                //            command.Parameters.AddWithValue("", uID);
+                //            command.ExecuteNonQuery();
+                //        }
+                //    }
+                //}
 
                 if (Session["uID"].ToString() != "")
                 {
