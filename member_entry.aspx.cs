@@ -2122,6 +2122,7 @@ public partial class _train_member_entry: System.Web.UI.Page
         clearBox(false);
         userDataSet(null);
     }
+
     protected void btnUpload_Click(object sender, EventArgs e)
     {
         bool errFound=false;
@@ -2156,23 +2157,23 @@ public partial class _train_member_entry: System.Web.UI.Page
         try
         {
             imgFile.PostedFile.SaveAs(Server.MapPath("CIMG") + "\\" + txtCardID.Text.Trim() + ".jpg");
-            OleDbConnection Conn=new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
-            OleDbCommand command=new OleDbCommand();
+            //OleDbConnection Conn=new OleDbConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
+            //OleDbCommand command=new OleDbCommand();
 
-            Conn.Open();
-            command.Connection = Conn;
+            //Conn.Open();
+            //command.Connection = Conn;
 
-            string sql="";
-            sql = "INSERT INTO tb_LOG(fl_email,fl_module,fl_action,fl_keyword,fl_date,fl_machine) VALUES(";
-            sql = sql + " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
-            sql = sql + " 'IMAGE FILE', ";
-            sql = sql + " 'UPLOAD', ";
-            sql = sql + " '" + txtCardID.Text.Trim().Replace("'", "''") + "', ";
-            sql = sql + " '" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
-            sql = sql + " '" + Request.UserHostAddress + "') ";
-            command.CommandText = sql;
-            command.ExecuteNonQuery();
-            Conn.Close();
+            //string sql="";
+            //sql = "INSERT INTO tb_LOG(fl_email,fl_module,fl_action,fl_keyword,fl_date,fl_machine) VALUES(";
+            //sql = sql + " '" + Session["uID"].ToString().Replace("'", "''") + "', ";
+            //sql = sql + " 'IMAGE FILE', ";
+            //sql = sql + " 'UPLOAD', ";
+            //sql = sql + " '" + txtCardID.Text.Trim().Replace("'", "''") + "', ";
+            //sql = sql + " '" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0') + "', ";
+            //sql = sql + " '" + Request.UserHostAddress + "') ";
+            //command.CommandText = sql;
+            //command.ExecuteNonQuery();
+            //Conn.Close();
         }catch(Exception ex){}
 
         boxSet(hidID.Value);
